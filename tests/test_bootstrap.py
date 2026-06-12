@@ -87,7 +87,8 @@ def test_main_writes_fixtures_json(tmp_path):
     with patch.dict(os.environ, {"API_FOOTBALL_KEY": "test"}):
         with patch("bootstrap_fixtures.requests.get", return_value=resp):
             bf.main(output_path=out)
-    data = json.loads(open(out).read())
+    with open(out, encoding="utf-8") as f:
+        data = json.loads(f.read())
     phases = {m["phase"] for m in data}
     assert "group" in phases
     assert "round_of_32" in phases

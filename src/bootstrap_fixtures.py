@@ -53,9 +53,10 @@ def map_api_response(api_data: dict) -> list[dict]:
     fixtures, counters = [], {}
     for item in api_data.get("response", []):
         rnd = item["league"].get("round", "")
-        if not (rnd.startswith("Group ") and len(rnd.split()) == 2):
+        parts = rnd.split()
+        if not (rnd.startswith("Group ") and len(parts) == 2 and len(parts[1]) == 1):
             continue
-        group = rnd.split()[1]
+        group = parts[1]
         team_a = item["teams"]["home"]["name"]
         team_b = item["teams"]["away"]["name"]
         city = item["fixture"]["venue"]["city"]
