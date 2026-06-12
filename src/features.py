@@ -7,6 +7,14 @@ ELO_PATH = "data/elo_ratings.json"
 HISTORICAL_PATH = "data/historical_matches.json"
 ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds"
 
+ODDS_NAME_MAP = {
+    "Bosnia-Herzegovina": "Bosnia & Herzegovina",
+    "Cape Verde Islands": "Cape Verde",
+    "Congo DR": "DR Congo",
+    "Czechia": "Czech Republic",
+    "United States": "USA",
+}
+
 
 def _h2h_score(team_a: str, team_b: str) -> float:
     if not os.path.exists(HISTORICAL_PATH):
@@ -40,9 +48,11 @@ def _odds_probs(team_a: str, team_b: str) -> tuple[float, float, float]:
         from data_fetcher import fetch
         data = fetch(ODDS_API_URL, params={"apiKey": key, "regions": "eu",
                                            "markets": "h2h", "oddsFormat": "decimal"})
+        odds_a = ODDS_NAME_MAP.get(team_a, team_a)
+        odds_b = ODDS_NAME_MAP.get(team_b, team_b)
         for event in data:
             teams = {event.get("home_team", ""), event.get("away_team", "")}
-            if team_a in teams and team_b in teams:
+            if odds_a in teams and odds_b in teams:
                 for bm in event.get("bookmakers", [])[:1]:
                     for mkt in bm.get("markets", []):
                         if mkt["key"] == "h2h":

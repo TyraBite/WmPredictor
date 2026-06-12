@@ -4,6 +4,16 @@ import os
 import time
 from typing import Any
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+
+def _session() -> requests.Session:
+    session = requests.Session()
+    retry = Retry(total=3, backoff_factor=2, status_forcelist=[429, 500, 502, 503, 504],
+                  raise_on_status=False, read=0, connect=0)
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+    return session
 
 
 def fetch(url: str, params: dict = None, headers: dict = None,
@@ -19,7 +29,7 @@ def fetch(url: str, params: dict = None, headers: dict = None,
         if (time.time() - entry["_ts"]) / 3600 < ttl_hours:
             return entry["data"]
 
-    resp = requests.get(url, params=params, headers=headers, timeout=30)
+    resp = _session().get(url, params=params, headers=headers, timeout=60)
     resp.raise_for_status()
     data = resp.json()
     with open(path, "w", encoding="utf-8") as f:
