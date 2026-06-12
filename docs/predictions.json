@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-06-12T12:00:00+00:00",
+  "updated_at": "2026-06-12T14:22:53.458735+00:00",
   "tournament_phase": "Gruppenphase",
-  "warnings": ["Kein Modell geladen"],
+  "warnings": [],
   "pending_matches": [
     {
       "match_id": "A1",
@@ -9,17 +9,2515 @@
       "phase": "group",
       "team_a": "Mexico",
       "flag_a": "🇲🇽",
-      "team_b": "Poland",
-      "flag_b": "🇵🇱",
+      "team_b": "South Africa",
+      "flag_b": "🇿🇦",
       "date": "2026-06-11",
-      "venue": "Los Angeles",
-      "prob_a": 42.5,
-      "prob_draw": 27.3,
-      "prob_b": 30.2,
+      "venue": "",
+      "prob_a": 36.7,
+      "prob_draw": 27.5,
+      "prob_b": 35.8,
       "tip": "1:1",
-      "top_results": [["1:1", 12.5], ["1:0", 11.2], ["2:1", 9.8]],
-      "klement_a": 0.61,
-      "klement_b": 0.44,
+      "top_results": [
+        [
+          "1:1",
+          13.1
+        ],
+        [
+          "1:0",
+          11.5
+        ],
+        [
+          "0:1",
+          10.3
+        ]
+      ],
+      "klement_a": 0.33,
+      "klement_b": 0.06,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "A2",
+      "group": "A",
+      "phase": "group",
+      "team_a": "South Korea",
+      "flag_a": "🇰🇷",
+      "team_b": "Czechia",
+      "flag_b": "🏳",
+      "date": "2026-06-12",
+      "venue": "",
+      "prob_a": 43.1,
+      "prob_draw": 24.7,
+      "prob_b": 32.2,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.6
+        ],
+        [
+          "1:0",
+          10.5
+        ],
+        [
+          "0:1",
+          9.0
+        ]
+      ],
+      "klement_a": 0.3,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B1",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Canada",
+      "flag_a": "🇨🇦",
+      "team_b": "Bosnia-Herzegovina",
+      "flag_b": "🏳",
+      "date": "2026-06-12",
+      "venue": "",
+      "prob_a": 10.2,
+      "prob_draw": 18.3,
+      "prob_b": 71.6,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          12.2
+        ],
+        [
+          "1:1",
+          11.4
+        ],
+        [
+          "0:2",
+          10.4
+        ]
+      ],
+      "klement_a": 0.3,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D1",
+      "group": "D",
+      "phase": "group",
+      "team_a": "United States",
+      "flag_a": "🇺🇸",
+      "team_b": "Paraguay",
+      "flag_b": "🏳",
+      "date": "2026-06-13",
+      "venue": "",
+      "prob_a": 17.1,
+      "prob_draw": 33.8,
+      "prob_b": 49.2,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          31.1
+        ],
+        [
+          "0:1",
+          23.6
+        ],
+        [
+          "1:0",
+          12.7
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B2",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Qatar",
+      "flag_a": "🇶🇦",
+      "team_b": "Switzerland",
+      "flag_b": "🇨🇭",
+      "date": "2026-06-13",
+      "venue": "",
+      "prob_a": 3.8,
+      "prob_draw": 11.8,
+      "prob_b": 84.4,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          20.1
+        ],
+        [
+          "0:2",
+          18.9
+        ],
+        [
+          "0:3",
+          11.9
+        ]
+      ],
+      "klement_a": 0.33,
+      "klement_b": 0.51,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C1",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Brazil",
+      "flag_a": "🇧🇷",
+      "team_b": "Morocco",
+      "flag_b": "🇲🇦",
+      "date": "2026-06-13",
+      "venue": "",
+      "prob_a": 54.5,
+      "prob_draw": 28.9,
+      "prob_b": 16.6,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          20.7
+        ],
+        [
+          "1:0",
+          20.2
+        ],
+        [
+          "0:1",
+          12.4
+        ]
+      ],
+      "klement_a": 0.42,
+      "klement_b": 0.22,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C2",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Haiti",
+      "flag_a": "🏳",
+      "team_b": "Scotland",
+      "flag_b": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "date": "2026-06-14",
+      "venue": "",
+      "prob_a": 39.2,
+      "prob_draw": 31.3,
+      "prob_b": 29.5,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          15.4
+        ],
+        [
+          "0:1",
+          14.4
+        ],
+        [
+          "1:0",
+          14.4
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.26,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D2",
+      "group": "D",
+      "phase": "group",
+      "team_a": "Australia",
+      "flag_a": "🇦🇺",
+      "team_b": "Turkey",
+      "flag_b": "🇹🇷",
+      "date": "2026-06-14",
+      "venue": "",
+      "prob_a": 39.0,
+      "prob_draw": 24.5,
+      "prob_b": 36.5,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.9
+        ],
+        [
+          "0:1",
+          10.7
+        ],
+        [
+          "1:0",
+          10.3
+        ]
+      ],
+      "klement_a": 0.35,
+      "klement_b": 0.24,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E1",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Germany",
+      "flag_a": "🇩🇪",
+      "team_b": "Curaçao",
+      "flag_b": "🏳",
+      "date": "2026-06-14",
+      "venue": "",
+      "prob_a": 68.4,
+      "prob_draw": 16.1,
+      "prob_b": 15.4,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          15.1
+        ],
+        [
+          "1:0",
+          13.3
+        ],
+        [
+          "3:0",
+          11.5
+        ]
+      ],
+      "klement_a": 0.43,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F1",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Netherlands",
+      "flag_a": "🇳🇱",
+      "team_b": "Japan",
+      "flag_b": "🇯🇵",
+      "date": "2026-06-14",
+      "venue": "",
+      "prob_a": 68.5,
+      "prob_draw": 21.1,
+      "prob_b": 10.4,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          17.3
+        ],
+        [
+          "2:0",
+          14.9
+        ],
+        [
+          "1:1",
+          10.1
+        ]
+      ],
+      "klement_a": 0.46,
+      "klement_b": 0.37,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E2",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Ivory Coast",
+      "flag_a": "🇨🇮",
+      "team_b": "Ecuador",
+      "flag_b": "🇪🇨",
+      "date": "2026-06-14",
+      "venue": "",
+      "prob_a": 31.5,
+      "prob_draw": 24.6,
+      "prob_b": 43.9,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.8
+        ],
+        [
+          "0:1",
+          12.5
+        ],
+        [
+          "1:0",
+          9.1
+        ]
+      ],
+      "klement_a": 0.11,
+      "klement_b": 0.17,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F2",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Sweden",
+      "flag_a": "🏳",
+      "team_b": "Tunisia",
+      "flag_b": "🇹🇳",
+      "date": "2026-06-15",
+      "venue": "",
+      "prob_a": 71.8,
+      "prob_draw": 18.0,
+      "prob_b": 10.2,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          18.3
+        ],
+        [
+          "2:0",
+          15.2
+        ],
+        [
+          "0:0",
+          11.0
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.06,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H1",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Spain",
+      "flag_a": "🇪🇸",
+      "team_b": "Cape Verde Islands",
+      "flag_b": "🏳",
+      "date": "2026-06-15",
+      "venue": "",
+      "prob_a": 60.6,
+      "prob_draw": 22.7,
+      "prob_b": 16.7,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          14.2
+        ],
+        [
+          "2:0",
+          12.9
+        ],
+        [
+          "1:1",
+          10.6
+        ]
+      ],
+      "klement_a": 0.36,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G1",
+      "group": "G",
+      "phase": "group",
+      "team_a": "Belgium",
+      "flag_a": "🇧🇪",
+      "team_b": "Egypt",
+      "flag_b": "🇪🇬",
+      "date": "2026-06-15",
+      "venue": "",
+      "prob_a": 87.2,
+      "prob_draw": 10.0,
+      "prob_b": 2.7,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          19.8
+        ],
+        [
+          "1:0",
+          17.1
+        ],
+        [
+          "3:0",
+          15.3
+        ]
+      ],
+      "klement_a": 0.42,
+      "klement_b": 0.15,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H2",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Saudi Arabia",
+      "flag_a": "🇸🇦",
+      "team_b": "Uruguay",
+      "flag_b": "🇺🇾",
+      "date": "2026-06-15",
+      "venue": "",
+      "prob_a": 4.4,
+      "prob_draw": 10.7,
+      "prob_b": 84.9,
+      "tip": "0:2",
+      "top_results": [
+        [
+          "0:2",
+          16.4
+        ],
+        [
+          "0:1",
+          14.2
+        ],
+        [
+          "0:3",
+          12.6
+        ]
+      ],
+      "klement_a": 0.24,
+      "klement_b": 0.23,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G2",
+      "group": "G",
+      "phase": "group",
+      "team_a": "Iran",
+      "flag_a": "🇮🇷",
+      "team_b": "New Zealand",
+      "flag_b": "🇳🇿",
+      "date": "2026-06-16",
+      "venue": "",
+      "prob_a": 9.9,
+      "prob_draw": 36.6,
+      "prob_b": 53.5,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          26.3
+        ],
+        [
+          "0:0",
+          24.1
+        ],
+        [
+          "0:2",
+          14.3
+        ]
+      ],
+      "klement_a": 0.18,
+      "klement_b": 0.17,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I1",
+      "group": "I",
+      "phase": "group",
+      "team_a": "France",
+      "flag_a": "🇫🇷",
+      "team_b": "Senegal",
+      "flag_b": "🇸🇳",
+      "date": "2026-06-16",
+      "venue": "",
+      "prob_a": 66.4,
+      "prob_draw": 19.1,
+      "prob_b": 14.5,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          10.4
+        ],
+        [
+          "2:1",
+          10.0
+        ],
+        [
+          "1:0",
+          8.7
+        ]
+      ],
+      "klement_a": 0.45,
+      "klement_b": 0.18,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I2",
+      "group": "I",
+      "phase": "group",
+      "team_a": "Iraq",
+      "flag_a": "🇮🇶",
+      "team_b": "Norway",
+      "flag_b": "🏳",
+      "date": "2026-06-16",
+      "venue": "",
+      "prob_a": 39.2,
+      "prob_draw": 31.3,
+      "prob_b": 29.5,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          15.4
+        ],
+        [
+          "0:1",
+          14.4
+        ],
+        [
+          "1:0",
+          14.4
+        ]
+      ],
+      "klement_a": 0.05,
+      "klement_b": 0.57,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J1",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Argentina",
+      "flag_a": "🇦🇷",
+      "team_b": "Algeria",
+      "flag_b": "🏳",
+      "date": "2026-06-17",
+      "venue": "",
+      "prob_a": 62.7,
+      "prob_draw": 20.7,
+      "prob_b": 16.7,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          12.7
+        ],
+        [
+          "1:1",
+          11.8
+        ],
+        [
+          "2:0",
+          10.3
+        ]
+      ],
+      "klement_a": 0.32,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J2",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Austria",
+      "flag_a": "🇦🇹",
+      "team_b": "Jordan",
+      "flag_b": "🇯🇴",
+      "date": "2026-06-17",
+      "venue": "",
+      "prob_a": 39.2,
+      "prob_draw": 31.3,
+      "prob_b": 29.5,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          15.4
+        ],
+        [
+          "0:1",
+          14.4
+        ],
+        [
+          "1:0",
+          14.4
+        ]
+      ],
+      "klement_a": 0.34,
+      "klement_b": 0.07,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K1",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Portugal",
+      "flag_a": "🇵🇹",
+      "team_b": "Congo DR",
+      "flag_b": "🏳",
+      "date": "2026-06-17",
+      "venue": "",
+      "prob_a": 66.4,
+      "prob_draw": 21.1,
+      "prob_b": 12.5,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          14.4
+        ],
+        [
+          "2:0",
+          12.2
+        ],
+        [
+          "1:1",
+          11.2
+        ]
+      ],
+      "klement_a": 0.32,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L1",
+      "group": "L",
+      "phase": "group",
+      "team_a": "England",
+      "flag_a": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "team_b": "Croatia",
+      "flag_b": "🇭🇷",
+      "date": "2026-06-17",
+      "venue": "",
+      "prob_a": 42.9,
+      "prob_draw": 28.9,
+      "prob_b": 28.2,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.0
+        ],
+        [
+          "1:0",
+          9.4
+        ],
+        [
+          "2:1",
+          9.0
+        ]
+      ],
+      "klement_a": 0.47,
+      "klement_b": 0.29,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L2",
+      "group": "L",
+      "phase": "group",
+      "team_a": "Ghana",
+      "flag_a": "🏳",
+      "team_b": "Panama",
+      "flag_b": "🇵🇦",
+      "date": "2026-06-17",
+      "venue": "",
+      "prob_a": 82.8,
+      "prob_draw": 9.3,
+      "prob_b": 7.9,
+      "tip": "3:0",
+      "top_results": [
+        [
+          "3:0",
+          11.4
+        ],
+        [
+          "4:0",
+          11.2
+        ],
+        [
+          "3:1",
+          8.9
+        ]
+      ],
+      "klement_a": 0.03,
+      "klement_b": 0.06,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K2",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Uzbekistan",
+      "flag_a": "🏳",
+      "team_b": "Colombia",
+      "flag_b": "🇨🇴",
+      "date": "2026-06-18",
+      "venue": "",
+      "prob_a": 8.1,
+      "prob_draw": 16.0,
+      "prob_b": 75.9,
+      "tip": "0:2",
+      "top_results": [
+        [
+          "0:2",
+          15.1
+        ],
+        [
+          "0:1",
+          14.5
+        ],
+        [
+          "0:3",
+          10.4
+        ]
+      ],
+      "klement_a": 0.03,
+      "klement_b": 0.23,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "A3",
+      "group": "A",
+      "phase": "group",
+      "team_a": "Czechia",
+      "flag_a": "🏳",
+      "team_b": "South Africa",
+      "flag_b": "🇿🇦",
+      "date": "2026-06-18",
+      "venue": "",
+      "prob_a": 34.5,
+      "prob_draw": 26.5,
+      "prob_b": 39.0,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.8
+        ],
+        [
+          "0:1",
+          11.7
+        ],
+        [
+          "1:0",
+          9.2
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.06,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B3",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Switzerland",
+      "flag_a": "🇨🇭",
+      "team_b": "Bosnia-Herzegovina",
+      "flag_b": "🏳",
+      "date": "2026-06-18",
+      "venue": "",
+      "prob_a": 41.1,
+      "prob_draw": 32.1,
+      "prob_b": 26.8,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          15.0
+        ],
+        [
+          "1:1",
+          13.3
+        ],
+        [
+          "0:0",
+          13.1
+        ]
+      ],
+      "klement_a": 0.51,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B4",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Canada",
+      "flag_a": "🇨🇦",
+      "team_b": "Qatar",
+      "flag_b": "🇶🇦",
+      "date": "2026-06-18",
+      "venue": "",
+      "prob_a": 54.0,
+      "prob_draw": 24.6,
+      "prob_b": 21.3,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          16.3
+        ],
+        [
+          "2:0",
+          12.6
+        ],
+        [
+          "1:1",
+          11.6
+        ]
+      ],
+      "klement_a": 0.3,
+      "klement_b": 0.33,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "A4",
+      "group": "A",
+      "phase": "group",
+      "team_a": "Mexico",
+      "flag_a": "🇲🇽",
+      "team_b": "South Korea",
+      "flag_b": "🇰🇷",
+      "date": "2026-06-19",
+      "venue": "",
+      "prob_a": 43.0,
+      "prob_draw": 29.7,
+      "prob_b": 27.3,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.7
+        ],
+        [
+          "1:0",
+          11.1
+        ],
+        [
+          "0:1",
+          9.1
+        ]
+      ],
+      "klement_a": 0.33,
+      "klement_b": 0.3,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D3",
+      "group": "D",
+      "phase": "group",
+      "team_a": "United States",
+      "flag_a": "🇺🇸",
+      "team_b": "Australia",
+      "flag_b": "🇦🇺",
+      "date": "2026-06-19",
+      "venue": "",
+      "prob_a": 38.5,
+      "prob_draw": 29.2,
+      "prob_b": 32.4,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.1
+        ],
+        [
+          "1:0",
+          9.5
+        ],
+        [
+          "2:1",
+          9.0
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.35,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C3",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Scotland",
+      "flag_a": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "team_b": "Morocco",
+      "flag_b": "🇲🇦",
+      "date": "2026-06-19",
+      "venue": "",
+      "prob_a": 27.6,
+      "prob_draw": 36.5,
+      "prob_b": 35.8,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          25.0
+        ],
+        [
+          "0:1",
+          20.9
+        ],
+        [
+          "1:0",
+          13.8
+        ]
+      ],
+      "klement_a": 0.26,
+      "klement_b": 0.22,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C4",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Brazil",
+      "flag_a": "🇧🇷",
+      "team_b": "Haiti",
+      "flag_b": "🏳",
+      "date": "2026-06-20",
+      "venue": "",
+      "prob_a": 66.2,
+      "prob_draw": 22.9,
+      "prob_b": 10.8,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          16.2
+        ],
+        [
+          "2:0",
+          13.4
+        ],
+        [
+          "1:1",
+          11.0
+        ]
+      ],
+      "klement_a": 0.42,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D4",
+      "group": "D",
+      "phase": "group",
+      "team_a": "Turkey",
+      "flag_a": "🇹🇷",
+      "team_b": "Paraguay",
+      "flag_b": "🏳",
+      "date": "2026-06-20",
+      "venue": "",
+      "prob_a": 26.0,
+      "prob_draw": 37.0,
+      "prob_b": 37.1,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          34.2
+        ],
+        [
+          "0:1",
+          24.8
+        ],
+        [
+          "1:0",
+          11.9
+        ]
+      ],
+      "klement_a": 0.24,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F3",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Netherlands",
+      "flag_a": "🇳🇱",
+      "team_b": "Sweden",
+      "flag_b": "🏳",
+      "date": "2026-06-20",
+      "venue": "",
+      "prob_a": 54.6,
+      "prob_draw": 29.3,
+      "prob_b": 16.1,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          19.9
+        ],
+        [
+          "0:0",
+          18.1
+        ],
+        [
+          "1:1",
+          12.1
+        ]
+      ],
+      "klement_a": 0.46,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E3",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Germany",
+      "flag_a": "🇩🇪",
+      "team_b": "Ivory Coast",
+      "flag_b": "🇨🇮",
+      "date": "2026-06-20",
+      "venue": "",
+      "prob_a": 72.2,
+      "prob_draw": 14.5,
+      "prob_b": 13.3,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          11.7
+        ],
+        [
+          "3:0",
+          10.4
+        ],
+        [
+          "2:1",
+          9.4
+        ]
+      ],
+      "klement_a": 0.43,
+      "klement_b": 0.11,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E4",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Ecuador",
+      "flag_a": "🇪🇨",
+      "team_b": "Curaçao",
+      "flag_b": "🏳",
+      "date": "2026-06-21",
+      "venue": "",
+      "prob_a": 46.1,
+      "prob_draw": 29.4,
+      "prob_b": 24.5,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          17.0
+        ],
+        [
+          "0:0",
+          14.2
+        ],
+        [
+          "1:1",
+          12.9
+        ]
+      ],
+      "klement_a": 0.17,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F4",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Tunisia",
+      "flag_a": "🇹🇳",
+      "team_b": "Japan",
+      "flag_b": "🇯🇵",
+      "date": "2026-06-21",
+      "venue": "",
+      "prob_a": 14.4,
+      "prob_draw": 23.2,
+      "prob_b": 62.4,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          13.7
+        ],
+        [
+          "1:1",
+          11.8
+        ],
+        [
+          "0:2",
+          11.0
+        ]
+      ],
+      "klement_a": 0.06,
+      "klement_b": 0.37,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H3",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Spain",
+      "flag_a": "🇪🇸",
+      "team_b": "Saudi Arabia",
+      "flag_b": "🇸🇦",
+      "date": "2026-06-21",
+      "venue": "",
+      "prob_a": 83.0,
+      "prob_draw": 9.9,
+      "prob_b": 7.1,
+      "tip": "3:0",
+      "top_results": [
+        [
+          "3:0",
+          13.7
+        ],
+        [
+          "2:0",
+          12.6
+        ],
+        [
+          "4:0",
+          11.2
+        ]
+      ],
+      "klement_a": 0.36,
+      "klement_b": 0.24,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G3",
+      "group": "G",
+      "phase": "group",
+      "team_a": "Belgium",
+      "flag_a": "🇧🇪",
+      "team_b": "Iran",
+      "flag_b": "🇮🇷",
+      "date": "2026-06-21",
+      "venue": "",
+      "prob_a": 77.2,
+      "prob_draw": 15.5,
+      "prob_b": 7.3,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          19.0
+        ],
+        [
+          "2:0",
+          17.1
+        ],
+        [
+          "0:0",
+          10.5
+        ]
+      ],
+      "klement_a": 0.42,
+      "klement_b": 0.18,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H4",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Uruguay",
+      "flag_a": "🇺🇾",
+      "team_b": "Cape Verde Islands",
+      "flag_b": "🏳",
+      "date": "2026-06-21",
+      "venue": "",
+      "prob_a": 59.2,
+      "prob_draw": 25.8,
+      "prob_b": 15.1,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          18.9
+        ],
+        [
+          "0:0",
+          14.7
+        ],
+        [
+          "2:0",
+          12.2
+        ]
+      ],
+      "klement_a": 0.23,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G4",
+      "group": "G",
+      "phase": "group",
+      "team_a": "New Zealand",
+      "flag_a": "🇳🇿",
+      "team_b": "Egypt",
+      "flag_b": "🇪🇬",
+      "date": "2026-06-22",
+      "venue": "",
+      "prob_a": 69.1,
+      "prob_draw": 24.2,
+      "prob_b": 6.8,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          27.4
+        ],
+        [
+          "0:0",
+          19.6
+        ],
+        [
+          "2:0",
+          19.3
+        ]
+      ],
+      "klement_a": 0.17,
+      "klement_b": 0.15,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J3",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Argentina",
+      "flag_a": "🇦🇷",
+      "team_b": "Austria",
+      "flag_b": "🇦🇹",
+      "date": "2026-06-22",
+      "venue": "",
+      "prob_a": 65.9,
+      "prob_draw": 19.9,
+      "prob_b": 14.2,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          13.7
+        ],
+        [
+          "2:0",
+          12.7
+        ],
+        [
+          "1:1",
+          10.4
+        ]
+      ],
+      "klement_a": 0.32,
+      "klement_b": 0.34,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I3",
+      "group": "I",
+      "phase": "group",
+      "team_a": "France",
+      "flag_a": "🇫🇷",
+      "team_b": "Iraq",
+      "flag_b": "🇮🇶",
+      "date": "2026-06-22",
+      "venue": "",
+      "prob_a": 70.1,
+      "prob_draw": 18.4,
+      "prob_b": 11.5,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          15.2
+        ],
+        [
+          "2:0",
+          14.5
+        ],
+        [
+          "1:1",
+          9.7
+        ]
+      ],
+      "klement_a": 0.45,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I4",
+      "group": "I",
+      "phase": "group",
+      "team_a": "Norway",
+      "flag_a": "🏳",
+      "team_b": "Senegal",
+      "flag_b": "🇸🇳",
+      "date": "2026-06-23",
+      "venue": "",
+      "prob_a": 32.5,
+      "prob_draw": 28.3,
+      "prob_b": 39.2,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.5
+        ],
+        [
+          "0:1",
+          10.6
+        ],
+        [
+          "1:0",
+          8.9
+        ]
+      ],
+      "klement_a": 0.57,
+      "klement_b": 0.18,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J4",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Jordan",
+      "flag_a": "🇯🇴",
+      "team_b": "Algeria",
+      "flag_b": "🏳",
+      "date": "2026-06-23",
+      "venue": "",
+      "prob_a": 37.9,
+      "prob_draw": 27.3,
+      "prob_b": 34.8,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          16.1
+        ],
+        [
+          "0:0",
+          14.0
+        ],
+        [
+          "1:1",
+          13.2
+        ]
+      ],
+      "klement_a": 0.07,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K3",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Portugal",
+      "flag_a": "🇵🇹",
+      "team_b": "Uzbekistan",
+      "flag_b": "🏳",
+      "date": "2026-06-23",
+      "venue": "",
+      "prob_a": 66.4,
+      "prob_draw": 21.1,
+      "prob_b": 12.5,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          14.4
+        ],
+        [
+          "2:0",
+          12.2
+        ],
+        [
+          "1:1",
+          11.2
+        ]
+      ],
+      "klement_a": 0.32,
+      "klement_b": 0.03,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L3",
+      "group": "L",
+      "phase": "group",
+      "team_a": "England",
+      "flag_a": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "team_b": "Ghana",
+      "flag_b": "🏳",
+      "date": "2026-06-23",
+      "venue": "",
+      "prob_a": 53.8,
+      "prob_draw": 23.7,
+      "prob_b": 22.4,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          11.9
+        ],
+        [
+          "1:0",
+          11.3
+        ],
+        [
+          "2:1",
+          9.6
+        ]
+      ],
+      "klement_a": 0.47,
+      "klement_b": 0.03,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L4",
+      "group": "L",
+      "phase": "group",
+      "team_a": "Panama",
+      "flag_a": "🇵🇦",
+      "team_b": "Croatia",
+      "flag_b": "🇭🇷",
+      "date": "2026-06-23",
+      "venue": "",
+      "prob_a": 2.1,
+      "prob_draw": 6.2,
+      "prob_b": 91.6,
+      "tip": "0:4",
+      "top_results": [
+        [
+          "0:4",
+          13.5
+        ],
+        [
+          "0:5",
+          12.9
+        ],
+        [
+          "0:3",
+          11.4
+        ]
+      ],
+      "klement_a": 0.06,
+      "klement_b": 0.29,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K4",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Colombia",
+      "flag_a": "🇨🇴",
+      "team_b": "Congo DR",
+      "flag_b": "🏳",
+      "date": "2026-06-24",
+      "venue": "",
+      "prob_a": 68.4,
+      "prob_draw": 17.4,
+      "prob_b": 14.3,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          15.1
+        ],
+        [
+          "1:0",
+          14.5
+        ],
+        [
+          "3:0",
+          10.4
+        ]
+      ],
+      "klement_a": 0.23,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B5",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Switzerland",
+      "flag_a": "🇨🇭",
+      "team_b": "Canada",
+      "flag_b": "🇨🇦",
+      "date": "2026-06-24",
+      "venue": "",
+      "prob_a": 71.1,
+      "prob_draw": 18.9,
+      "prob_b": 10.0,
+      "tip": "2:0",
+      "top_results": [
+        [
+          "2:0",
+          11.3
+        ],
+        [
+          "1:0",
+          10.8
+        ],
+        [
+          "2:1",
+          10.1
+        ]
+      ],
+      "klement_a": 0.51,
+      "klement_b": 0.3,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "B6",
+      "group": "B",
+      "phase": "group",
+      "team_a": "Bosnia-Herzegovina",
+      "flag_a": "🏳",
+      "team_b": "Qatar",
+      "flag_b": "🇶🇦",
+      "date": "2026-06-24",
+      "venue": "",
+      "prob_a": 73.6,
+      "prob_draw": 20.7,
+      "prob_b": 5.7,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          22.5
+        ],
+        [
+          "2:0",
+          17.3
+        ],
+        [
+          "0:0",
+          14.6
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.33,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C5",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Morocco",
+      "flag_a": "🇲🇦",
+      "team_b": "Haiti",
+      "flag_b": "🏳",
+      "date": "2026-06-24",
+      "venue": "",
+      "prob_a": 34.3,
+      "prob_draw": 35.8,
+      "prob_b": 29.9,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          25.0
+        ],
+        [
+          "1:0",
+          20.9
+        ],
+        [
+          "0:1",
+          13.8
+        ]
+      ],
+      "klement_a": 0.22,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "C6",
+      "group": "C",
+      "phase": "group",
+      "team_a": "Scotland",
+      "flag_a": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "team_b": "Brazil",
+      "flag_b": "🇧🇷",
+      "date": "2026-06-24",
+      "venue": "",
+      "prob_a": 18.4,
+      "prob_draw": 23.4,
+      "prob_b": 58.2,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          16.2
+        ],
+        [
+          "0:2",
+          13.4
+        ],
+        [
+          "1:1",
+          11.0
+        ]
+      ],
+      "klement_a": 0.26,
+      "klement_b": 0.42,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "A5",
+      "group": "A",
+      "phase": "group",
+      "team_a": "Czechia",
+      "flag_a": "🏳",
+      "team_b": "Mexico",
+      "flag_b": "🇲🇽",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 27.4,
+      "prob_draw": 29.7,
+      "prob_b": 42.9,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          17.0
+        ],
+        [
+          "0:0",
+          15.6
+        ],
+        [
+          "1:1",
+          13.1
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.33,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "A6",
+      "group": "A",
+      "phase": "group",
+      "team_a": "South Africa",
+      "flag_a": "🇿🇦",
+      "team_b": "South Korea",
+      "flag_b": "🇰🇷",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 42.7,
+      "prob_draw": 28.6,
+      "prob_b": 28.8,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          9.8
+        ],
+        [
+          "2:1",
+          8.7
+        ],
+        [
+          "1:2",
+          8.0
+        ]
+      ],
+      "klement_a": 0.06,
+      "klement_b": 0.3,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E5",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Ecuador",
+      "flag_a": "🇪🇨",
+      "team_b": "Germany",
+      "flag_b": "🇩🇪",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 9.6,
+      "prob_draw": 19.9,
+      "prob_b": 70.5,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          13.9
+        ],
+        [
+          "0:2",
+          12.8
+        ],
+        [
+          "1:1",
+          10.5
+        ]
+      ],
+      "klement_a": 0.17,
+      "klement_b": 0.43,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "E6",
+      "group": "E",
+      "phase": "group",
+      "team_a": "Curaçao",
+      "flag_a": "🏳",
+      "team_b": "Ivory Coast",
+      "flag_b": "🇨🇮",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 41.2,
+      "prob_draw": 27.6,
+      "prob_b": 31.2,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          13.1
+        ],
+        [
+          "0:1",
+          11.9
+        ],
+        [
+          "1:0",
+          10.4
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.11,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F5",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Tunisia",
+      "flag_a": "🇹🇳",
+      "team_b": "Netherlands",
+      "flag_b": "🇳🇱",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 4.5,
+      "prob_draw": 13.6,
+      "prob_b": 81.9,
+      "tip": "0:2",
+      "top_results": [
+        [
+          "0:2",
+          18.1
+        ],
+        [
+          "0:1",
+          16.0
+        ],
+        [
+          "0:3",
+          13.7
+        ]
+      ],
+      "klement_a": 0.06,
+      "klement_b": 0.46,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "F6",
+      "group": "F",
+      "phase": "group",
+      "team_a": "Japan",
+      "flag_a": "🇯🇵",
+      "team_b": "Sweden",
+      "flag_b": "🏳",
+      "date": "2026-06-25",
+      "venue": "",
+      "prob_a": 17.6,
+      "prob_draw": 24.6,
+      "prob_b": 57.8,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          16.4
+        ],
+        [
+          "0:0",
+          13.0
+        ],
+        [
+          "1:1",
+          12.8
+        ]
+      ],
+      "klement_a": 0.37,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D5",
+      "group": "D",
+      "phase": "group",
+      "team_a": "Turkey",
+      "flag_a": "🇹🇷",
+      "team_b": "United States",
+      "flag_b": "🇺🇸",
+      "date": "2026-06-26",
+      "venue": "",
+      "prob_a": 35.4,
+      "prob_draw": 28.2,
+      "prob_b": 36.4,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          13.7
+        ],
+        [
+          "1:1",
+          13.5
+        ],
+        [
+          "0:0",
+          12.4
+        ]
+      ],
+      "klement_a": 0.24,
+      "klement_b": 0.53,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "D6",
+      "group": "D",
+      "phase": "group",
+      "team_a": "Paraguay",
+      "flag_a": "🏳",
+      "team_b": "Australia",
+      "flag_b": "🇦🇺",
+      "date": "2026-06-26",
+      "venue": "",
+      "prob_a": 41.1,
+      "prob_draw": 39.6,
+      "prob_b": 19.3,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          24.1
+        ],
+        [
+          "1:0",
+          23.5
+        ],
+        [
+          "2:0",
+          11.4
+        ]
+      ],
+      "klement_a": 0.05,
+      "klement_b": 0.35,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I5",
+      "group": "I",
+      "phase": "group",
+      "team_a": "Norway",
+      "flag_a": "🏳",
+      "team_b": "France",
+      "flag_b": "🇫🇷",
+      "date": "2026-06-26",
+      "venue": "",
+      "prob_a": 12.8,
+      "prob_draw": 19.5,
+      "prob_b": 67.7,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          15.2
+        ],
+        [
+          "0:2",
+          14.5
+        ],
+        [
+          "1:1",
+          9.7
+        ]
+      ],
+      "klement_a": 0.57,
+      "klement_b": 0.45,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "I6",
+      "group": "I",
+      "phase": "group",
+      "team_a": "Senegal",
+      "flag_a": "🇸🇳",
+      "team_b": "Iraq",
+      "flag_b": "🇮🇶",
+      "date": "2026-06-26",
+      "venue": "",
+      "prob_a": 47.2,
+      "prob_draw": 24.3,
+      "prob_b": 28.5,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          12.5
+        ],
+        [
+          "1:0",
+          10.6
+        ],
+        [
+          "0:1",
+          8.9
+        ]
+      ],
+      "klement_a": 0.18,
+      "klement_b": 0.05,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H5",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Uruguay",
+      "flag_a": "🇺🇾",
+      "team_b": "Spain",
+      "flag_b": "🇪🇸",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 32.4,
+      "prob_draw": 27.6,
+      "prob_b": 39.9,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          13.3
+        ],
+        [
+          "0:1",
+          13.0
+        ],
+        [
+          "1:0",
+          10.8
+        ]
+      ],
+      "klement_a": 0.23,
+      "klement_b": 0.36,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "H6",
+      "group": "H",
+      "phase": "group",
+      "team_a": "Cape Verde Islands",
+      "flag_a": "🏳",
+      "team_b": "Saudi Arabia",
+      "flag_b": "🇸🇦",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 66.3,
+      "prob_draw": 20.7,
+      "prob_b": 13.0,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          14.8
+        ],
+        [
+          "2:0",
+          12.5
+        ],
+        [
+          "1:1",
+          11.2
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.24,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G5",
+      "group": "G",
+      "phase": "group",
+      "team_a": "New Zealand",
+      "flag_a": "🇳🇿",
+      "team_b": "Belgium",
+      "flag_b": "🇧🇪",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 14.8,
+      "prob_draw": 39.6,
+      "prob_b": 45.6,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          36.2
+        ],
+        [
+          "0:1",
+          20.0
+        ],
+        [
+          "1:0",
+          16.7
+        ]
+      ],
+      "klement_a": 0.17,
+      "klement_b": 0.42,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "G6",
+      "group": "G",
+      "phase": "group",
+      "team_a": "Egypt",
+      "flag_a": "🇪🇬",
+      "team_b": "Iran",
+      "flag_b": "🇮🇷",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 12.8,
+      "prob_draw": 22.6,
+      "prob_b": 64.5,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          16.3
+        ],
+        [
+          "1:1",
+          12.3
+        ],
+        [
+          "0:0",
+          11.7
+        ]
+      ],
+      "klement_a": 0.15,
+      "klement_b": 0.18,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L5",
+      "group": "L",
+      "phase": "group",
+      "team_a": "Panama",
+      "flag_a": "🇵🇦",
+      "team_b": "England",
+      "flag_b": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 2.0,
+      "prob_draw": 6.1,
+      "prob_b": 92.0,
+      "tip": "0:4",
+      "top_results": [
+        [
+          "0:4",
+          15.1
+        ],
+        [
+          "0:5",
+          13.7
+        ],
+        [
+          "0:3",
+          13.4
+        ]
+      ],
+      "klement_a": 0.06,
+      "klement_b": 0.47,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "L6",
+      "group": "L",
+      "phase": "group",
+      "team_a": "Croatia",
+      "flag_a": "🇭🇷",
+      "team_b": "Ghana",
+      "flag_b": "🏳",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 54.7,
+      "prob_draw": 24.6,
+      "prob_b": 20.7,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          11.1
+        ],
+        [
+          "2:1",
+          9.5
+        ],
+        [
+          "1:0",
+          8.5
+        ]
+      ],
+      "klement_a": 0.29,
+      "klement_b": 0.03,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K5",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Colombia",
+      "flag_a": "🇨🇴",
+      "team_b": "Portugal",
+      "flag_b": "🇵🇹",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 62.4,
+      "prob_draw": 21.2,
+      "prob_b": 16.4,
+      "tip": "1:1",
+      "top_results": [
+        [
+          "1:1",
+          11.4
+        ],
+        [
+          "1:0",
+          10.4
+        ],
+        [
+          "2:1",
+          9.8
+        ]
+      ],
+      "klement_a": 0.23,
+      "klement_b": 0.32,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "K6",
+      "group": "K",
+      "phase": "group",
+      "team_a": "Congo DR",
+      "flag_a": "🏳",
+      "team_b": "Uzbekistan",
+      "flag_b": "🏳",
+      "date": "2026-06-27",
+      "venue": "",
+      "prob_a": 39.2,
+      "prob_draw": 31.3,
+      "prob_b": 29.5,
+      "tip": "0:0",
+      "top_results": [
+        [
+          "0:0",
+          15.4
+        ],
+        [
+          "0:1",
+          14.4
+        ],
+        [
+          "1:0",
+          14.4
+        ]
+      ],
+      "klement_a": 0.53,
+      "klement_b": 0.03,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J5",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Jordan",
+      "flag_a": "🇯🇴",
+      "team_b": "Argentina",
+      "flag_b": "🇦🇷",
+      "date": "2026-06-28",
+      "venue": "",
+      "prob_a": 17.5,
+      "prob_draw": 20.1,
+      "prob_b": 62.4,
+      "tip": "0:1",
+      "top_results": [
+        [
+          "0:1",
+          13.7
+        ],
+        [
+          "0:2",
+          12.7
+        ],
+        [
+          "1:1",
+          10.4
+        ]
+      ],
+      "klement_a": 0.07,
+      "klement_b": 0.32,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    },
+    {
+      "match_id": "J6",
+      "group": "J",
+      "phase": "group",
+      "team_a": "Algeria",
+      "flag_a": "🏳",
+      "team_b": "Austria",
+      "flag_b": "🇦🇹",
+      "date": "2026-06-28",
+      "venue": "",
+      "prob_a": 34.7,
+      "prob_draw": 35.6,
+      "prob_b": 29.6,
+      "tip": "1:0",
+      "top_results": [
+        [
+          "1:0",
+          16.1
+        ],
+        [
+          "0:0",
+          14.0
+        ],
+        [
+          "1:1",
+          13.2
+        ]
+      ],
+      "klement_a": 0.05,
+      "klement_b": 0.34,
       "form_a": [],
       "form_b": [],
       "injuries_a": [],
