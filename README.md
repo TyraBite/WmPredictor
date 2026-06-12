@@ -94,22 +94,11 @@ Written 72 group + 32 KO slots → data/fixtures.json
 
 Die 48 Gruppenspiele enthalten bereits Teams, Datum und Spielort. Die 32 KO-Slots sind als Platzhalter angelegt und werden automatisch befüllt, sobald die Gruppenphase durch ist.
 
-### Schritt 4 — Statische Scores und Elo-Ratings berechnen
+### Schritt 4 — Statische Scores und Elo-Ratings ~~berechnen~~ (entfällt)
 
-Dieser Schritt lädt Bevölkerungs- und BIP-Daten von der Weltbank sowie Klimadaten von Open-Meteo. Die historischen WM-Spielergebnisse (2006–2022) sind bereits als `data/historical_matches.json` im Repository enthalten — kein API-Key nötig. Alle externen Daten werden lokal gecacht, sodass der Schritt nur beim allerersten Aufruf länger dauert (ca. 2–5 Minuten).
+`data/klement_scores.json` und `data/elo_ratings.json` sind bereits im Repository enthalten. Dieser Schritt ist nicht mehr nötig.
 
-```bash
-python src/klement.py
-```
-
-Erwartete Ausgabe:
-```
-Klement scores + Elo ratings computed for 48 teams.
-```
-
-Erzeugte Dateien:
-- `data/klement_scores.json` — Klement-Score, Heimklima und Venue-Klima pro Team
-- `data/elo_ratings.json` — Elo-Rating pro Team basierend auf WM-Ergebnissen 2006–2022
+> `src/klement.py` bleibt im Repo falls die Daten nach einer Regeländerung (FIFA-Ranking, neue WM-Ergebnisse) neu berechnet werden sollen.
 
 ### Schritt 5 — Vorhersagemodell trainieren
 
