@@ -55,11 +55,13 @@
   .dot-L { color: var(--loss); }
 
   /* Pending: tip row + confidence badge */
-  .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+  .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
   .tip-label { font-size: 0.8rem; color: var(--muted); }
   .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .tip-alt   { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .tip-prob  { font-size: 0.72rem; color: var(--muted); }
+  .tip-sep   { color: var(--muted); font-size: 0.75rem; }
   .tip-winner { font-size: 0.8rem; color: var(--muted); }
-  .second-tip { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
   .badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
            font-size: 0.7rem; font-weight: 700; letter-spacing: .03em; }
@@ -125,6 +127,18 @@
     const d = new Date(s + "T12:00:00");
     return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
   }
+  function fmtDateTime(kickoff_utc, date) {
+    if (kickoff_utc) {
+      const d = new Date(kickoff_utc);
+      const months = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+      const day = d.toLocaleDateString("en-CA"); // local YYYY-MM-DD
+      const todayStr = today();
+      const dateLabel = day === todayStr ? "Heute" : fmtDate(day);
+      const time = d.toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit"});
+      return `${dateLabel}, ${time} Uhr`;
+    }
+    return fmtDate(date);
+  }
   function fmtPhase(p) {
     return {"group":"Gruppenphase","round_of_32":"Achtelfinale",
             "round_of_16":"Sechzehntelfinale","quarter_final":"Viertelfinale",
@@ -161,10 +175,12 @@
     const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
     const bA = (m.prob_a||0).toFixed(0), bD = (m.prob_draw||0).toFixed(0), bB = (m.prob_b||0).toFixed(0);
     const hasInj = (m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
-    const secondLine = m.confidence_level === "low" && m.second_tip
-      ? `<div class="second-tip">Alt: ${m.second_tip}</div>` : "";
+    const top3 = (m.top_results||[]).slice(0,3);
+    const tipsHtml = top3.map((t,i) =>
+      `<span class="${i===0?"tip-value":"tip-alt"}">${t[0]}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
+    ).join('<span class="tip-sep">·</span>');
     return `<div class="card">
-  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
+  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
     <span>${m.flag_a||""} ${m.team_a}</span>
     <span class="vs">vs</span>
@@ -172,11 +188,9 @@
   </div>
   <hr class="card-divider"/>
   <div class="tip-row">
-    <span class="tip-label">Tipp:</span>
-    <span class="tip-value">${m.tip}</span>
-    <span class="tip-winner">(${tipWinner(m)})</span>
+    <span class="tip-label">Tipps:</span>
+    ${tipsHtml}
   </div>
-  ${secondLine}
   <div class="prob-bar">
     <div class="bar-a" style="width:${bA}%"></div>
     <div class="bar-draw" style="width:${bD}%"></div>
@@ -268,7 +282,13 @@
 
       const pending = data.pending_matches || [];
       const completed = data.completed_matches || [];
+      // HEUTE: at least 3 — today's matches first, fill with next upcoming if needed
       const todayPending = pending.filter(m => m.date === todayStr);
+      const futurePending = pending.filter(m => m.date > todayStr);
+      const heuteMatches = todayPending.length >= 3
+        ? todayPending
+        : [...todayPending, ...futurePending].slice(0, Math.max(3, todayPending.length));
+
       const yesterdayCompleted = completed.filter(m => m.date === yestStr);
 
       const totalPending = pending.length;
@@ -277,10 +297,10 @@
 
       // HEUTE section
       let heuteHtml = sectionHeader("HEUTE", data.tournament_phase);
-      if (todayPending.length) {
-        heuteHtml += todayPending.map(renderPending).join("");
+      if (heuteMatches.length) {
+        heuteHtml += heuteMatches.map(renderPending).join("");
       } else {
-        heuteHtml += `<p class="section-empty">Heute keine Spiele</p>`;
+        heuteHtml += `<p class="section-empty">Keine ausstehenden Spiele</p>`;
       }
       document.getElementById("section-heute").innerHTML = heuteHtml;
 

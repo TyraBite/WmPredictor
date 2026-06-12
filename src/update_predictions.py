@@ -126,6 +126,7 @@ def build_predictions_json(
             "team_b": m["team_b"],
             "flag_b": m.get("flag_b", ""),
             "date": m["date"],
+            "kickoff_utc": m.get("kickoff_utc"),
             "venue": m["venue"],
             "prob_a": round(r.prob_a * 100, 1),
             "prob_draw": round(r.prob_draw * 100, 1),

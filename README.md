@@ -144,6 +144,8 @@ python predict.py
 python predict.py "Germany" "France"
 ```
 
+`predict.py` ruft automatisch Ergebnisse ab, wenn `FOOTBALL_DATA_KEY` gesetzt ist und vergangene Spiele noch als ausstehend markiert sind. Ein manueller Abruf ist daher in der Regel nicht nötig.
+
 ### Ergebnis nach einem Spiel eintragen
 
 Die Match-ID steht in der Ausgabe von `predict.py` und entspricht dem Schema `A1`, `B3`, `R32_4` etc.
@@ -183,7 +185,7 @@ Dies regeneriert `docs/predictions.json`, die von der Web-App geladen wird. Soll
 
 Wenn das Repository auf GitHub liegt, übernehmen zwei Workflows die automatische Aktualisierung:
 
-- **`update_after_matchday.yml`** — läuft täglich um 19:15 und 22:15 MESZ, holt Spielergebnisse von API-Football und regeneriert `docs/predictions.json`
+- **`update_after_matchday.yml`** — läuft täglich um 19:15 und 22:15 MESZ, holt Spielergebnisse von football-data.org und regeneriert `docs/predictions.json`
 - **`injury_update.yml`** — läuft automatisch, sobald `data/injuries.json` gepusht wird
 
 ### Secrets im Repository hinterlegen
@@ -192,7 +194,7 @@ Im GitHub-Repository unter **Settings → Secrets and variables → Actions** fo
 
 | Secret | Wert | Pflicht |
 |--------|------|---------|
-| `API_FOOTBALL_KEY` | Key aus api-football.com | Ja |
+| `FOOTBALL_DATA_KEY` | Key aus football-data.org | Ja |
 | `ODDS_API_KEY` | Key aus the-odds-api.com | Nein |
 
 ---
@@ -204,7 +206,13 @@ Im GitHub-Repository unter **Settings → Secrets and variables → Actions** fo
 3. **Branch:** `main`, Ordner: `/docs`
 4. Speichern — die App ist dann unter `https://<username>.github.io/<repo>/` erreichbar
 
-Die Web-App lädt automatisch `docs/predictions.json` und rendert alle ausstehenden Spiele als mobile-optimierte Karten mit Wahrscheinlichkeiten, Form-Anzeige und Verletzungshinweisen.
+Die Web-App lädt automatisch `docs/predictions.json` und ist in drei Sektionen gegliedert:
+
+| Sektion | Inhalt |
+|---------|--------|
+| **HEUTE** | Mindestens 3 ausstehende Spiele — zuerst die heutigen, dann die nächsten. Anstoßzeit in der lokalen Zeitzone des Browsers. Jede Karte zeigt die 3 wahrscheinlichsten Ergebnisse sowie ein Confidence-Badge (Sicher / Knapp / Unsicher). |
+| **GESTERN** | Abgeschlossene Spiele vom Vortag mit Ergebnis und Accuracy-Badge (Exakt / Differenz ✓ / Tendenz ✓ / Daneben). Wird ausgeblendet wenn leer. |
+| **GENAUIGKEIT** | Gesamtstatistik aller getippten Spiele als farbige Leiste und Kennzahlen. Wird erst angezeigt wenn mindestens ein Spiel gespielt wurde. |
 
 ---
 

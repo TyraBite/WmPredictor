@@ -49,6 +49,7 @@ def map_api_response(api_data: dict) -> list[dict]:
             "flag_a": FLAG.get(team_a, "🏳"),
             "flag_b": FLAG.get(team_b, "🏳"),
             "date": match["utcDate"][:10],
+            "kickoff_utc": match["utcDate"],
             "venue": match.get("venue", ""),
             "status": "pending",
             "result": None,
