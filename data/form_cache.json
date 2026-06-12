@@ -1,1 +1,26 @@
-{}
+{
+  "France": {
+    "turnier_form": 0.8,
+    "pre_tournament_form": 0.5,
+    "recent_matches": [
+      "W"
+    ]
+  },
+  "Japan": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
+  },
+  "Spain": {
+    "turnier_form": 0.0,
+    "pre_tournament_form": 0.5,
+    "recent_matches": [
+      "L"
+    ]
+  },
+  "Germany": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
+  }
+}
