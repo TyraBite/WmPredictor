@@ -43,18 +43,32 @@ git clone <repo-url>
 cd wm-predictor
 ```
 
-Falls `pip` nicht verfügbar ist (z.B. auf neueren Linux-Systemen), zuerst eine virtuelle Umgebung anlegen:
+Virtuelle Umgebung anlegen und Abhängigkeiten installieren:
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+**Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Danach ist `python` im Terminal immer das aus der aktivierten venv. Alternativ kann jeder Befehl mit `.venv/bin/python` statt `python` aufgerufen werden.
+**Linux / macOS:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Danach ist `python` im Terminal immer das aus der aktivierten venv. Die venv muss in jeder neuen Terminal-Session erneut aktiviert werden (`activate`). Alternativ kann jeder Befehl direkt mit `.venv\Scripts\python` (Windows) bzw. `.venv/bin/python` (Linux/macOS) aufgerufen werden.
 
 ### Schritt 2 — API-Keys konfigurieren
 
+**Windows:**
+```powershell
+copy .env.example .env
+```
+
+**Linux / macOS:**
 ```bash
 cp .env.example .env
 ```

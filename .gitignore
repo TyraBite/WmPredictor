@@ -1,7 +1,16 @@
+# Secrets
 .env
-data/cache/
+
+# Claude Code
+.claude/
+HANDOVER.md
+
+# Python
 __pycache__/
 *.pyc
 *.pkl
 .pytest_cache/
 .venv/
+
+# Daten-Cache und lokale Artefakte
+data/cache/
