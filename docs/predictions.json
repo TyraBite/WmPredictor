@@ -1,0 +1,29 @@
+{
+  "updated_at": "2026-06-12T12:00:00+00:00",
+  "tournament_phase": "Gruppenphase",
+  "warnings": ["Kein Modell geladen"],
+  "pending_matches": [
+    {
+      "match_id": "A1",
+      "group": "A",
+      "phase": "group",
+      "team_a": "Mexico",
+      "flag_a": "🇲🇽",
+      "team_b": "Poland",
+      "flag_b": "🇵🇱",
+      "date": "2026-06-11",
+      "venue": "Los Angeles",
+      "prob_a": 42.5,
+      "prob_draw": 27.3,
+      "prob_b": 30.2,
+      "tip": "1:1",
+      "top_results": [["1:1", 12.5], ["1:0", 11.2], ["2:1", 9.8]],
+      "klement_a": 0.61,
+      "klement_b": 0.44,
+      "form_a": [],
+      "form_b": [],
+      "injuries_a": [],
+      "injuries_b": []
+    }
+  ]
+}

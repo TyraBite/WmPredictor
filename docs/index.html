@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WM 2026 Tipps</title>
+<style>
+  :root {
+    --bg: #1a1a2e; --card: #16213e; --accent: #ffd700;
+    --text: #eee; --muted: #888; --win: #4caf50; --draw: #ff9800; --loss: #f44336;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
+         max-width: 420px; margin: 0 auto; padding: 12px; }
+  header { text-align: center; padding: 20px 0 12px; }
+  header h1 { color: var(--accent); font-size: 1.4rem; }
+  header p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  .warning { background: #7a6000; color: #ffe082; padding: 10px 14px;
+             border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px;
+             display: none; }
+  .warning.visible { display: block; }
+  .card { background: var(--card); border-radius: 12px; padding: 14px 16px;
+          margin-bottom: 14px; }
+  .card-meta { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
+               letter-spacing: .04em; margin-bottom: 8px; }
+  .teams { display: flex; align-items: center; justify-content: space-between;
+           font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
+  .vs { color: var(--muted); font-size: 0.8rem; }
+  .card-divider { border: none; border-top: 1px solid #2a2a4a; margin: 8px 0; }
+  .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+  .tip-label { font-size: 0.8rem; color: var(--muted); }
+  .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .tip-winner { font-size: 0.8rem; color: var(--muted); }
+  .prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden;
+              margin-bottom: 6px; }
+  .bar-a    { background: var(--win); }
+  .bar-draw { background: var(--draw); }
+  .bar-b    { background: var(--loss); }
+  .prob-row { display: flex; gap: 8px; font-size: 0.8rem; margin-bottom: 4px; }
+  .prob-a    { color: var(--win); }
+  .prob-draw { color: var(--draw); }
+  .prob-b    { color: var(--loss); }
+  .prob-sep  { color: var(--muted); }
+  .form-row, .injuries-row { font-size: 0.82rem; margin-top: 6px; color: var(--muted); }
+  .highlight { color: var(--text); }
+  .dot-W { color: var(--win); }
+  .dot-D { color: var(--draw); }
+  .dot-L { color: var(--loss); }
+  footer { text-align: center; font-size: 0.75rem; color: var(--muted);
+           padding: 20px 0; }
+  #loading { text-align: center; color: var(--muted); padding: 40px; }
+  #empty-state { text-align: center; padding: 40px; display: none; }
+  #phase-label { font-size: 0.85rem; color: var(--muted); text-align: center;
+                 margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚽ WM 2026 Tipps</h1>
+  <p id="header-subtitle">Lade Vorhersagen…</p>
+</header>
+<div id="warning-banner" class="warning"></div>
+<div id="phase-label"></div>
+<div id="loading">⏳ Lade…</div>
+<div id="empty-state">🏆 Alle Spiele abgeschlossen!</div>
+<div id="cards-container"></div>
+<footer id="footer"></footer>
+<script>
+  function fmtDate(s) {
+    const months = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+    const d = new Date(s + "T12:00:00");
+    return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function fmtPhase(p) {
+    return {"group":"Gruppenphase","round_of_32":"Achtelfinale",
+            "round_of_16":"Sechzehntelfinale","quarter_final":"Viertelfinale",
+            "semi_final":"Halbfinale","final":"Finale","third_place":"Spiel um Platz 3"}[p] || p;
+  }
+  function formDots(arr) {
+    if (!arr || !arr.length) return '<span style="color:var(--muted)">–</span>';
+    return arr.map(r => r==="W"?'<span class="dot-W">●</span>':
+                        r==="D"?'<span class="dot-D">◑</span>':
+                                '<span class="dot-L">○</span>').join(" ");
+  }
+  function tipWinner(m) {
+    const [ga, gb] = (m.tip||"0:0").split(":").map(Number);
+    if (ga > gb) return m.team_a;
+    if (gb > ga) return m.team_b;
+    return "Unentschieden";
+  }
+  function renderCard(m) {
+    const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
+    const bA = (m.prob_a||0).toFixed(0), bD = (m.prob_draw||0).toFixed(0),
+          bB = (m.prob_b||0).toFixed(0);
+    const hasInj = (m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
+    return `<div class="card">
+  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)}</div>
+  <div class="teams">
+    <span>${m.flag_a||""} ${m.team_a}</span>
+    <span class="vs">vs</span>
+    <span>${m.team_b} ${m.flag_b||""}</span>
+  </div>
+  <hr class="card-divider"/>
+  <div class="tip-row">
+    <span class="tip-label">Tipp:</span>
+    <span class="tip-value">${m.tip}</span>
+    <span class="tip-winner">(${tipWinner(m)})</span>
+  </div>
+  <div class="prob-bar">
+    <div class="bar-a" style="width:${bA}%"></div>
+    <div class="bar-draw" style="width:${bD}%"></div>
+    <div class="bar-b" style="width:${bB}%"></div>
+  </div>
+  <div class="prob-row">
+    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span>
+    <span class="prob-sep">•</span>
+    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span>
+    <span class="prob-sep">•</span>
+    <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
+  </div>
+  <hr class="card-divider"/>
+  <div class="form-row">🔥 Form: ${m.team_a} ${formDots(m.form_a)} &nbsp; ${m.team_b} ${formDots(m.form_b)}</div>
+  ${hasInj?`<div class="injuries-row">🚑 <span class="highlight">${m.team_a}: ${(m.injuries_a||[]).join(", ")||"–"}</span> | ${m.team_b}: ${(m.injuries_b||[]).join(", ")||"–"}</div>`:""}
+</div>`;
+  }
+  async function init() {
+    try {
+      const r = await fetch("predictions.json?_=" + Date.now());
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const data = await r.json();
+      document.getElementById("loading").style.display = "none";
+      if (data.warnings&&data.warnings.length) {
+        const b = document.getElementById("warning-banner");
+        b.textContent = "⚠️ " + data.warnings.join(" | ");
+        b.classList.add("visible");
+      }
+      if (data.tournament_phase)
+        document.getElementById("phase-label").textContent = "📅 " + data.tournament_phase;
+      const matches = data.pending_matches||[];
+      document.getElementById("header-subtitle").textContent =
+        matches.length ? `${matches.length} ausstehende Spiele` : "Alle Spiele abgeschlossen";
+      if (!matches.length) { document.getElementById("empty-state").style.display="block"; return; }
+      document.getElementById("cards-container").innerHTML = matches.map(renderCard).join("");
+      if (data.updated_at) {
+        const ts = new Date(data.updated_at);
+        document.getElementById("footer").textContent =
+          "Letzte Aktualisierung: " + ts.toLocaleDateString("de-DE") + " " +
+          ts.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
+      }
+    } catch(e) {
+      document.getElementById("loading").textContent = "⚠️ Fehler beim Laden.";
+    }
+  }
+  init();
+</script>
+</body>
+</html>
