@@ -5,6 +5,9 @@
 .claude/
 HANDOVER.md
 
+# IDEs
+.idea/
+
 # Python
 __pycache__/
 *.pyc

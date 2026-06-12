@@ -8,31 +8,38 @@
   :root {
     --bg: #1a1a2e; --card: #16213e; --accent: #ffd700;
     --text: #eee; --muted: #888; --win: #4caf50; --draw: #ff9800; --loss: #f44336;
+    --blue: #2196f3;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
          max-width: 420px; margin: 0 auto; padding: 12px; }
   header { text-align: center; padding: 20px 0 12px; }
-  header h1 { color: var(--accent); font-size: 1.4rem; }
+  header h1 { color: var(--accent); font-size: 1.4rem; letter-spacing: .04em; }
   header p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
   .warning { background: #7a6000; color: #ffe082; padding: 10px 14px;
-             border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px;
-             display: none; }
+             border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px; display: none; }
   .warning.visible { display: block; }
+
+  /* Section headers */
+  .section-header { border-left: 3px solid var(--accent); padding-left: 10px;
+                    margin: 20px 0 12px; }
+  .section-header h2 { font-size: 0.78rem; font-weight: 700; color: var(--accent);
+                       text-transform: uppercase; letter-spacing: .08em; }
+  .section-header p  { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .section-empty { font-size: 0.85rem; color: var(--muted); text-align: center;
+                   padding: 12px 0 4px; }
+
+  /* Cards (shared) */
   .card { background: var(--card); border-radius: 12px; padding: 14px 16px;
           margin-bottom: 14px; }
   .card-meta { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
-               letter-spacing: .04em; margin-bottom: 8px; }
+               letter-spacing: .04em; margin-bottom: 8px; display: flex;
+               align-items: center; gap: 6px; flex-wrap: wrap; }
   .teams { display: flex; align-items: center; justify-content: space-between;
            font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
   .vs { color: var(--muted); font-size: 0.8rem; }
   .card-divider { border: none; border-top: 1px solid #2a2a4a; margin: 8px 0; }
-  .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
-  .tip-label { font-size: 0.8rem; color: var(--muted); }
-  .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
-  .tip-winner { font-size: 0.8rem; color: var(--muted); }
-  .prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden;
-              margin-bottom: 6px; }
+  .prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
   .bar-a    { background: var(--win); }
   .bar-draw { background: var(--draw); }
   .bar-b    { background: var(--loss); }
@@ -46,12 +53,50 @@
   .dot-W { color: var(--win); }
   .dot-D { color: var(--draw); }
   .dot-L { color: var(--loss); }
-  footer { text-align: center; font-size: 0.75rem; color: var(--muted);
-           padding: 20px 0; }
+
+  /* Pending: tip row + confidence badge */
+  .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+  .tip-label { font-size: 0.8rem; color: var(--muted); }
+  .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .tip-winner { font-size: 0.8rem; color: var(--muted); }
+  .second-tip { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
+           font-size: 0.7rem; font-weight: 700; letter-spacing: .03em; }
+  .badge-high   { background: #1b5e20; color: #a5d6a7; }
+  .badge-medium { background: #e65100; color: #ffcc80; }
+  .badge-low    { background: #4a1010; color: #ef9a9a; }
+
+  /* Completed card */
+  .result-big { text-align: center; font-size: 2rem; font-weight: 800;
+                color: var(--text); margin: 6px 0 4px; letter-spacing: .04em; }
+  .result-tip-row { text-align: center; font-size: 0.82rem; color: var(--muted);
+                    margin-bottom: 8px; display: flex; align-items: center;
+                    justify-content: center; gap: 8px; }
+  .badge-exact      { background: #5a4000; color: var(--accent); }
+  .badge-difference { background: #0d2a5c; color: #90caf9; }
+  .badge-tendency   { background: #1b4020; color: #a5d6a7; }
+  .badge-wrong      { background: #4a1010; color: #ef9a9a; }
+
+  /* Stats block */
+  .stats-block { background: var(--card); border-radius: 12px; padding: 14px 16px;
+                 margin-bottom: 14px; }
+  .stats-bar-track { display: flex; height: 8px; border-radius: 4px; overflow: hidden;
+                     margin-bottom: 10px; }
+  .stats-seg-exact { background: var(--accent); }
+  .stats-seg-diff  { background: var(--blue); }
+  .stats-seg-tend  { background: var(--win); }
+  .stats-seg-wrong { background: var(--loss); }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+  .stats-cell { font-size: 0.82rem; }
+  .stats-num  { font-weight: 700; font-size: 1rem; margin-right: 4px; }
+  .col-exact  { color: var(--accent); }
+  .col-diff   { color: var(--blue); }
+  .col-tend   { color: var(--win); }
+  .col-wrong  { color: var(--loss); }
+
+  footer { text-align: center; font-size: 0.75rem; color: var(--muted); padding: 20px 0; }
   #loading { text-align: center; color: var(--muted); padding: 40px; }
-  #empty-state { text-align: center; padding: 40px; display: none; }
-  #phase-label { font-size: 0.85rem; color: var(--muted); text-align: center;
-                 margin-bottom: 12px; }
 </style>
 </head>
 <body>
@@ -60,12 +105,21 @@
   <p id="header-subtitle">Lade Vorhersagen…</p>
 </header>
 <div id="warning-banner" class="warning"></div>
-<div id="phase-label"></div>
 <div id="loading">⏳ Lade…</div>
-<div id="empty-state">🏆 Alle Spiele abgeschlossen!</div>
-<div id="cards-container"></div>
+<div id="app" style="display:none">
+  <div id="section-heute"></div>
+  <div id="section-gestern"></div>
+  <div id="section-genauigkeit"></div>
+</div>
 <footer id="footer"></footer>
 <script>
+  function today() {
+    return new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD local
+  }
+  function yesterday() {
+    const d = new Date(); d.setDate(d.getDate()-1);
+    return d.toLocaleDateString("en-CA");
+  }
   function fmtDate(s) {
     const months = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
     const d = new Date(s + "T12:00:00");
@@ -88,13 +142,29 @@
     if (gb > ga) return m.team_b;
     return "Unentschieden";
   }
-  function renderCard(m) {
+  function confidenceBadge(level) {
+    const map = {high:["badge-high","Sicher"], medium:["badge-medium","Knapp"], low:["badge-low","Unsicher"]};
+    const [cls, label] = map[level] || map.medium;
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+  function accuracyBadge(acc) {
+    const map = {
+      correct_result:    ["badge badge-exact",      "Exakt"],
+      correct_difference:["badge badge-difference", "Differenz ✓"],
+      correct_tendency:  ["badge badge-tendency",   "Tendenz ✓"],
+      wrong:             ["badge badge-wrong",      "Daneben"],
+    };
+    const [cls, label] = map[acc] || map.wrong;
+    return `<span class="${cls}">${label}</span>`;
+  }
+  function renderPending(m) {
     const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
-    const bA = (m.prob_a||0).toFixed(0), bD = (m.prob_draw||0).toFixed(0),
-          bB = (m.prob_b||0).toFixed(0);
+    const bA = (m.prob_a||0).toFixed(0), bD = (m.prob_draw||0).toFixed(0), bB = (m.prob_b||0).toFixed(0);
     const hasInj = (m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
+    const secondLine = m.confidence_level === "low" && m.second_tip
+      ? `<div class="second-tip">Alt: ${m.second_tip}</div>` : "";
     return `<div class="card">
-  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)}</div>
+  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
     <span>${m.flag_a||""} ${m.team_a}</span>
     <span class="vs">vs</span>
@@ -106,6 +176,7 @@
     <span class="tip-value">${m.tip}</span>
     <span class="tip-winner">(${tipWinner(m)})</span>
   </div>
+  ${secondLine}
   <div class="prob-bar">
     <div class="bar-a" style="width:${bA}%"></div>
     <div class="bar-draw" style="width:${bD}%"></div>
@@ -123,29 +194,116 @@
   ${hasInj?`<div class="injuries-row">🚑 <span class="highlight">${m.team_a}: ${(m.injuries_a||[]).join(", ")||"–"}</span> | ${m.team_b}: ${(m.injuries_b||[]).join(", ")||"–"}</div>`:""}
 </div>`;
   }
+  function renderCompleted(m) {
+    const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
+    const pa = m.prob_a != null ? m.prob_a.toFixed(0) : "0";
+    const pd = m.prob_draw != null ? m.prob_draw.toFixed(0) : "0";
+    const pb = m.prob_b != null ? m.prob_b.toFixed(0) : "0";
+    const hasProbs = m.prob_a != null;
+    return `<div class="card">
+  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)}</div>
+  <div class="teams">
+    <span>${m.flag_a||""} ${m.team_a}</span>
+    <span class="vs">vs</span>
+    <span>${m.team_b} ${m.flag_b||""}</span>
+  </div>
+  <hr class="card-divider"/>
+  <div class="result-big">${m.result||"–"}</div>
+  <div class="result-tip-row">
+    <span>Tipp war: <strong>${m.tip}</strong></span>
+    ${accuracyBadge(m.accuracy)}
+  </div>
+  ${hasProbs ? `<div class="prob-bar">
+    <div class="bar-a" style="width:${pa}%"></div>
+    <div class="bar-draw" style="width:${pd}%"></div>
+    <div class="bar-b" style="width:${pb}%"></div>
+  </div>
+  <div class="prob-row">
+    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span>
+    <span class="prob-sep">•</span>
+    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span>
+    <span class="prob-sep">•</span>
+    <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
+  </div>` : ""}
+</div>`;
+  }
+  function renderStats(stats) {
+    if (!stats || stats.played === 0) return "";
+    const p = stats.played;
+    const pct = v => p > 0 ? (v/p*100).toFixed(1)+"%" : "0%";
+    const w = v => p > 0 ? (v/p*100).toFixed(1)+"%" : "0%";
+    return `<div class="stats-block">
+  <div class="stats-bar-track">
+    <div class="stats-seg-exact" style="width:${w(stats.correct_result)}"></div>
+    <div class="stats-seg-diff"  style="width:${w(stats.correct_difference)}"></div>
+    <div class="stats-seg-tend"  style="width:${w(stats.correct_tendency)}"></div>
+    <div class="stats-seg-wrong" style="width:${w(stats.wrong)}"></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stats-cell col-exact"><span class="stats-num">${stats.correct_result}</span>🏆 Exakt</div>
+    <div class="stats-cell col-diff"><span class="stats-num">${stats.correct_difference}</span>📏 Differenz</div>
+    <div class="stats-cell col-tend"><span class="stats-num">${stats.correct_tendency}</span>↗ Tendenz</div>
+    <div class="stats-cell col-wrong"><span class="stats-num">${stats.wrong}</span>✗ Daneben</div>
+  </div>
+</div>`;
+  }
+  function sectionHeader(title, subtitle) {
+    return `<div class="section-header"><h2>${title}</h2>${subtitle?`<p>${subtitle}</p>`:""}</div>`;
+  }
   async function init() {
+    const todayStr = today();
+    const yestStr = yesterday();
     try {
       const r = await fetch("predictions.json?_=" + Date.now());
       if (!r.ok) throw new Error("HTTP " + r.status);
       const data = await r.json();
       document.getElementById("loading").style.display = "none";
-      if (data.warnings&&data.warnings.length) {
+      document.getElementById("app").style.display = "block";
+
+      if (data.warnings && data.warnings.length) {
         const b = document.getElementById("warning-banner");
         b.textContent = "⚠️ " + data.warnings.join(" | ");
         b.classList.add("visible");
       }
-      if (data.tournament_phase)
-        document.getElementById("phase-label").textContent = "📅 " + data.tournament_phase;
-      const matches = data.pending_matches||[];
+
+      const pending = data.pending_matches || [];
+      const completed = data.completed_matches || [];
+      const todayPending = pending.filter(m => m.date === todayStr);
+      const yesterdayCompleted = completed.filter(m => m.date === yestStr);
+
+      const totalPending = pending.length;
       document.getElementById("header-subtitle").textContent =
-        matches.length ? `${matches.length} ausstehende Spiele` : "Alle Spiele abgeschlossen";
-      if (!matches.length) { document.getElementById("empty-state").style.display="block"; return; }
-      document.getElementById("cards-container").innerHTML = matches.map(renderCard).join("");
+        totalPending ? `${totalPending} ausstehende Spiele` : "Alle Spiele abgeschlossen";
+
+      // HEUTE section
+      let heuteHtml = sectionHeader("HEUTE", data.tournament_phase);
+      if (todayPending.length) {
+        heuteHtml += todayPending.map(renderPending).join("");
+      } else {
+        heuteHtml += `<p class="section-empty">Heute keine Spiele</p>`;
+      }
+      document.getElementById("section-heute").innerHTML = heuteHtml;
+
+      // GESTERN section — only if there are completed matches from yesterday
+      if (yesterdayCompleted.length) {
+        let gestHtml = sectionHeader("GESTERN", "Abgeschlossene Spiele");
+        gestHtml += yesterdayCompleted.map(renderCompleted).join("");
+        document.getElementById("section-gestern").innerHTML = gestHtml;
+      }
+
+      // GENAUIGKEIT section — only if matches have been played
+      const stats = data.stats;
+      if (stats && stats.played > 0) {
+        let accHtml = sectionHeader("GENAUIGKEIT", `${stats.played} Spiel${stats.played !== 1 ? "e" : ""} gespielt`);
+        accHtml += renderStats(stats);
+        document.getElementById("section-genauigkeit").innerHTML = accHtml;
+      }
+
       if (data.updated_at) {
         const ts = new Date(data.updated_at);
         document.getElementById("footer").textContent =
           "Letzte Aktualisierung: " + ts.toLocaleDateString("de-DE") + " " +
-          ts.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
+          ts.toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit"});
       }
     } catch(e) {
       document.getElementById("loading").textContent = "⚠️ Fehler beim Laden.";

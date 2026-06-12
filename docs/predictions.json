@@ -1,8 +1,15 @@
 {
-  "updated_at": "2026-06-12T14:22:53.458735+00:00",
+  "updated_at": "2026-06-12T14:35:31.665281+00:00",
   "tournament_phase": "Gruppenphase",
   "warnings": [],
-  "pending_matches": [
+  "stats": {
+    "played": 2,
+    "correct_result": 0,
+    "correct_difference": 0,
+    "correct_tendency": 0,
+    "wrong": 2
+  },
+  "completed_matches": [
     {
       "match_id": "A1",
       "group": "A",
@@ -12,31 +19,12 @@
       "team_b": "South Africa",
       "flag_b": "🇿🇦",
       "date": "2026-06-11",
-      "venue": "",
+      "result": "2:0",
+      "tip": "1:1",
+      "accuracy": "wrong",
       "prob_a": 36.7,
       "prob_draw": 27.5,
-      "prob_b": 35.8,
-      "tip": "1:1",
-      "top_results": [
-        [
-          "1:1",
-          13.1
-        ],
-        [
-          "1:0",
-          11.5
-        ],
-        [
-          "0:1",
-          10.3
-        ]
-      ],
-      "klement_a": 0.33,
-      "klement_b": 0.06,
-      "form_a": [],
-      "form_b": [],
-      "injuries_a": [],
-      "injuries_b": []
+      "prob_b": 35.8
     },
     {
       "match_id": "A2",
@@ -47,32 +35,15 @@
       "team_b": "Czechia",
       "flag_b": "🏳",
       "date": "2026-06-12",
-      "venue": "",
+      "result": "2:1",
+      "tip": "1:1",
+      "accuracy": "wrong",
       "prob_a": 43.1,
       "prob_draw": 24.7,
-      "prob_b": 32.2,
-      "tip": "1:1",
-      "top_results": [
-        [
-          "1:1",
-          12.6
-        ],
-        [
-          "1:0",
-          10.5
-        ],
-        [
-          "0:1",
-          9.0
-        ]
-      ],
-      "klement_a": 0.3,
-      "klement_b": 0.53,
-      "form_a": [],
-      "form_b": [],
-      "injuries_a": [],
-      "injuries_b": []
-    },
+      "prob_b": 32.2
+    }
+  ],
+  "pending_matches": [
     {
       "match_id": "B1",
       "group": "B",
@@ -101,6 +72,8 @@
           10.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:1",
       "klement_a": 0.3,
       "klement_b": 0.53,
       "form_a": [],
@@ -136,6 +109,8 @@
           12.7
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.05,
       "form_a": [],
@@ -171,6 +146,8 @@
           11.9
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:2",
       "klement_a": 0.33,
       "klement_b": 0.51,
       "form_a": [],
@@ -206,6 +183,8 @@
           12.4
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "1:0",
       "klement_a": 0.42,
       "klement_b": 0.22,
       "form_a": [],
@@ -241,6 +220,8 @@
           14.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.26,
       "form_a": [],
@@ -276,6 +257,8 @@
           10.3
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.35,
       "klement_b": 0.24,
       "form_a": [],
@@ -311,6 +294,8 @@
           11.5
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:0",
       "klement_a": 0.43,
       "klement_b": 0.53,
       "form_a": [],
@@ -346,6 +331,8 @@
           10.1
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.46,
       "klement_b": 0.37,
       "form_a": [],
@@ -381,6 +368,8 @@
           9.1
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.11,
       "klement_b": 0.17,
       "form_a": [],
@@ -416,6 +405,8 @@
           11.0
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.53,
       "klement_b": 0.06,
       "form_a": [],
@@ -451,6 +442,8 @@
           10.6
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.36,
       "klement_b": 0.53,
       "form_a": [],
@@ -486,6 +479,8 @@
           15.3
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:0",
       "klement_a": 0.42,
       "klement_b": 0.15,
       "form_a": [],
@@ -521,6 +516,8 @@
           12.6
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:1",
       "klement_a": 0.24,
       "klement_b": 0.23,
       "form_a": [],
@@ -556,6 +553,8 @@
           14.3
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "0:0",
       "klement_a": 0.18,
       "klement_b": 0.17,
       "form_a": [],
@@ -591,6 +590,8 @@
           8.7
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:1",
       "klement_a": 0.45,
       "klement_b": 0.18,
       "form_a": [],
@@ -626,6 +627,8 @@
           14.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.05,
       "klement_b": 0.57,
       "form_a": [],
@@ -661,6 +664,8 @@
           10.3
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:1",
       "klement_a": 0.32,
       "klement_b": 0.05,
       "form_a": [],
@@ -696,6 +701,8 @@
           14.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.34,
       "klement_b": 0.07,
       "form_a": [],
@@ -731,6 +738,8 @@
           11.2
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.32,
       "klement_b": 0.53,
       "form_a": [],
@@ -766,6 +775,8 @@
           9.0
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:0",
       "klement_a": 0.47,
       "klement_b": 0.29,
       "form_a": [],
@@ -801,6 +812,8 @@
           8.9
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "4:0",
       "klement_a": 0.03,
       "klement_b": 0.06,
       "form_a": [],
@@ -836,6 +849,8 @@
           10.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:1",
       "klement_a": 0.03,
       "klement_b": 0.23,
       "form_a": [],
@@ -853,9 +868,9 @@
       "flag_b": "🇿🇦",
       "date": "2026-06-18",
       "venue": "",
-      "prob_a": 34.5,
+      "prob_a": 34.8,
       "prob_draw": 26.5,
-      "prob_b": 39.0,
+      "prob_b": 38.7,
       "tip": "1:1",
       "top_results": [
         [
@@ -871,10 +886,16 @@
           9.2
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.06,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "L"
+      ],
+      "form_b": [
+        "L"
+      ],
       "injuries_a": [],
       "injuries_b": []
     },
@@ -906,6 +927,8 @@
           13.1
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:1",
       "klement_a": 0.51,
       "klement_b": 0.53,
       "form_a": [],
@@ -941,6 +964,8 @@
           11.6
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "2:0",
       "klement_a": 0.3,
       "klement_b": 0.33,
       "form_a": [],
@@ -958,9 +983,9 @@
       "flag_b": "🇰🇷",
       "date": "2026-06-19",
       "venue": "",
-      "prob_a": 43.0,
+      "prob_a": 43.4,
       "prob_draw": 29.7,
-      "prob_b": 27.3,
+      "prob_b": 26.9,
       "tip": "1:1",
       "top_results": [
         [
@@ -976,10 +1001,16 @@
           9.1
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:0",
       "klement_a": 0.33,
       "klement_b": 0.3,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "W"
+      ],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": []
     },
@@ -1011,6 +1042,8 @@
           9.0
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:0",
       "klement_a": 0.53,
       "klement_b": 0.35,
       "form_a": [],
@@ -1046,6 +1079,8 @@
           13.8
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.26,
       "klement_b": 0.22,
       "form_a": [],
@@ -1081,6 +1116,8 @@
           11.0
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.42,
       "klement_b": 0.53,
       "form_a": [],
@@ -1116,6 +1153,8 @@
           11.9
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.24,
       "klement_b": 0.05,
       "form_a": [],
@@ -1151,6 +1190,8 @@
           12.1
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "0:0",
       "klement_a": 0.46,
       "klement_b": 0.53,
       "form_a": [],
@@ -1186,6 +1227,8 @@
           9.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "3:0",
       "klement_a": 0.43,
       "klement_b": 0.11,
       "form_a": [],
@@ -1221,6 +1264,8 @@
           12.9
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "0:0",
       "klement_a": 0.17,
       "klement_b": 0.53,
       "form_a": [],
@@ -1256,6 +1301,8 @@
           11.0
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:1",
       "klement_a": 0.06,
       "klement_b": 0.37,
       "form_a": [],
@@ -1291,6 +1338,8 @@
           11.2
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.36,
       "klement_b": 0.24,
       "form_a": [],
@@ -1326,6 +1375,8 @@
           10.5
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.42,
       "klement_b": 0.18,
       "form_a": [],
@@ -1361,6 +1412,8 @@
           12.2
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:0",
       "klement_a": 0.23,
       "klement_b": 0.53,
       "form_a": [],
@@ -1396,6 +1449,8 @@
           19.3
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:0",
       "klement_a": 0.17,
       "klement_b": 0.15,
       "form_a": [],
@@ -1431,6 +1486,8 @@
           10.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.32,
       "klement_b": 0.34,
       "form_a": [],
@@ -1466,6 +1523,8 @@
           9.7
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.45,
       "klement_b": 0.05,
       "form_a": [],
@@ -1501,6 +1560,8 @@
           8.9
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.57,
       "klement_b": 0.18,
       "form_a": [],
@@ -1536,6 +1597,8 @@
           13.2
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:0",
       "klement_a": 0.07,
       "klement_b": 0.05,
       "form_a": [],
@@ -1571,6 +1634,8 @@
           11.2
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.32,
       "klement_b": 0.03,
       "form_a": [],
@@ -1606,6 +1671,8 @@
           9.6
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "1:0",
       "klement_a": 0.47,
       "klement_b": 0.03,
       "form_a": [],
@@ -1641,6 +1708,8 @@
           11.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:5",
       "klement_a": 0.06,
       "klement_b": 0.29,
       "form_a": [],
@@ -1676,6 +1745,8 @@
           10.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:0",
       "klement_a": 0.23,
       "klement_b": 0.53,
       "form_a": [],
@@ -1711,6 +1782,8 @@
           10.1
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:0",
       "klement_a": 0.51,
       "klement_b": 0.3,
       "form_a": [],
@@ -1746,6 +1819,8 @@
           14.6
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.53,
       "klement_b": 0.33,
       "form_a": [],
@@ -1781,6 +1856,8 @@
           13.8
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:0",
       "klement_a": 0.22,
       "klement_b": 0.53,
       "form_a": [],
@@ -1816,6 +1893,8 @@
           11.0
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:2",
       "klement_a": 0.26,
       "klement_b": 0.42,
       "form_a": [],
@@ -1833,9 +1912,9 @@
       "flag_b": "🇲🇽",
       "date": "2026-06-25",
       "venue": "",
-      "prob_a": 27.4,
-      "prob_draw": 29.7,
-      "prob_b": 42.9,
+      "prob_a": 12.9,
+      "prob_draw": 24.6,
+      "prob_b": 62.6,
       "tip": "0:1",
       "top_results": [
         [
@@ -1851,10 +1930,16 @@
           13.1
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:0",
       "klement_a": 0.53,
       "klement_b": 0.33,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "L"
+      ],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": []
     },
@@ -1868,9 +1953,9 @@
       "flag_b": "🇰🇷",
       "date": "2026-06-25",
       "venue": "",
-      "prob_a": 42.7,
-      "prob_draw": 28.6,
-      "prob_b": 28.8,
+      "prob_a": 23.5,
+      "prob_draw": 27.6,
+      "prob_b": 48.9,
       "tip": "1:1",
       "top_results": [
         [
@@ -1886,10 +1971,16 @@
           8.0
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "2:1",
       "klement_a": 0.06,
       "klement_b": 0.3,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "L"
+      ],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": []
     },
@@ -1921,6 +2012,8 @@
           10.5
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:2",
       "klement_a": 0.17,
       "klement_b": 0.43,
       "form_a": [],
@@ -1956,6 +2049,8 @@
           10.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.11,
       "form_a": [],
@@ -1991,6 +2086,8 @@
           13.7
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:1",
       "klement_a": 0.06,
       "klement_b": 0.46,
       "form_a": [],
@@ -2026,6 +2123,8 @@
           12.8
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:0",
       "klement_a": 0.37,
       "klement_b": 0.53,
       "form_a": [],
@@ -2061,6 +2160,8 @@
           12.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:1",
       "klement_a": 0.24,
       "klement_b": 0.53,
       "form_a": [],
@@ -2096,6 +2197,8 @@
           11.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "1:0",
       "klement_a": 0.05,
       "klement_b": 0.35,
       "form_a": [],
@@ -2131,6 +2234,8 @@
           9.7
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:2",
       "klement_a": 0.57,
       "klement_b": 0.45,
       "form_a": [],
@@ -2166,6 +2271,8 @@
           8.9
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "1:0",
       "klement_a": 0.18,
       "klement_b": 0.05,
       "form_a": [],
@@ -2201,6 +2308,8 @@
           10.8
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.23,
       "klement_b": 0.36,
       "form_a": [],
@@ -2236,6 +2345,8 @@
           11.2
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "2:0",
       "klement_a": 0.53,
       "klement_b": 0.24,
       "form_a": [],
@@ -2271,6 +2382,8 @@
           16.7
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "0:1",
       "klement_a": 0.17,
       "klement_b": 0.42,
       "form_a": [],
@@ -2306,6 +2419,8 @@
           11.7
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:1",
       "klement_a": 0.15,
       "klement_b": 0.18,
       "form_a": [],
@@ -2341,6 +2456,8 @@
           13.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:5",
       "klement_a": 0.06,
       "klement_b": 0.47,
       "form_a": [],
@@ -2376,6 +2493,8 @@
           8.5
         ]
       ],
+      "confidence_level": "medium",
+      "second_tip": "2:1",
       "klement_a": 0.29,
       "klement_b": 0.03,
       "form_a": [],
@@ -2411,6 +2530,8 @@
           9.8
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "1:0",
       "klement_a": 0.23,
       "klement_b": 0.32,
       "form_a": [],
@@ -2446,6 +2567,8 @@
           14.4
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.03,
       "form_a": [],
@@ -2481,6 +2604,8 @@
           10.4
         ]
       ],
+      "confidence_level": "high",
+      "second_tip": "0:2",
       "klement_a": 0.07,
       "klement_b": 0.32,
       "form_a": [],
@@ -2516,6 +2641,8 @@
           13.2
         ]
       ],
+      "confidence_level": "low",
+      "second_tip": "0:0",
       "klement_a": 0.05,
       "klement_b": 0.34,
       "form_a": [],

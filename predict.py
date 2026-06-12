@@ -9,9 +9,15 @@ Usage:
 import os
 import sys
 import json
+from datetime import date as _date
 sys.path.insert(0, "src")
 from dotenv import load_dotenv
 load_dotenv()
+
+
+def _needs_result_fetch(store) -> bool:
+    today = _date.today().isoformat()
+    return any(m["date"] <= today for m in store.pending())
 
 
 WIDTH = 43
@@ -134,6 +140,12 @@ def main():
     except FileNotFoundError:
         print("❌ fixtures.json nicht gefunden. Bitte erst: python src/bootstrap_fixtures.py")
         sys.exit(1)
+
+    if _needs_result_fetch(store) and os.environ.get("FOOTBALL_DATA_KEY"):
+        print("🔄 Neue Ergebnisse werden abgerufen...")
+        from fetch_results import fetch_results
+        fetch_results()
+        store.load()
 
     form_cache = {}
     if os.path.exists("data/form_cache.json"):
