@@ -8,7 +8,6 @@ HANDOVER.md
 # Python
 __pycache__/
 *.pyc
-*.pkl
 .pytest_cache/
 .venv/
 
