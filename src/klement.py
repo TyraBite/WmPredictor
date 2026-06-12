@@ -11,7 +11,7 @@ STORE_PATH = "data/fixtures.json"
 
 WB_URL = "https://api.worldbank.org/v2/country/{iso}/indicator/{ind}?format=json&mrv=1"
 METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
-FD_URL = "https://api.football-data.org/v4/competitions/WC/matches"
+HISTORICAL_MATCHES_PATH = "data/historical_matches.json"
 
 TEAM_ISO: dict[str, str] = {
     "Argentina": "AR", "Brazil": "BR", "Colombia": "CO", "Uruguay": "UY",
@@ -126,23 +126,12 @@ def _wb_value(iso: str, indicator: str) -> float:
         return 0.0
 
 
-def _fetch_historical_matches(key: str) -> list[dict]:
-    matches = []
-    for season in [2006, 2010, 2014, 2018, 2022]:
-        data = fetch(FD_URL, params={"season": season, "status": "FINISHED"},
-                     headers={"X-Auth-Token": key})
-        for match in data.get("matches", []):
-            score = match.get("score", {}).get("fullTime", {})
-            ga, gb = score.get("home"), score.get("away")
-            if ga is None or gb is None:
-                continue
-            matches.append({
-                "team_a": match["homeTeam"]["name"],
-                "team_b": match["awayTeam"]["name"],
-                "goals_a": int(ga), "goals_b": int(gb),
-                "season": season,
-            })
-    return matches
+def _load_historical_matches() -> list[dict]:
+    if not os.path.exists(HISTORICAL_MATCHES_PATH):
+        print(f"  {HISTORICAL_MATCHES_PATH} nicht gefunden — kein historisches Training.")
+        return []
+    with open(HISTORICAL_MATCHES_PATH, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def compute_all() -> None:
@@ -152,8 +141,6 @@ def compute_all() -> None:
     except FileNotFoundError:
         pass
     teams = list(store.all_teams()) or list(TEAM_HOME_COORDS.keys())
-
-    key = os.environ.get("FOOTBALL_DATA_KEY", "")
 
     pop_raw, gdp_raw = {}, {}
     for team in teams:
@@ -187,18 +174,16 @@ def compute_all() -> None:
         }
 
     elo: dict[str, float] = {t: 1500.0 for t in teams}
-    historical: list[dict] = []
-    if key:
-        historical = _fetch_historical_matches(key)
-        for m in historical:
-            ta, tb = m["team_a"], m["team_b"]
-            if ta not in elo:
-                elo[ta] = 1500.0
-            if tb not in elo:
-                elo[tb] = 1500.0
-            ga, gb = m["goals_a"], m["goals_b"]
-            result = "win" if ga > gb else ("draw" if ga == gb else "loss")
-            elo[ta], elo[tb] = _elo_update(elo[ta], elo[tb], result)
+    historical = _load_historical_matches()
+    for m in historical:
+        ta, tb = m["team_a"], m["team_b"]
+        if ta not in elo:
+            elo[ta] = 1500.0
+        if tb not in elo:
+            elo[tb] = 1500.0
+        ga, gb = m["goals_a"], m["goals_b"]
+        result = "win" if ga > gb else ("draw" if ga == gb else "loss")
+        elo[ta], elo[tb] = _elo_update(elo[ta], elo[tb], result)
 
     os.makedirs("data", exist_ok=True)
     with open(KLEMENT_PATH, "w", encoding="utf-8") as f:

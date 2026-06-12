@@ -1,0 +1,2242 @@
+[
+  {
+    "team_a": "Germany",
+    "team_b": "Costa Rica",
+    "goals_a": 4,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Poland",
+    "team_b": "Ecuador",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Poland",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Ecuador",
+    "team_b": "Costa Rica",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Ecuador",
+    "team_b": "Germany",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2006
+  },
+  {
+    "team_a": "Costa Rica",
+    "team_b": "Poland",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "England",
+    "team_b": "Paraguay",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Trinidad and Tobago",
+    "team_b": "Sweden",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "England",
+    "team_b": "Trinidad and Tobago",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Sweden",
+    "team_b": "Paraguay",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Sweden",
+    "team_b": "England",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Paraguay",
+    "team_b": "Trinidad and Tobago",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Ivory Coast",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Serbia and Montenegro",
+    "team_b": "Netherlands",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Serbia and Montenegro",
+    "goals_a": 6,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Ivory Coast",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Argentina",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Ivory Coast",
+    "team_b": "Serbia and Montenegro",
+    "goals_a": 3,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Iran",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Angola",
+    "team_b": "Portugal",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Angola",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Iran",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Mexico",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "Angola",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Czech Republic",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2006
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Ghana",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Czech Republic",
+    "team_b": "Ghana",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "United States",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Czech Republic",
+    "team_b": "Italy",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Ghana",
+    "team_b": "United States",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Japan",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Croatia",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Croatia",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Australia",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Brazil",
+    "goals_a": 1,
+    "goals_b": 4,
+    "season": 2006
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Australia",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Togo",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "France",
+    "team_b": "Switzerland",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "France",
+    "team_b": "South Korea",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Togo",
+    "team_b": "Switzerland",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Togo",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "South Korea",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Ukraine",
+    "goals_a": 4,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Tunisia",
+    "team_b": "Saudi Arabia",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Tunisia",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Saudi Arabia",
+    "team_b": "Ukraine",
+    "goals_a": 0,
+    "goals_b": 4,
+    "season": 2006
+  },
+  {
+    "team_a": "Saudi Arabia",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Ukraine",
+    "team_b": "Tunisia",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Sweden",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Mexico",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "England",
+    "team_b": "Ecuador",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Netherlands",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Australia",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "Ukraine",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Ghana",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "France",
+    "goals_a": 1,
+    "goals_b": 3,
+    "season": 2006
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Argentina",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Ukraine",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "England",
+    "team_b": "Portugal",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2006
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Italy",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2006
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Portugal",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "France",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2006
+  },
+  {
+    "team_a": "South Africa",
+    "team_b": "Mexico",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "South Africa",
+    "team_b": "Uruguay",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2010
+  },
+  {
+    "team_a": "France",
+    "team_b": "Mexico",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Uruguay",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "France",
+    "team_b": "South Africa",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Greece",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Nigeria",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "South Korea",
+    "goals_a": 4,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Greece",
+    "team_b": "Nigeria",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Nigeria",
+    "team_b": "South Korea",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Greece",
+    "team_b": "Argentina",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "England",
+    "team_b": "United States",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Algeria",
+    "team_b": "Slovenia",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Slovenia",
+    "team_b": "United States",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "England",
+    "team_b": "Algeria",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Slovenia",
+    "team_b": "England",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Algeria",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Serbia",
+    "team_b": "Ghana",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Australia",
+    "goals_a": 4,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Serbia",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Ghana",
+    "team_b": "Australia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Ghana",
+    "team_b": "Germany",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Serbia",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Denmark",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Cameroon",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Japan",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Denmark",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Denmark",
+    "team_b": "Japan",
+    "goals_a": 1,
+    "goals_b": 3,
+    "season": 2010
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Netherlands",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Paraguay",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "New Zealand",
+    "team_b": "Slovakia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Slovakia",
+    "team_b": "Paraguay",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "New Zealand",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Slovakia",
+    "team_b": "Italy",
+    "goals_a": 3,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Paraguay",
+    "team_b": "New Zealand",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Ivory Coast",
+    "team_b": "Portugal",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "North Korea",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Ivory Coast",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "North Korea",
+    "goals_a": 7,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Brazil",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "North Korea",
+    "team_b": "Ivory Coast",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2010
+  },
+  {
+    "team_a": "Honduras",
+    "team_b": "Chile",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Switzerland",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Chile",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Honduras",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Chile",
+    "team_b": "Spain",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "Honduras",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "South Korea",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Ghana",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2010
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "England",
+    "goals_a": 4,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Mexico",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Slovakia",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Chile",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Paraguay",
+    "team_b": "Japan",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Portugal",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2010
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Brazil",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Ghana",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Germany",
+    "goals_a": 0,
+    "goals_b": 4,
+    "season": 2010
+  },
+  {
+    "team_a": "Paraguay",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Netherlands",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2010
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Germany",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2010
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2010
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Croatia",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Cameroon",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Mexico",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Croatia",
+    "goals_a": 0,
+    "goals_b": 4,
+    "season": 2014
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Brazil",
+    "goals_a": 1,
+    "goals_b": 4,
+    "season": 2014
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Mexico",
+    "goals_a": 1,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Netherlands",
+    "goals_a": 1,
+    "goals_b": 5,
+    "season": 2014
+  },
+  {
+    "team_a": "Chile",
+    "team_b": "Australia",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Netherlands",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Chile",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Chile",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Colombia",
+    "team_b": "Greece",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Ivory Coast",
+    "team_b": "Japan",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Greece",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Colombia",
+    "team_b": "Ivory Coast",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Colombia",
+    "goals_a": 1,
+    "goals_b": 4,
+    "season": 2014
+  },
+  {
+    "team_a": "Greece",
+    "team_b": "Ivory Coast",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Costa Rica",
+    "goals_a": 1,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "England",
+    "team_b": "Italy",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "England",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Costa Rica",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Italy",
+    "team_b": "Uruguay",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Costa Rica",
+    "team_b": "England",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "Ecuador",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "France",
+    "team_b": "Honduras",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "France",
+    "goals_a": 2,
+    "goals_b": 5,
+    "season": 2014
+  },
+  {
+    "team_a": "Honduras",
+    "team_b": "Ecuador",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "Honduras",
+    "team_b": "Switzerland",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Ecuador",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Bosnia and Herzegovina",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "Nigeria",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Iran",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Nigeria",
+    "team_b": "Bosnia and Herzegovina",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Nigeria",
+    "team_b": "Argentina",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Bosnia and Herzegovina",
+    "team_b": "Iran",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Portugal",
+    "goals_a": 4,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Ghana",
+    "team_b": "United States",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Ghana",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Portugal",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2014
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Germany",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Ghana",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Algeria",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Russia",
+    "team_b": "South Korea",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Russia",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Algeria",
+    "goals_a": 2,
+    "goals_b": 4,
+    "season": 2014
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Belgium",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Algeria",
+    "team_b": "Russia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Chile",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Colombia",
+    "team_b": "Uruguay",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Mexico",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Costa Rica",
+    "team_b": "Greece",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "France",
+    "team_b": "Nigeria",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Algeria",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "United States",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "France",
+    "team_b": "Germany",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Colombia",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Belgium",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Costa Rica",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Brazil",
+    "goals_a": 7,
+    "goals_b": 1,
+    "season": 2014
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Argentina",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Netherlands",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2014
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Argentina",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2014
+  },
+  {
+    "team_a": "Russia",
+    "team_b": "Saudi Arabia",
+    "goals_a": 5,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Egypt",
+    "team_b": "Uruguay",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Russia",
+    "team_b": "Egypt",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Saudi Arabia",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Russia",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Saudi Arabia",
+    "team_b": "Egypt",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Morocco",
+    "team_b": "Iran",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Spain",
+    "goals_a": 3,
+    "goals_b": 3,
+    "season": 2018
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Morocco",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "Portugal",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Morocco",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "France",
+    "team_b": "Australia",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Peru",
+    "team_b": "Denmark",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "France",
+    "team_b": "Peru",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Denmark",
+    "team_b": "Australia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Denmark",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Peru",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Iceland",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Nigeria",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Croatia",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2018
+  },
+  {
+    "team_a": "Nigeria",
+    "team_b": "Iceland",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Nigeria",
+    "team_b": "Argentina",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Iceland",
+    "team_b": "Croatia",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Costa Rica",
+    "team_b": "Serbia",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Costa Rica",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Serbia",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Serbia",
+    "team_b": "Brazil",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "Costa Rica",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Mexico",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Sweden",
+    "team_b": "South Korea",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Mexico",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Sweden",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Germany",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Sweden",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2018
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Panama",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Tunisia",
+    "team_b": "England",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Tunisia",
+    "goals_a": 5,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "England",
+    "team_b": "Panama",
+    "goals_a": 6,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "England",
+    "team_b": "Belgium",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Panama",
+    "team_b": "Tunisia",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Colombia",
+    "team_b": "Japan",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Poland",
+    "team_b": "Senegal",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Senegal",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Poland",
+    "team_b": "Colombia",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2018
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Poland",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Senegal",
+    "team_b": "Colombia",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "France",
+    "team_b": "Argentina",
+    "goals_a": 4,
+    "goals_b": 3,
+    "season": 2018
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "Portugal",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Russia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Denmark",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Mexico",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Japan",
+    "goals_a": 3,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Sweden",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Colombia",
+    "team_b": "England",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "France",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Belgium",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Sweden",
+    "team_b": "England",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Russia",
+    "team_b": "Croatia",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "France",
+    "team_b": "Belgium",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "England",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2018
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "England",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2018
+  },
+  {
+    "team_a": "France",
+    "team_b": "Croatia",
+    "goals_a": 4,
+    "goals_b": 2,
+    "season": 2018
+  },
+  {
+    "team_a": "Qatar",
+    "team_b": "Ecuador",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Senegal",
+    "team_b": "Netherlands",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Qatar",
+    "team_b": "Senegal",
+    "goals_a": 1,
+    "goals_b": 3,
+    "season": 2022
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Ecuador",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Ecuador",
+    "team_b": "Senegal",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Qatar",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "England",
+    "goals_a": 2,
+    "goals_b": 6,
+    "season": 2022
+  },
+  {
+    "team_a": "United States",
+    "team_b": "Wales",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Wales",
+    "team_b": "Iran",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "England",
+    "team_b": "United States",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Wales",
+    "team_b": "England",
+    "goals_a": 0,
+    "goals_b": 3,
+    "season": 2022
+  },
+  {
+    "team_a": "Iran",
+    "team_b": "United States",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Saudi Arabia",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Mexico",
+    "team_b": "Poland",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Poland",
+    "team_b": "Saudi Arabia",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Mexico",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Poland",
+    "team_b": "Argentina",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Saudi Arabia",
+    "team_b": "Mexico",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Denmark",
+    "team_b": "Tunisia",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "France",
+    "team_b": "Australia",
+    "goals_a": 4,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Tunisia",
+    "team_b": "Australia",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "France",
+    "team_b": "Denmark",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Australia",
+    "team_b": "Denmark",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Tunisia",
+    "team_b": "France",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Germany",
+    "team_b": "Japan",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Costa Rica",
+    "goals_a": 7,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Costa Rica",
+    "goals_a": 0,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Spain",
+    "team_b": "Germany",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Spain",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Costa Rica",
+    "team_b": "Germany",
+    "goals_a": 2,
+    "goals_b": 4,
+    "season": 2022
+  },
+  {
+    "team_a": "Morocco",
+    "team_b": "Croatia",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Canada",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Belgium",
+    "team_b": "Morocco",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Canada",
+    "goals_a": 4,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Belgium",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Canada",
+    "team_b": "Morocco",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Switzerland",
+    "team_b": "Cameroon",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Serbia",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Serbia",
+    "goals_a": 3,
+    "goals_b": 3,
+    "season": 2022
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "Switzerland",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Serbia",
+    "team_b": "Switzerland",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2022
+  },
+  {
+    "team_a": "Cameroon",
+    "team_b": "Brazil",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Uruguay",
+    "team_b": "South Korea",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Ghana",
+    "goals_a": 3,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Ghana",
+    "goals_a": 2,
+    "goals_b": 3,
+    "season": 2022
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Uruguay",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Ghana",
+    "team_b": "Uruguay",
+    "goals_a": 0,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "South Korea",
+    "team_b": "Portugal",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "United States",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Australia",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "England",
+    "team_b": "Senegal",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "France",
+    "team_b": "Poland",
+    "goals_a": 3,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Japan",
+    "team_b": "Croatia",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Brazil",
+    "team_b": "South Korea",
+    "goals_a": 4,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Morocco",
+    "team_b": "Spain",
+    "goals_a": 0,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Portugal",
+    "team_b": "Switzerland",
+    "goals_a": 6,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Netherlands",
+    "team_b": "Argentina",
+    "goals_a": 2,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Brazil",
+    "goals_a": 1,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Morocco",
+    "team_b": "Portugal",
+    "goals_a": 1,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "England",
+    "team_b": "France",
+    "goals_a": 1,
+    "goals_b": 2,
+    "season": 2022
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "Croatia",
+    "goals_a": 3,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "France",
+    "team_b": "Morocco",
+    "goals_a": 2,
+    "goals_b": 0,
+    "season": 2022
+  },
+  {
+    "team_a": "Croatia",
+    "team_b": "Morocco",
+    "goals_a": 2,
+    "goals_b": 1,
+    "season": 2022
+  },
+  {
+    "team_a": "Argentina",
+    "team_b": "France",
+    "goals_a": 3,
+    "goals_b": 3,
+    "season": 2022
+  }
+]
