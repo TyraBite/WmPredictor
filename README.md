@@ -75,13 +75,13 @@ cp .env.example .env
 Dann `.env` mit einem Texteditor öffnen und die Keys eintragen:
 
 ```
-API_FOOTBALL_KEY=dein_key_hier
+FOOTBALL_DATA_KEY=dein_key_hier
 ODDS_API_KEY=dein_key_hier   # kann leer bleiben
 ```
 
 ### Schritt 3 — Spieldaten laden
 
-Dieser Schritt ruft die API-Football-API einmalig ab und speichert alle WM-2026-Spielpaarungen (Gruppenphase + KO-Bracket) in `data/fixtures.json`.
+Dieser Schritt ruft die football-data.org-API einmalig ab und speichert alle WM-2026-Spielpaarungen (Gruppenphase + KO-Bracket) in `data/fixtures.json`.
 
 ```bash
 python src/bootstrap_fixtures.py
@@ -89,14 +89,14 @@ python src/bootstrap_fixtures.py
 
 Erwartete Ausgabe:
 ```
-Written 48 group + 32 KO slots → data/fixtures.json
+Written 72 group + 32 KO slots → data/fixtures.json
 ```
 
 Die 48 Gruppenspiele enthalten bereits Teams, Datum und Spielort. Die 32 KO-Slots sind als Platzhalter angelegt und werden automatisch befüllt, sobald die Gruppenphase durch ist.
 
-### Schritt 4 — Statische Scores und historische Elo-Ratings berechnen
+### Schritt 4 — Statische Scores und Elo-Ratings berechnen
 
-Dieser Schritt lädt Bevölkerungs- und BIP-Daten von der Weltbank, Klimadaten von Open-Meteo und historische WM-Spielergebnisse (2006–2022) von API-Football. Alle Daten werden lokal gecacht, sodass der Schritt nur beim allerersten Aufruf länger dauert (ca. 2–5 Minuten).
+Dieser Schritt lädt Bevölkerungs- und BIP-Daten von der Weltbank sowie Klimadaten von Open-Meteo. Die historischen WM-Spielergebnisse (2006–2022) sind bereits als `data/historical_matches.json` im Repository enthalten — kein API-Key nötig. Alle externen Daten werden lokal gecacht, sodass der Schritt nur beim allerersten Aufruf länger dauert (ca. 2–5 Minuten).
 
 ```bash
 python src/klement.py
@@ -110,7 +110,6 @@ Klement scores + Elo ratings computed for 48 teams.
 Erzeugte Dateien:
 - `data/klement_scores.json` — Klement-Score, Heimklima und Venue-Klima pro Team
 - `data/elo_ratings.json` — Elo-Rating pro Team basierend auf WM-Ergebnissen 2006–2022
-- `data/historical_matches.json` — Rohdaten der historischen Spiele (Grundlage fürs Modell)
 
 ### Schritt 5 — Vorhersagemodell trainieren
 
@@ -242,7 +241,7 @@ wm-predictor/
 │   ├── injuries.json           # Manuelle Verletzungsdaten
 │   ├── klement_scores.json     # Klement-Scores (klement.py-Output)
 │   ├── elo_ratings.json        # Elo-Ratings (klement.py-Output)
-│   ├── historical_matches.json # Historische WM-Daten (klement.py-Output)
+│   ├── historical_matches.json # Historische WM-Daten 2006–2022 (im Repo enthalten)
 │   ├── form_cache.json         # Turnierform-Cache (automatisch)
 │   └── cache/                  # HTTP-Response-Cache (automatisch, .gitignore)
 ├── docs/
