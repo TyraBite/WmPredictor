@@ -45,8 +45,8 @@ def build_predictions_json(
     warnings = []
     if not os.environ.get("ODDS_API_KEY"):
         warnings.append("Wettquoten nicht verfügbar (ODDS_API_KEY fehlt)")
-    if not os.environ.get("API_FOOTBALL_KEY"):
-        warnings.append("Live-Updates nicht verfügbar (API_FOOTBALL_KEY fehlt)")
+    if not os.environ.get("FOOTBALL_DATA_KEY"):
+        warnings.append("Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)")
 
     pending_out = []
     for m in store.pending():

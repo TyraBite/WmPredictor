@@ -7,23 +7,22 @@ Tiplu-internes WM 2026 Wettbüro-Tool. Zeigt Vorhersagen für ausstehende Spiele
 ## Voraussetzungen
 
 - Python 3.11 oder neuer
-- Ein kostenloser API-Football-Account (siehe unten)
+- Ein kostenloser football-data.org-Account (siehe unten)
 - Optional: ein Odds-API-Account für Wettquoten (kann übersprungen werden)
 
 ---
 
 ## API-Keys beschaffen
 
-### API-Football (Pflicht)
+### football-data.org (Pflicht)
 
-Der Key wird für zwei Dinge gebraucht: einmalig zum Laden der historischen WM-Daten (2006–2022) für das Modell und täglich zum Abrufen aktueller Spielergebnisse.
+Der Key wird für den Spielplan-Abruf und täglich zum Laden aktueller Ergebnisse verwendet. Außerdem lädt er historische WM-Daten (2006–2022) für das Vorhersagemodell.
 
-1. Gehe auf [api-football.com](https://www.api-football.com) und klicke auf **Sign Up**
-2. Wähle den **Free Plan** (100 Anfragen/Tag — reicht für dieses Tool)
-3. Nach der Registrierung findest du deinen Key im Dashboard unter **My Account → Credentials → API Key**
-4. Den Key kopieren und in `.env` eintragen (siehe Setup-Schritt 2)
+1. Gehe auf [football-data.org](https://www.football-data.org/client/register) und registriere dich
+2. Der Key kommt per E-Mail — kein Kreditkarte nötig
+3. Den Key als `FOOTBALL_DATA_KEY` in `.env` eintragen (siehe Setup-Schritt 2)
 
-> **Hinweis:** Der Free-Plan reicht für den Erstaufbau und den täglichen Betrieb aus. Das Tool cached alle Antworten 24 Stunden in `data/cache/`, sodass API-Anfragen auf ein Minimum reduziert werden.
+> **Hinweis:** Der kostenlose Plan reicht für den Betrieb aus. Das Tool cached alle Antworten 24 Stunden in `data/cache/`, sodass API-Anfragen auf ein Minimum reduziert werden.
 
 ### Odds API (Optional)
 

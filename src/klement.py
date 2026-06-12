@@ -11,8 +11,7 @@ STORE_PATH = "data/fixtures.json"
 
 WB_URL = "https://api.worldbank.org/v2/country/{iso}/indicator/{ind}?format=json&mrv=1"
 METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
-AF_URL = "https://v3.football.api-sports.io/fixtures"
-WORLD_CUP_LEAGUE_ID = 1
+FD_URL = "https://api.football-data.org/v4/competitions/WC/matches"
 
 TEAM_ISO: dict[str, str] = {
     "Argentina": "AR", "Brazil": "BR", "Colombia": "CO", "Uruguay": "UY",
@@ -129,18 +128,17 @@ def _wb_value(iso: str, indicator: str) -> float:
 
 def _fetch_historical_matches(key: str) -> list[dict]:
     matches = []
-    for season in range(2006, 2023, 4):
-        data = fetch(AF_URL, params={"league": WORLD_CUP_LEAGUE_ID, "season": season,
-                                     "status": "FT"},
-                     headers={"x-apisports-key": key})
-        for item in data.get("response", []):
-            goals = item.get("goals", {})
-            ga, gb = goals.get("home"), goals.get("away")
+    for season in [2006, 2010, 2014, 2018, 2022]:
+        data = fetch(FD_URL, params={"season": season, "status": "FINISHED"},
+                     headers={"X-Auth-Token": key})
+        for match in data.get("matches", []):
+            score = match.get("score", {}).get("fullTime", {})
+            ga, gb = score.get("home"), score.get("away")
             if ga is None or gb is None:
                 continue
             matches.append({
-                "team_a": item["teams"]["home"]["name"],
-                "team_b": item["teams"]["away"]["name"],
+                "team_a": match["homeTeam"]["name"],
+                "team_b": match["awayTeam"]["name"],
                 "goals_a": int(ga), "goals_b": int(gb),
                 "season": season,
             })
@@ -155,7 +153,7 @@ def compute_all() -> None:
         pass
     teams = list(store.all_teams()) or list(TEAM_HOME_COORDS.keys())
 
-    key = os.environ.get("API_FOOTBALL_KEY", "")
+    key = os.environ.get("FOOTBALL_DATA_KEY", "")
 
     pop_raw, gdp_raw = {}, {}
     for team in teams:

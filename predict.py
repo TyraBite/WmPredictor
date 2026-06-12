@@ -115,8 +115,8 @@ def main():
     warnings = []
     if not os.environ.get("ODDS_API_KEY"):
         warnings.append("⚠️  ODDS_API_KEY nicht gesetzt – Wettquoten deaktiviert.")
-    if not os.environ.get("API_FOOTBALL_KEY"):
-        warnings.append("⚠️  API_FOOTBALL_KEY nicht gesetzt – keine Live-Updates möglich.")
+    if not os.environ.get("FOOTBALL_DATA_KEY"):
+        warnings.append("⚠️  FOOTBALL_DATA_KEY nicht gesetzt – keine Live-Updates möglich.")
 
     for w in warnings:
         print(w)

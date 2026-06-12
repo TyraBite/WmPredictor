@@ -18,7 +18,7 @@ jobs:
       - name: Fetch results
         run: python src/fetch_results.py
         env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
       - name: Rebuild predictions
         run: python src/update_predictions.py
         env:

@@ -6,26 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CITY_TO_VENUE: dict[str, str] = {
-    "New York": "New York/NJ", "East Rutherford": "New York/NJ",
-    "Newark": "New York/NJ", "New York/NJ": "New York/NJ",
-    "Los Angeles": "Los Angeles", "Inglewood": "Los Angeles",
-    "Dallas": "Dallas", "Arlington": "Dallas",
-    "San Francisco": "San Francisco", "Santa Clara": "San Francisco",
-    "Seattle": "Seattle",
-    "Miami": "Miami", "Miami Gardens": "Miami",
-    "Houston": "Houston",
-    "Atlanta": "Atlanta",
-    "Philadelphia": "Philadelphia",
-    "Kansas City": "Kansas City", "Kansas City (KS)": "Kansas City",
-    "Boston": "Boston", "Foxborough": "Boston",
-    "Toronto": "Toronto",
-    "Vancouver": "Vancouver",
-    "Mexico City": "Mexico City", "Ciudad de Mexico": "Mexico City",
-    "Guadalajara": "Guadalajara",
-    "Monterrey": "Monterrey",
-}
-
 FLAG: dict[str, str] = {
     "Mexico": "🇲🇽", "USA": "🇺🇸", "United States": "🇺🇸", "Canada": "🇨🇦",
     "Argentina": "🇦🇷", "Brazil": "🇧🇷", "Colombia": "🇨🇴", "Uruguay": "🇺🇾",
@@ -45,30 +25,34 @@ FLAG: dict[str, str] = {
     "Costa Rica": "🇨🇷", "Panama": "🇵🇦", "Honduras": "🇭🇳",
 }
 
-API_URL = "https://v3.football.api-sports.io/fixtures"
-WORLD_CUP_LEAGUE_ID = 1
+FD_URL = "https://api.football-data.org/v4/competitions/WC/matches"
 
 
 def map_api_response(api_data: dict) -> list[dict]:
     fixtures, counters = [], {}
-    for item in api_data.get("response", []):
-        rnd = item["league"].get("round", "")
-        parts = rnd.split()
-        if not (rnd.startswith("Group ") and len(parts) == 2 and len(parts[1]) == 1):
+    for match in api_data.get("matches", []):
+        if match.get("stage") != "GROUP_STAGE":
             continue
-        group = parts[1]
-        team_a = item["teams"]["home"]["name"]
-        team_b = item["teams"]["away"]["name"]
-        city = item["fixture"]["venue"]["city"]
+        group_raw = match.get("group", "")
+        group = group_raw.replace("GROUP_", "")
+        if not group or len(group) != 1:
+            continue
+        team_a = match["homeTeam"]["name"]
+        team_b = match["awayTeam"]["name"]
         counters[group] = counters.get(group, 0) + 1
         fixtures.append({
             "match_id": f"{group}{counters[group]}",
-            "group": group, "phase": "group",
-            "team_a": team_a, "team_b": team_b,
-            "flag_a": FLAG.get(team_a, "🏳"), "flag_b": FLAG.get(team_b, "🏳"),
-            "date": item["fixture"]["date"][:10],
-            "venue": CITY_TO_VENUE.get(city, city),
-            "status": "pending", "result": None,
+            "group": group,
+            "phase": "group",
+            "team_a": team_a,
+            "team_b": team_b,
+            "flag_a": FLAG.get(team_a, "🏳"),
+            "flag_b": FLAG.get(team_b, "🏳"),
+            "date": match["utcDate"][:10],
+            "venue": match.get("venue", ""),
+            "status": "pending",
+            "result": None,
+            "api_id": match["id"],
         })
     return fixtures
 
@@ -127,15 +111,16 @@ def generate_ko_bracket() -> list[dict]:
 
 
 def main(output_path: str = "data/fixtures.json") -> None:
-    key = os.environ.get("API_FOOTBALL_KEY")
+    key = os.environ.get("FOOTBALL_DATA_KEY")
     if not key:
-        print("ERROR: API_FOOTBALL_KEY not set.\nGet a free key at https://api-football.com and add it to .env")
+        print("ERROR: FOOTBALL_DATA_KEY not set.\nGet a free key at https://www.football-data.org and add it to .env")
         sys.exit(1)
 
-    print("Fetching WM 2026 fixtures from API-Football...")
-    resp = requests.get(API_URL,
-                        params={"league": WORLD_CUP_LEAGUE_ID, "season": 2026},
-                        headers={"x-apisports-key": key}, timeout=30)
+    print("Fetching WM 2026 fixtures from football-data.org...")
+    resp = requests.get(FD_URL,
+                        params={"stage": "GROUP_STAGE"},
+                        headers={"X-Auth-Token": key},
+                        timeout=30)
     resp.raise_for_status()
     group_fixtures = map_api_response(resp.json())
     ko_fixtures = generate_ko_bracket()
