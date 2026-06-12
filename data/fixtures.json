@@ -9,8 +9,8 @@
     "flag_b": "🇿🇦",
     "date": "2026-06-11",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "2:0",
     "api_id": 537327
   },
   {
@@ -23,8 +23,8 @@
     "flag_b": "🏳",
     "date": "2026-06-12",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "2:1",
     "api_id": 537328
   },
   {
