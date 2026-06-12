@@ -1,4 +1,5 @@
-import json, os
+import json
+import os
 from typing import Optional
 
 
@@ -10,11 +11,13 @@ class FixtureStore:
     def load(self) -> None:
         if not os.path.exists(self.path):
             raise FileNotFoundError(f"Not found: {self.path}")
-        self._matches = json.loads(open(self.path).read())
+        with open(self.path, "r", encoding="utf-8") as f:
+            self._matches = json.loads(f.read())
 
     def save(self) -> None:
         os.makedirs(os.path.dirname(os.path.abspath(self.path)), exist_ok=True)
-        open(self.path, "w").write(json.dumps(self._matches, indent=2, ensure_ascii=False))
+        with open(self.path, "w", encoding="utf-8") as f:
+            f.write(json.dumps(self._matches, indent=2, ensure_ascii=False))
 
     def pending(self) -> list[dict]:
         return [m for m in self._matches
