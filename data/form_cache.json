@@ -1,15 +1,37 @@
 {
-  "Austria": {
+  "Switzerland": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.5,
+    "pre_tournament_form": 0.4493,
     "recent_matches": []
   },
-  "Canada": {
+  "Czechia": {
+    "turnier_form": 0.0,
+    "pre_tournament_form": 0.5,
+    "recent_matches": [
+      "L"
+    ]
+  },
+  "Qatar": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.0,
     "recent_matches": []
   },
-  "Cura\u00e7ao": {
+  "Belgium": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.725,
+    "recent_matches": []
+  },
+  "Spain": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.4599,
+    "recent_matches": []
+  },
+  "Australia": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.2201,
+    "recent_matches": []
+  },
+  "Turkey": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
@@ -19,27 +41,49 @@
     "pre_tournament_form": 0.4069,
     "recent_matches": []
   },
-  "Egypt": {
+  "Morocco": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.3979,
+    "recent_matches": []
+  },
+  "Croatia": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.4568,
+    "recent_matches": []
+  },
+  "New Zealand": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.3333,
+    "recent_matches": []
+  },
+  "Senegal": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.462,
+    "recent_matches": []
+  },
+  "Panama": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.0,
     "recent_matches": []
   },
-  "Jordan": {
+  "Mexico": {
+    "turnier_form": 0.85,
+    "pre_tournament_form": 0.4563,
+    "recent_matches": [
+      "W"
+    ]
+  },
+  "Portugal": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.5,
+    "pre_tournament_form": 0.5668,
     "recent_matches": []
   },
-  "Norway": {
+  "United States": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.5,
+    "pre_tournament_form": 0.3862,
     "recent_matches": []
   },
-  "Ghana": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.293,
-    "recent_matches": []
-  },
-  "Turkey": {
+  "Haiti": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
@@ -51,76 +95,24 @@
       "W"
     ]
   },
-  "Algeria": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.231,
-    "recent_matches": []
-  },
-  "Ivory Coast": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.3543,
-    "recent_matches": []
-  },
-  "England": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.4525,
-    "recent_matches": []
-  },
-  "France": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.8324,
-    "recent_matches": []
-  },
-  "Panama": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.0,
-    "recent_matches": []
-  },
-  "Ecuador": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.4526,
-    "recent_matches": []
-  },
-  "Qatar": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.0,
-    "recent_matches": []
-  },
-  "Czechia": {
-    "turnier_form": 0.0,
-    "pre_tournament_form": 0.5,
-    "recent_matches": [
-      "L"
-    ]
-  },
-  "Senegal": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.462,
-    "recent_matches": []
-  },
-  "Morocco": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.3979,
-    "recent_matches": []
-  },
-  "Haiti": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.5,
-    "recent_matches": []
-  },
   "Paraguay": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.3688,
     "recent_matches": []
   },
-  "Tunisia": {
+  "Jordan": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.2986,
+    "pre_tournament_form": 0.5,
     "recent_matches": []
   },
-  "Belgium": {
+  "Ghana": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.725,
+    "pre_tournament_form": 0.293,
+    "recent_matches": []
+  },
+  "Germany": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.642,
     "recent_matches": []
   },
   "Uruguay": {
@@ -128,19 +120,9 @@
     "pre_tournament_form": 0.6227,
     "recent_matches": []
   },
-  "Saudi Arabia": {
+  "Egypt": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.2611,
-    "recent_matches": []
-  },
-  "Switzerland": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.4493,
-    "recent_matches": []
-  },
-  "New Zealand": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.3333,
+    "pre_tournament_form": 0.0,
     "recent_matches": []
   },
   "Congo DR": {
@@ -148,9 +130,9 @@
     "pre_tournament_form": 0.5,
     "recent_matches": []
   },
-  "Spain": {
+  "Canada": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.4599,
+    "pre_tournament_form": 0.0,
     "recent_matches": []
   },
   "Iran": {
@@ -158,22 +140,22 @@
     "pre_tournament_form": 0.2948,
     "recent_matches": []
   },
-  "Portugal": {
+  "Sweden": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.5668,
+    "pre_tournament_form": 0.5072,
     "recent_matches": []
   },
-  "Iraq": {
+  "Algeria": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.5,
+    "pre_tournament_form": 0.231,
     "recent_matches": []
   },
-  "Australia": {
+  "Brazil": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.2201,
+    "pre_tournament_form": 0.6607,
     "recent_matches": []
   },
-  "Bosnia-Herzegovina": {
+  "Cape Verde Islands": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
@@ -183,61 +165,49 @@
     "pre_tournament_form": 0.729,
     "recent_matches": []
   },
-  "Uzbekistan": {
+  "Colombia": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.698,
+    "recent_matches": []
+  },
+  "Iraq": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
   },
-  "Cape Verde Islands": {
+  "Tunisia": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.2986,
+    "recent_matches": []
+  },
+  "England": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.4525,
+    "recent_matches": []
+  },
+  "Austria": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
   },
-  "Mexico": {
-    "turnier_form": 0.85,
-    "pre_tournament_form": 0.4563,
-    "recent_matches": [
-      "W"
-    ]
+  "Bosnia-Herzegovina": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
+  },
+  "Ivory Coast": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.3543,
+    "recent_matches": []
   },
   "Scotland": {
     "turnier_form": 0.5,
     "pre_tournament_form": 0.5,
     "recent_matches": []
   },
-  "Brazil": {
+  "Ecuador": {
     "turnier_form": 0.5,
-    "pre_tournament_form": 0.6607,
-    "recent_matches": []
-  },
-  "Germany": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.642,
-    "recent_matches": []
-  },
-  "Sweden": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.5072,
-    "recent_matches": []
-  },
-  "United States": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.3862,
-    "recent_matches": []
-  },
-  "Colombia": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.698,
-    "recent_matches": []
-  },
-  "Argentina": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.5542,
-    "recent_matches": []
-  },
-  "Croatia": {
-    "turnier_form": 0.5,
-    "pre_tournament_form": 0.4568,
+    "pre_tournament_form": 0.4526,
     "recent_matches": []
   },
   "South Africa": {
@@ -246,5 +216,35 @@
     "recent_matches": [
       "L"
     ]
+  },
+  "Norway": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
+  },
+  "Argentina": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5542,
+    "recent_matches": []
+  },
+  "Uzbekistan": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
+  },
+  "France": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.8324,
+    "recent_matches": []
+  },
+  "Saudi Arabia": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.2611,
+    "recent_matches": []
+  },
+  "Cura\u00e7ao": {
+    "turnier_form": 0.5,
+    "pre_tournament_form": 0.5,
+    "recent_matches": []
   }
 }
