@@ -7,7 +7,7 @@ sys.path.insert(0, "src")
 from dotenv import load_dotenv
 load_dotenv()
 from fixtures import FixtureStore
-from features import build as build_features
+from features import build as build_features, fetch_score_odds
 from model import WMPredictor, PredictionResult
 from form_tracker import update_all
 
@@ -117,6 +117,7 @@ def build_predictions_json(
         inj_b = ([f"{p} ❌" for p in inj_b_entry.get("injured", [])] +
                  [f"{p} 🟥" for p in inj_b_entry.get("suspended", [])])
 
+        score_odds = fetch_score_odds(m["team_a"], m["team_b"])
         pending_out.append({
             "match_id": m["match_id"],
             "group": m.get("group"),
@@ -141,6 +142,21 @@ def build_predictions_json(
             "form_b": fb,
             "injuries_a": inj_a,
             "injuries_b": inj_b,
+            "score_odds": score_odds,
+            "explanation_factors": {
+                "elo_a": round(feat["elo_a"]),
+                "elo_b": round(feat["elo_b"]),
+                "h2h_score": round(feat["h2h_score"], 2),
+                "odds_prob_a": round(feat["odds_prob_a"] * 100, 1),
+                "odds_prob_draw": round(feat["odds_prob_draw"] * 100, 1),
+                "odds_prob_b": round(feat["odds_prob_b"] * 100, 1),
+                "attack_a": round(feat["attack_a"], 3),
+                "attack_b": round(feat["attack_b"], 3),
+                "defense_a": round(feat["defense_a"], 3),
+                "defense_b": round(feat["defense_b"], 3),
+                "live_adj_a": round(feat.get("live_adj_a", 0.5), 3),
+                "live_adj_b": round(feat.get("live_adj_b", 0.5), 3),
+            },
         })
 
     # Build completed matches with accuracy classification

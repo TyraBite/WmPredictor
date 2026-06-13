@@ -71,8 +71,7 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
 
     results = [(f"{i}:{j}", float(mat[i, j])) for i in range(n) for j in range(n)]
     results.sort(key=lambda x: -x[1])
-    tip = results[0][0]
-    return p_win, p_draw, p_loss, results[:3], tip
+    return p_win, p_draw, p_loss, results[:5], results
 
 
 def _feat_to_array(feat: dict) -> np.ndarray:
@@ -130,7 +129,7 @@ class WMPredictor:
         self._xgb.fit(X_arr, y_arr)
 
     def predict(self, feat: dict, team_a: str = "A", team_b: str = "B") -> PredictionResult:
-        pw, pd, pl, top3, tip = _poisson_probs(self._poisson_params, team_a, team_b, feat)
+        pw, pd, pl, top5, all_results = _poisson_probs(self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
         p_a = 0.6 * pw + 0.4 * xgb_probs[0]
@@ -142,9 +141,17 @@ class WMPredictor:
         total = p_a + p_d + p_b
         if total > 0:
             p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
+        # Tip from the direction of the final blended probability (Poisson+XGBoost+Odds+Live)
+        if p_a >= p_d and p_a >= p_b:
+            cat = [(s, p) for s, p in all_results if int(s.split(":")[0]) > int(s.split(":")[1])]
+        elif p_b >= p_d and p_b >= p_a:
+            cat = [(s, p) for s, p in all_results if int(s.split(":")[0]) < int(s.split(":")[1])]
+        else:
+            cat = [(s, p) for s, p in all_results if s.split(":")[0] == s.split(":")[1]]
+        tip = cat[0][0] if cat else all_results[0][0]
         return PredictionResult(
             prob_a=round(p_a, 4), prob_draw=round(p_d, 4), prob_b=round(p_b, 4),
-            top_results=top3, tip=tip,
+            top_results=top5, tip=tip,
         )
 
     def save(self, poisson_path: str = POISSON_PATH, xgb_path: str = XGB_PATH) -> None:

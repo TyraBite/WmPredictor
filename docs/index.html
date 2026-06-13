@@ -8,7 +8,7 @@
   :root {
     --bg: #1a1a2e; --card: #16213e; --accent: #ffd700;
     --text: #eee; --muted: #888; --win: #4caf50; --draw: #ff9800; --loss: #f44336;
-    --blue: #2196f3;
+    --blue: #2196f3; --detail-bg: #0f1729;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
@@ -31,7 +31,8 @@
 
   /* Cards (shared) */
   .card { background: var(--card); border-radius: 12px; padding: 14px 16px;
-          margin-bottom: 14px; }
+          margin-bottom: 14px; cursor: pointer; transition: filter 120ms; }
+  .card:active { filter: brightness(1.12); }
   .card-meta { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
                letter-spacing: .04em; margin-bottom: 8px; display: flex;
                align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -54,14 +55,13 @@
   .dot-D { color: var(--draw); }
   .dot-L { color: var(--loss); }
 
-  /* Pending: tip row + confidence badge */
+  /* Pending: tip row */
   .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
   .tip-label { font-size: 0.8rem; color: var(--muted); }
   .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
   .tip-alt   { font-size: 0.95rem; font-weight: 600; color: var(--text); }
   .tip-prob  { font-size: 0.72rem; color: var(--muted); }
   .tip-sep   { color: var(--muted); font-size: 0.75rem; }
-  .tip-winner { font-size: 0.8rem; color: var(--muted); }
 
   .badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
            font-size: 0.7rem; font-weight: 700; letter-spacing: .03em; }
@@ -99,6 +99,59 @@
 
   footer { text-align: center; font-size: 0.75rem; color: var(--muted); padding: 20px 0; }
   #loading { text-align: center; color: var(--muted); padding: 40px; }
+
+  /* ── Detail Modal ── */
+  #detail-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.72); z-index: 200;
+    align-items: flex-end; justify-content: center;
+  }
+  #detail-overlay.open { display: flex; }
+  #detail-panel {
+    background: var(--detail-bg); border-radius: 18px 18px 0 0;
+    width: 100%; max-width: 420px;
+    max-height: 88vh; overflow-y: auto;
+    padding: 20px 16px 32px;
+    transform: translateY(100%);
+    transition: transform 280ms cubic-bezier(.32,.72,0,1);
+  }
+  #detail-panel.open { transform: translateY(0); }
+  .detail-drag { width: 36px; height: 4px; background: #444; border-radius: 2px;
+                 margin: 0 auto 16px; }
+  .detail-teams { font-size: 1.1rem; font-weight: 700; text-align: center; margin-bottom: 4px; }
+  .detail-meta  { font-size: 0.78rem; color: var(--muted); text-align: center;
+                  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .detail-section { border-left: 3px solid var(--accent); padding-left: 10px;
+                    margin: 16px 0 10px; }
+  .detail-section h3 { font-size: 0.72rem; font-weight: 700; color: var(--accent);
+                       text-transform: uppercase; letter-spacing: .08em; }
+
+  /* Score rows in detail */
+  .score-row { display: grid; grid-template-columns: 36px 1fr 52px 1fr auto;
+               align-items: center; gap: 6px; padding: 5px 6px; border-radius: 6px;
+               margin-bottom: 4px; }
+  .score-val  { font-size: 0.95rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .score-bar-track { height: 6px; background: #2a2a4a; border-radius: 3px; overflow: hidden; }
+  .score-bar-fill  { height: 100%; border-radius: 3px; transition: width .3s; }
+  .score-pct  { font-size: 0.78rem; color: var(--muted); text-align: right; }
+  .score-lbl  { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .score-bm   { font-size: 0.68rem; color: var(--accent); background: #3a2f00;
+                padding: 1px 5px; border-radius: 8px; white-space: nowrap; }
+  .score-row-w { background: rgba(76,175,80,.08); }
+  .score-row-d { background: rgba(255,152,0,.08); }
+  .score-row-l { background: rgba(244,67,54,.08); }
+
+  /* Factor rows in detail */
+  .factor-row { display: grid; grid-template-columns: 1fr 44px 80px 44px;
+                align-items: center; gap: 6px; margin-bottom: 8px; }
+  .factor-label { font-size: 0.75rem; color: var(--muted); }
+  .factor-val   { font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .factor-val-a { color: var(--win); text-align: right; }
+  .factor-val-b { color: var(--loss); }
+  .factor-bar   { height: 8px; border-radius: 4px; overflow: hidden;
+                  background: #2a2a4a; display: flex; }
+  .factor-bar-a { background: var(--win); }
+  .factor-bar-b { background: var(--loss); }
 </style>
 </head>
 <body>
@@ -114,83 +167,81 @@
   <div id="section-genauigkeit"></div>
 </div>
 <footer id="footer"></footer>
+
+<!-- Detail Modal -->
+<div id="detail-overlay">
+  <div id="detail-panel">
+    <div class="detail-drag"></div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
 <script>
-  function today() {
-    return new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD local
-  }
-  function yesterday() {
-    const d = new Date(); d.setDate(d.getDate()-1);
-    return d.toLocaleDateString("en-CA");
-  }
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function today() { return new Date().toLocaleDateString("en-CA"); }
+  function yesterday() { const d=new Date(); d.setDate(d.getDate()-1); return d.toLocaleDateString("en-CA"); }
   function fmtDate(s) {
-    const months = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
-    const d = new Date(s + "T12:00:00");
+    const months=["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
+    const d=new Date(s+"T12:00:00");
     return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
   }
   function fmtDateTime(kickoff_utc, date) {
     if (kickoff_utc) {
-      const d = new Date(kickoff_utc);
-      const months = ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
-      const day = d.toLocaleDateString("en-CA"); // local YYYY-MM-DD
-      const todayStr = today();
-      const dateLabel = day === todayStr ? "Heute" : fmtDate(day);
-      const time = d.toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit"});
+      const d=new Date(kickoff_utc);
+      const day=d.toLocaleDateString("en-CA");
+      const dateLabel=day===today()?"Heute":fmtDate(day);
+      const time=d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
       return `${dateLabel}, ${time} Uhr`;
     }
     return fmtDate(date);
   }
   function fmtPhase(p) {
-    return {"group":"Gruppenphase","round_of_32":"Achtelfinale",
-            "round_of_16":"Sechzehntelfinale","quarter_final":"Viertelfinale",
-            "semi_final":"Halbfinale","final":"Finale","third_place":"Spiel um Platz 3"}[p] || p;
+    return {"group":"Gruppenphase","round_of_32":"Achtelfinale","round_of_16":"Sechzehntelfinale",
+            "quarter_final":"Viertelfinale","semi_final":"Halbfinale","final":"Finale",
+            "third_place":"Spiel um Platz 3"}[p]||p;
   }
   function formDots(arr) {
-    if (!arr || !arr.length) return '<span style="color:var(--muted)">–</span>';
-    return arr.map(r => r==="W"?'<span class="dot-W">●</span>':
-                        r==="D"?'<span class="dot-D">◑</span>':
-                                '<span class="dot-L">○</span>').join(" ");
+    if (!arr||!arr.length) return '<span style="color:var(--muted)">–</span>';
+    return arr.map(r=>r==="W"?'<span class="dot-W">●</span>':
+                      r==="D"?'<span class="dot-D">◑</span>':
+                              '<span class="dot-L">○</span>').join(" ");
   }
   function tipWinner(m) {
-    const [ga, gb] = (m.tip||"0:0").split(":").map(Number);
-    if (ga > gb) return m.team_a;
-    if (gb > ga) return m.team_b;
-    return "Unentschieden";
+    const [ga,gb]=(m.tip||"0:0").split(":").map(Number);
+    if(ga>gb) return m.team_a; if(gb>ga) return m.team_b; return "Unentschieden";
   }
   function confidenceBadge(level) {
-    const map = {high:["badge-high","Sicher"], medium:["badge-medium","Knapp"], low:["badge-low","Unsicher"]};
-    const [cls, label] = map[level] || map.medium;
+    const map={high:["badge-high","Sicher"],medium:["badge-medium","Knapp"],low:["badge-low","Unsicher"]};
+    const [cls,label]=map[level]||map.medium;
     return `<span class="badge ${cls}">${label}</span>`;
   }
   function accuracyBadge(acc) {
-    const map = {
-      correct_result:    ["badge badge-exact",      "Exakt"],
-      correct_difference:["badge badge-difference", "Differenz ✓"],
-      correct_tendency:  ["badge badge-tendency",   "Tendenz ✓"],
-      wrong:             ["badge badge-wrong",      "Daneben"],
-    };
-    const [cls, label] = map[acc] || map.wrong;
+    const map={correct_result:["badge badge-exact","Exakt"],
+               correct_difference:["badge badge-difference","Differenz ✓"],
+               correct_tendency:["badge badge-tendency","Tendenz ✓"],
+               wrong:["badge badge-wrong","Daneben"]};
+    const [cls,label]=map[acc]||map.wrong;
     return `<span class="${cls}">${label}</span>`;
   }
+
+  // ── Card renderers ────────────────────────────────────────────────────────
   function renderPending(m) {
-    const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
-    const bA = (m.prob_a||0).toFixed(0), bD = (m.prob_draw||0).toFixed(0), bB = (m.prob_b||0).toFixed(0);
-    const hasInj = (m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
-    const top3 = (m.top_results||[]).slice(0,3);
-    const tipsHtml = top3.map((t,i) =>
+    const grp=m.group?`GRUPPE ${m.group}`:fmtPhase(m.phase).toUpperCase();
+    const bA=(m.prob_a||0).toFixed(0),bD=(m.prob_draw||0).toFixed(0),bB=(m.prob_b||0).toFixed(0);
+    const hasInj=(m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
+    const top3=(m.top_results||[]).slice(0,3);
+    const tipsHtml=top3.map((t,i)=>
       `<span class="${i===0?"tip-value":"tip-alt"}">${t[0]}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
     ).join('<span class="tip-sep">·</span>');
-    return `<div class="card">
-  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
+    return `<div class="card" onclick="openDetail(allMatches['${m.match_id}'])">
+  <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc,m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
     <span>${m.flag_a||""} ${m.team_a}</span>
     <span class="vs">vs</span>
     <span>${m.team_b} ${m.flag_b||""}</span>
   </div>
   <hr class="card-divider"/>
-  <div class="tip-row">
-    <span class="tip-label">Tipps:</span>
-    ${tipsHtml}
-  </div>
+  <div class="tip-row"><span class="tip-label">Tipps:</span>${tipsHtml}</div>
   <div class="prob-bar">
     <div class="bar-a" style="width:${bA}%"></div>
     <div class="bar-draw" style="width:${bD}%"></div>
@@ -209,43 +260,34 @@
 </div>`;
   }
   function renderCompleted(m) {
-    const grp = m.group ? `GRUPPE ${m.group}` : fmtPhase(m.phase).toUpperCase();
-    const pa = m.prob_a != null ? m.prob_a.toFixed(0) : "0";
-    const pd = m.prob_draw != null ? m.prob_draw.toFixed(0) : "0";
-    const pb = m.prob_b != null ? m.prob_b.toFixed(0) : "0";
-    const hasProbs = m.prob_a != null;
+    const grp=m.group?`GRUPPE ${m.group}`:fmtPhase(m.phase).toUpperCase();
+    const pa=m.prob_a!=null?m.prob_a.toFixed(0):"0";
+    const pd=m.prob_draw!=null?m.prob_draw.toFixed(0):"0";
+    const pb=m.prob_b!=null?m.prob_b.toFixed(0):"0";
+    const hasProbs=m.prob_a!=null;
     return `<div class="card">
   <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)}</div>
   <div class="teams">
-    <span>${m.flag_a||""} ${m.team_a}</span>
-    <span class="vs">vs</span>
-    <span>${m.team_b} ${m.flag_b||""}</span>
+    <span>${m.flag_a||""} ${m.team_a}</span><span class="vs">vs</span><span>${m.team_b} ${m.flag_b||""}</span>
   </div>
   <hr class="card-divider"/>
   <div class="result-big">${m.result||"–"}</div>
-  <div class="result-tip-row">
-    <span>Tipp war: <strong>${m.tip}</strong></span>
-    ${accuracyBadge(m.accuracy)}
-  </div>
-  ${hasProbs ? `<div class="prob-bar">
+  <div class="result-tip-row"><span>Tipp war: <strong>${m.tip}</strong></span>${accuracyBadge(m.accuracy)}</div>
+  ${hasProbs?`<div class="prob-bar">
     <div class="bar-a" style="width:${pa}%"></div>
     <div class="bar-draw" style="width:${pd}%"></div>
     <div class="bar-b" style="width:${pb}%"></div>
   </div>
   <div class="prob-row">
-    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span>
-    <span class="prob-sep">•</span>
-    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span>
-    <span class="prob-sep">•</span>
+    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span><span class="prob-sep">•</span>
+    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span><span class="prob-sep">•</span>
     <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
-  </div>` : ""}
+  </div>`:""}
 </div>`;
   }
   function renderStats(stats) {
-    if (!stats || stats.played === 0) return "";
-    const p = stats.played;
-    const pct = v => p > 0 ? (v/p*100).toFixed(1)+"%" : "0%";
-    const w = v => p > 0 ? (v/p*100).toFixed(1)+"%" : "0%";
+    if(!stats||stats.played===0) return "";
+    const w=v=>stats.played>0?(v/stats.played*100).toFixed(1)+"%":"0%";
     return `<div class="stats-block">
   <div class="stats-bar-track">
     <div class="stats-seg-exact" style="width:${w(stats.correct_result)}"></div>
@@ -261,12 +303,107 @@
   </div>
 </div>`;
   }
-  function sectionHeader(title, subtitle) {
+  function sectionHeader(title,subtitle) {
     return `<div class="section-header"><h2>${title}</h2>${subtitle?`<p>${subtitle}</p>`:""}</div>`;
   }
+
+  // ── Detail Modal ──────────────────────────────────────────────────────────
+  let allMatches = {};
+
+  function splitBar(a, b, invertForLower) {
+    const fa = parseFloat(a), fb = parseFloat(b);
+    if (isNaN(fa) || isNaN(fb) || fa + fb === 0) return [50, 50];
+    if (invertForLower) return [fb/(fa+fb)*100, fa/(fa+fb)*100];
+    return [fa/(fa+fb)*100, fb/(fa+fb)*100];
+  }
+  function factorRow(label, valA, valB, invertForLower) {
+    const [pA, pB] = splitBar(valA, valB, invertForLower);
+    const dispA = valA != null ? valA : "–";
+    const dispB = valB != null ? valB : "–";
+    return `<div class="factor-row">
+  <span class="factor-label">${label}</span>
+  <span class="factor-val factor-val-a">${dispA}</span>
+  <div class="factor-bar">
+    <div class="factor-bar-a" style="width:${pA.toFixed(1)}%"></div>
+    <div class="factor-bar-b" style="width:${pB.toFixed(1)}%"></div>
+  </div>
+  <span class="factor-val factor-val-b">${dispB}</span>
+</div>`;
+  }
+
+  function renderDetail(m) {
+    const ef = m.explanation_factors || {};
+    const so = m.score_odds || {};
+    const grp = m.group ? `Gruppe ${m.group}` : fmtPhase(m.phase);
+    const top5 = (m.top_results || []).slice(0, 5);
+    const maxProb = top5.length ? top5[0][1] : 1;
+
+    // Score rows
+    const scoreRows = top5.map(t => {
+      const [ga, gb] = t[0].split(":").map(Number);
+      const type = ga > gb ? "w" : ga < gb ? "l" : "d";
+      const color = type==="w" ? "var(--win)" : type==="d" ? "var(--draw)" : "var(--loss)";
+      const lbl = type==="w" ? m.team_a+" gewinnt" : type==="l" ? m.team_b+" gewinnt" : "Unentschieden";
+      const barW = maxProb > 0 ? (t[1]/maxProb*100).toFixed(0) : 0;
+      const bm = so[t[0]];
+      const bmHtml = bm ? `<span class="score-bm">BM ${bm}%</span>` : `<span></span>`;
+      return `<div class="score-row score-row-${type}">
+  <span class="score-val" style="color:${color}">${t[0]}</span>
+  <div class="score-bar-track"><div class="score-bar-fill" style="width:${barW}%;background:${color}"></div></div>
+  <span class="score-pct">${t[1].toFixed(1)}%</span>
+  <span class="score-lbl">${lbl}</span>
+  ${bmHtml}
+</div>`;
+    }).join("");
+
+    // Build h2h display
+    const h2h = ef.h2h_score != null ? ef.h2h_score : null;
+    const h2hA = h2h != null ? (h2h*100).toFixed(0)+"%" : "–";
+    const h2hB = h2h != null ? ((1-h2h)*100).toFixed(0)+"%" : "–";
+
+    // Odds
+    const oddsA = ef.odds_prob_a != null ? ef.odds_prob_a+"%" : "–";
+    const oddsB = ef.odds_prob_b != null ? ef.odds_prob_b+"%" : "–";
+
+    return `
+<div class="detail-teams">${m.flag_a||""} ${m.team_a} <span style="color:var(--muted);font-weight:400">vs</span> ${m.team_b} ${m.flag_b||""}</div>
+<div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}</div>
+<div class="detail-section"><h3>Top 5 Ergebnisse</h3></div>
+${scoreRows}
+<div class="detail-section"><h3>Modell-Faktoren</h3></div>
+${factorRow("Tendenz-Quoten", ef.odds_prob_a != null ? ef.odds_prob_a+"%" : null, ef.odds_prob_b != null ? ef.odds_prob_b+"%" : null)}
+${factorRow("ELO-Rating", ef.elo_a, ef.elo_b)}
+${factorRow("Kopf an Kopf", h2hA !== "–" ? h2hA : null, h2hB !== "–" ? h2hB : null)}
+${factorRow("Klement-Score", m.klement_a, m.klement_b)}
+${factorRow("Angriff (Poisson)", ef.attack_a, ef.attack_b)}
+${factorRow("Abwehr (Poisson)", ef.defense_a, ef.defense_b, true)}
+${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
+  }
+
+  function openDetail(m) {
+    if (!m) return;
+    document.getElementById("detail-content").innerHTML = renderDetail(m);
+    const overlay = document.getElementById("detail-overlay");
+    const panel   = document.getElementById("detail-panel");
+    overlay.classList.add("open");
+    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add("open")));
+    panel.scrollTop = 0;
+  }
+  function closeDetail() {
+    const panel = document.getElementById("detail-panel");
+    const overlay = document.getElementById("detail-overlay");
+    panel.classList.remove("open");
+    setTimeout(() => overlay.classList.remove("open"), 290);
+  }
+
+  document.getElementById("detail-overlay").addEventListener("click", e => {
+    if (e.target === document.getElementById("detail-overlay")) closeDetail();
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+
+  // ── Main ─────────────────────────────────────────────────────────────────
   async function init() {
-    const todayStr = today();
-    const yestStr = yesterday();
+    const todayStr = today(), yestStr = yesterday();
     try {
       const r = await fetch("predictions.json?_=" + Date.now());
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -282,39 +419,39 @@
 
       const pending = data.pending_matches || [];
       const completed = data.completed_matches || [];
-      // HEUTE: at least 3 — today's matches first, fill with next upcoming if needed
-      const todayPending = pending.filter(m => m.date === todayStr);
+
+      // Build lookup for click handler
+      pending.forEach(m => { allMatches[m.match_id] = m; });
+
+      // HEUTE: at least 3 matches — today first, fill with upcoming if needed
+      const todayPending  = pending.filter(m => m.date === todayStr);
       const futurePending = pending.filter(m => m.date > todayStr);
-      const heuteMatches = todayPending.length >= 3
+      const heuteMatches  = todayPending.length >= 3
         ? todayPending
         : [...todayPending, ...futurePending].slice(0, Math.max(3, todayPending.length));
-
       const yesterdayCompleted = completed.filter(m => m.date === yestStr);
 
-      const totalPending = pending.length;
       document.getElementById("header-subtitle").textContent =
-        totalPending ? `${totalPending} ausstehende Spiele` : "Alle Spiele abgeschlossen";
+        pending.length ? `${pending.length} ausstehende Spiele` : "Alle Spiele abgeschlossen";
 
       // HEUTE section
       let heuteHtml = sectionHeader("HEUTE", data.tournament_phase);
-      if (heuteMatches.length) {
-        heuteHtml += heuteMatches.map(renderPending).join("");
-      } else {
-        heuteHtml += `<p class="section-empty">Keine ausstehenden Spiele</p>`;
-      }
+      heuteHtml += heuteMatches.length
+        ? heuteMatches.map(renderPending).join("")
+        : `<p class="section-empty">Keine ausstehenden Spiele</p>`;
       document.getElementById("section-heute").innerHTML = heuteHtml;
 
-      // GESTERN section — only if there are completed matches from yesterday
+      // GESTERN section
       if (yesterdayCompleted.length) {
         let gestHtml = sectionHeader("GESTERN", "Abgeschlossene Spiele");
         gestHtml += yesterdayCompleted.map(renderCompleted).join("");
         document.getElementById("section-gestern").innerHTML = gestHtml;
       }
 
-      // GENAUIGKEIT section — only if matches have been played
+      // GENAUIGKEIT section
       const stats = data.stats;
       if (stats && stats.played > 0) {
-        let accHtml = sectionHeader("GENAUIGKEIT", `${stats.played} Spiel${stats.played !== 1 ? "e" : ""} gespielt`);
+        let accHtml = sectionHeader("GENAUIGKEIT", `${stats.played} Spiel${stats.played!==1?"e":""} gespielt`);
         accHtml += renderStats(stats);
         document.getElementById("section-genauigkeit").innerHTML = accHtml;
       }
@@ -323,7 +460,7 @@
         const ts = new Date(data.updated_at);
         document.getElementById("footer").textContent =
           "Letzte Aktualisierung: " + ts.toLocaleDateString("de-DE") + " " +
-          ts.toLocaleTimeString("de-DE", {hour:"2-digit", minute:"2-digit"});
+          ts.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
       }
     } catch(e) {
       document.getElementById("loading").textContent = "⚠️ Fehler beim Laden.";

@@ -67,6 +67,50 @@ def _odds_probs(team_a: str, team_b: str) -> tuple[float, float, float]:
     return 0.4, 0.25, 0.35
 
 
+def fetch_score_odds(team_a: str, team_b: str) -> dict:
+    """Returns {score: implied_prob_pct} from bookmaker correct_score market, or {} if unavailable."""
+    key = os.environ.get("ODDS_API_KEY")
+    if not key:
+        return {}
+    try:
+        from data_fetcher import fetch
+        data = fetch(ODDS_API_URL, params={"apiKey": key, "regions": "eu",
+                                           "markets": "correct_score", "oddsFormat": "decimal"},
+                     ttl_hours=1)
+        odds_a = ODDS_NAME_MAP.get(team_a, team_a)
+        odds_b = ODDS_NAME_MAP.get(team_b, team_b)
+        for event in data:
+            home = event.get("home_team", "")
+            away = event.get("away_team", "")
+            if {odds_a, odds_b} != {home, away}:
+                continue
+            a_is_home = home == odds_a
+            for bm in event.get("bookmakers", [])[:1]:
+                for mkt in bm.get("markets", []):
+                    if mkt["key"] != "correct_score":
+                        continue
+                    result = {}
+                    for o in mkt.get("outcomes", []):
+                        price = o.get("price", 0)
+                        if price <= 0:
+                            continue
+                        # Outcome name is typically "1-0", "2-1" (home:away)
+                        raw = o["name"].replace(" ", "")
+                        parts = raw.split("-")
+                        if len(parts) != 2:
+                            continue
+                        try:
+                            gh, ga_val = int(parts[0]), int(parts[1])
+                        except ValueError:
+                            continue
+                        score = f"{gh}:{ga_val}" if a_is_home else f"{ga_val}:{gh}"
+                        result[score] = round(100 / price, 1)
+                    return result
+    except Exception:
+        pass
+    return {}
+
+
 def build(team_a: str, team_b: str, venue: str) -> dict:
     klement = {}
     if os.path.exists(KLEMENT_PATH):

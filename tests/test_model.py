@@ -56,7 +56,7 @@ def test_prediction_result_type():
     }
     r = p.predict(feat)
     assert isinstance(r, PredictionResult)
-    assert len(r.top_results) == 3
+    assert len(r.top_results) == 5
     assert ":" in r.tip
 
 
