@@ -190,8 +190,8 @@
     "date": "2026-06-15",
     "kickoff_utc": "2026-06-15T16:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "0:0",
     "api_id": 537369
   },
   {
@@ -205,8 +205,8 @@
     "date": "2026-06-15",
     "kickoff_utc": "2026-06-15T19:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "1:1",
     "api_id": 537363
   },
   {
