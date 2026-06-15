@@ -1,15 +1,15 @@
 {
-  "updated_at": "2026-06-14T21:55:34.754642+00:00",
+  "updated_at": "2026-06-15T16:22:39.149188+00:00",
   "tournament_phase": "Gruppenphase",
   "warnings": [
     "Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)"
   ],
   "stats": {
-    "played": 9,
+    "played": 12,
     "correct_result": 0,
     "correct_difference": 0,
-    "correct_tendency": 2,
-    "wrong": 7
+    "correct_tendency": 3,
+    "wrong": 9
   },
   "completed_matches": [
     {
@@ -155,9 +155,7 @@
       "prob_a": 68.4,
       "prob_draw": 16.1,
       "prob_b": 15.4
-    }
-  ],
-  "pending_matches": [
+    },
     {
       "match_id": "F1",
       "group": "F",
@@ -167,57 +165,12 @@
       "team_b": "Japan",
       "flag_b": "🇯🇵",
       "date": "2026-06-14",
-      "kickoff_utc": "2026-06-14T20:00:00Z",
-      "venue": "",
+      "result": "2:2",
+      "tip": "1:0",
+      "accuracy": "wrong",
       "prob_a": 68.5,
       "prob_draw": 21.1,
-      "prob_b": 10.4,
-      "tip": "1:0",
-      "top_results": [
-        [
-          "1:0",
-          17.3
-        ],
-        [
-          "2:0",
-          14.9
-        ],
-        [
-          "1:1",
-          10.1
-        ],
-        [
-          "0:0",
-          10.0
-        ],
-        [
-          "2:1",
-          8.7
-        ]
-      ],
-      "confidence_level": "high",
-      "second_tip": "2:0",
-      "klement_a": 0.46,
-      "klement_b": 0.37,
-      "form_a": [],
-      "form_b": [],
-      "injuries_a": [],
-      "injuries_b": [],
-      "score_odds": {},
-      "explanation_factors": {
-        "elo_a": 1662,
-        "elo_b": 1486,
-        "h2h_score": 1.0,
-        "odds_prob_a": 12.1,
-        "odds_prob_draw": 77.7,
-        "odds_prob_b": 10.2,
-        "attack_a": 0.566,
-        "attack_b": 0.217,
-        "defense_a": 0.689,
-        "defense_b": -0.044,
-        "live_adj_a": 0.719,
-        "live_adj_b": 0.622
-      }
+      "prob_b": 10.4
     },
     {
       "match_id": "E2",
@@ -228,57 +181,12 @@
       "team_b": "Ecuador",
       "flag_b": "🇪🇨",
       "date": "2026-06-14",
-      "kickoff_utc": "2026-06-14T23:00:00Z",
-      "venue": "",
+      "result": "1:0",
+      "tip": "0:1",
+      "accuracy": "wrong",
       "prob_a": 31.5,
       "prob_draw": 24.6,
-      "prob_b": 43.9,
-      "tip": "0:1",
-      "top_results": [
-        [
-          "1:1",
-          12.8
-        ],
-        [
-          "0:1",
-          12.5
-        ],
-        [
-          "1:0",
-          9.1
-        ],
-        [
-          "0:0",
-          8.9
-        ],
-        [
-          "1:2",
-          8.9
-        ]
-      ],
-      "confidence_level": "low",
-      "second_tip": "0:1",
-      "klement_a": 0.11,
-      "klement_b": 0.17,
-      "form_a": [],
-      "form_b": [],
-      "injuries_a": [],
-      "injuries_b": [],
-      "score_odds": {},
-      "explanation_factors": {
-        "elo_a": 1474,
-        "elo_b": 1507,
-        "h2h_score": 0.5,
-        "odds_prob_a": 28.1,
-        "odds_prob_draw": 33.2,
-        "odds_prob_b": 38.7,
-        "attack_a": 0.301,
-        "attack_b": 0.241,
-        "defense_a": -0.158,
-        "defense_b": 0.212,
-        "live_adj_a": 0.606,
-        "live_adj_b": 0.636
-      }
+      "prob_b": 43.9
     },
     {
       "match_id": "F2",
@@ -289,58 +197,15 @@
       "team_b": "Tunisia",
       "flag_b": "🇹🇳",
       "date": "2026-06-15",
-      "kickoff_utc": "2026-06-15T02:00:00Z",
-      "venue": "",
+      "result": "5:1",
+      "tip": "1:0",
+      "accuracy": "correct_tendency",
       "prob_a": 71.8,
       "prob_draw": 18.0,
-      "prob_b": 10.2,
-      "tip": "1:0",
-      "top_results": [
-        [
-          "1:0",
-          18.3
-        ],
-        [
-          "2:0",
-          15.2
-        ],
-        [
-          "0:0",
-          11.0
-        ],
-        [
-          "1:1",
-          10.1
-        ],
-        [
-          "3:0",
-          8.4
-        ]
-      ],
-      "confidence_level": "high",
-      "second_tip": "2:0",
-      "klement_a": 0.53,
-      "klement_b": 0.06,
-      "form_a": [],
-      "form_b": [],
-      "injuries_a": [],
-      "injuries_b": [],
-      "score_odds": {},
-      "explanation_factors": {
-        "elo_a": 1522,
-        "elo_b": 1470,
-        "h2h_score": 0.5,
-        "odds_prob_a": 51.0,
-        "odds_prob_draw": 27.8,
-        "odds_prob_b": 21.2,
-        "attack_a": 0.259,
-        "attack_b": -0.127,
-        "defense_a": 0.402,
-        "defense_b": -0.316,
-        "live_adj_a": 0.652,
-        "live_adj_b": 0.59
-      }
-    },
+      "prob_b": 10.2
+    }
+  ],
+  "pending_matches": [
     {
       "match_id": "H1",
       "group": "H",
@@ -391,8 +256,8 @@
         "elo_a": 1568,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 87.9,
-        "odds_prob_draw": 7.9,
+        "odds_prob_a": 84.9,
+        "odds_prob_draw": 11.6,
         "odds_prob_b": 0.0,
         "attack_a": 0.66,
         "attack_b": 0,
@@ -452,9 +317,9 @@
         "elo_a": 1594,
         "elo_b": 1452,
         "h2h_score": 0.5,
-        "odds_prob_a": 59.2,
-        "odds_prob_draw": 24.1,
-        "odds_prob_b": 16.8,
+        "odds_prob_a": 60.3,
+        "odds_prob_draw": 23.6,
+        "odds_prob_b": 16.1,
         "attack_a": 0.381,
         "attack_b": -0.488,
         "defense_a": 0.584,
@@ -513,9 +378,9 @@
         "elo_a": 1450,
         "elo_b": 1553,
         "h2h_score": 0.0,
-        "odds_prob_a": 12.7,
-        "odds_prob_draw": 22.3,
-        "odds_prob_b": 65.0,
+        "odds_prob_a": 11.1,
+        "odds_prob_draw": 21.2,
+        "odds_prob_b": 67.7,
         "attack_a": -0.216,
         "attack_b": 0.317,
         "defense_a": -0.586,
@@ -574,9 +439,9 @@
         "elo_a": 1446,
         "elo_b": 1503,
         "h2h_score": 0.5,
-        "odds_prob_a": 49.2,
-        "odds_prob_draw": 28.5,
-        "odds_prob_b": 22.3,
+        "odds_prob_a": 54.6,
+        "odds_prob_draw": 26.9,
+        "odds_prob_b": 18.5,
         "attack_a": -0.128,
         "attack_b": -0.123,
         "defense_a": -0.274,
@@ -635,9 +500,9 @@
         "elo_a": 1657,
         "elo_b": 1506,
         "h2h_score": 0.5,
-        "odds_prob_a": 65.2,
-        "odds_prob_draw": 21.5,
-        "odds_prob_b": 13.4,
+        "odds_prob_a": 65.5,
+        "odds_prob_draw": 21.3,
+        "odds_prob_b": 13.2,
         "attack_a": 0.71,
         "attack_b": 0.41,
         "defense_a": 0.389,
@@ -696,9 +561,9 @@
         "elo_a": 1500,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 6.1,
+        "odds_prob_a": 5.5,
         "odds_prob_draw": 13.0,
-        "odds_prob_b": 80.8,
+        "odds_prob_b": 81.5,
         "attack_a": 0,
         "attack_b": 0,
         "defense_a": 0,
@@ -757,9 +622,9 @@
         "elo_a": 1621,
         "elo_b": 1464,
         "h2h_score": 0.5,
-        "odds_prob_a": 68.7,
-        "odds_prob_draw": 21.0,
-        "odds_prob_b": 10.3,
+        "odds_prob_a": 68.3,
+        "odds_prob_draw": 21.2,
+        "odds_prob_b": 10.5,
         "attack_a": 0.684,
         "attack_b": 0.202,
         "defense_a": 0.208,
@@ -818,9 +683,9 @@
         "elo_a": 1500,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 71.5,
-        "odds_prob_draw": 17.7,
-        "odds_prob_b": 10.8,
+        "odds_prob_a": 73.9,
+        "odds_prob_draw": 16.8,
+        "odds_prob_b": 9.3,
         "attack_a": 0,
         "attack_b": 0,
         "defense_a": 0,
@@ -879,8 +744,8 @@
         "elo_a": 1533,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 75.2,
-        "odds_prob_draw": 16.7,
+        "odds_prob_a": 76.1,
+        "odds_prob_draw": 16.4,
         "odds_prob_b": 0.0,
         "attack_a": 0.593,
         "attack_b": 0,
@@ -940,9 +805,9 @@
         "elo_a": 1538,
         "elo_b": 1544,
         "h2h_score": 0.0,
-        "odds_prob_a": 55.8,
-        "odds_prob_draw": 24.8,
-        "odds_prob_b": 19.4,
+        "odds_prob_a": 55.6,
+        "odds_prob_draw": 24.9,
+        "odds_prob_b": 19.5,
         "attack_a": 0.49,
         "attack_b": 0.543,
         "defense_a": 0.237,
@@ -1001,9 +866,9 @@
         "elo_a": 1477,
         "elo_b": 1454,
         "h2h_score": 0.5,
-        "odds_prob_a": 43.9,
-        "odds_prob_draw": 27.9,
-        "odds_prob_b": 28.2,
+        "odds_prob_a": 43.4,
+        "odds_prob_draw": 28.1,
+        "odds_prob_b": 28.5,
         "attack_a": 0.35,
         "attack_b": -0.242,
         "defense_a": -0.059,
@@ -1062,9 +927,9 @@
         "elo_a": 1500,
         "elo_b": 1552,
         "h2h_score": 0.5,
-        "odds_prob_a": 10.4,
-        "odds_prob_draw": 20.2,
-        "odds_prob_b": 69.3,
+        "odds_prob_a": 10.2,
+        "odds_prob_draw": 19.9,
+        "odds_prob_b": 69.9,
         "attack_a": 0,
         "attack_b": 0.796,
         "defense_a": 0,
@@ -1128,8 +993,8 @@
         "elo_b": 1502,
         "h2h_score": 0.5,
         "odds_prob_a": 0.0,
-        "odds_prob_draw": 24.7,
-        "odds_prob_b": 19.9,
+        "odds_prob_draw": 25.4,
+        "odds_prob_b": 20.0,
         "attack_a": 0,
         "attack_b": 0.388,
         "defense_a": 0,
@@ -1192,8 +1057,8 @@
         "elo_a": 1517,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 61.0,
-        "odds_prob_draw": 23.8,
+        "odds_prob_a": 61.9,
+        "odds_prob_draw": 23.2,
         "odds_prob_b": 0.0,
         "attack_a": 0.2,
         "attack_b": 0,
@@ -1257,8 +1122,8 @@
         "elo_a": 1460,
         "elo_b": 1460,
         "h2h_score": 0.5,
-        "odds_prob_a": 72.2,
-        "odds_prob_draw": 17.2,
+        "odds_prob_a": 72.6,
+        "odds_prob_draw": 16.9,
         "odds_prob_b": 10.5,
         "attack_a": 0.003,
         "attack_b": -0.881,
@@ -1322,9 +1187,9 @@
         "elo_a": 1506,
         "elo_b": 1454,
         "h2h_score": 1.0,
-        "odds_prob_a": 48.4,
-        "odds_prob_draw": 27.9,
-        "odds_prob_b": 23.7,
+        "odds_prob_a": 48.1,
+        "odds_prob_draw": 28.7,
+        "odds_prob_b": 23.1,
         "attack_a": 0.15,
         "attack_b": 0.399,
         "defense_a": 0.198,
@@ -1388,8 +1253,8 @@
         "elo_b": 1449,
         "h2h_score": 0.5,
         "odds_prob_a": 0.0,
-        "odds_prob_draw": 22.5,
-        "odds_prob_b": 16.8,
+        "odds_prob_draw": 22.1,
+        "odds_prob_b": 17.4,
         "attack_a": 0.165,
         "attack_b": 0.256,
         "defense_a": -0.046,
@@ -1452,9 +1317,9 @@
         "elo_a": 1500,
         "elo_b": 1506,
         "h2h_score": 0.5,
-        "odds_prob_a": 20.7,
-        "odds_prob_draw": 26.2,
-        "odds_prob_b": 53.1,
+        "odds_prob_a": 19.8,
+        "odds_prob_draw": 25.4,
+        "odds_prob_b": 54.7,
         "attack_a": 0,
         "attack_b": -0.116,
         "defense_a": 0,
@@ -1517,9 +1382,9 @@
         "elo_a": 1594,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 85.7,
-        "odds_prob_draw": 10.2,
-        "odds_prob_b": 4.1,
+        "odds_prob_a": 86.1,
+        "odds_prob_draw": 9.7,
+        "odds_prob_b": 4.3,
         "attack_a": 0.568,
         "attack_b": 0,
         "defense_a": 0.327,
@@ -1582,9 +1447,9 @@
         "elo_a": 1500,
         "elo_b": 1492,
         "h2h_score": 0.5,
-        "odds_prob_a": 46.4,
+        "odds_prob_a": 47.2,
         "odds_prob_draw": 28.6,
-        "odds_prob_b": 25.0,
+        "odds_prob_b": 24.3,
         "attack_a": 0,
         "attack_b": -0.256,
         "defense_a": 0,
@@ -1604,9 +1469,9 @@
       "date": "2026-06-20",
       "kickoff_utc": "2026-06-20T17:00:00Z",
       "venue": "",
-      "prob_a": 54.6,
-      "prob_draw": 29.3,
-      "prob_b": 16.1,
+      "prob_a": 41.0,
+      "prob_draw": 32.5,
+      "prob_b": 26.5,
       "tip": "1:0",
       "top_results": [
         [
@@ -1630,12 +1495,16 @@
           11.0
         ]
       ],
-      "confidence_level": "medium",
+      "confidence_level": "low",
       "second_tip": "0:0",
       "klement_a": 0.46,
       "klement_b": 0.53,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "D"
+      ],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -1643,15 +1512,15 @@
         "elo_a": 1662,
         "elo_b": 1522,
         "h2h_score": 0.5,
-        "odds_prob_a": 57.5,
-        "odds_prob_draw": 24.2,
-        "odds_prob_b": 18.3,
+        "odds_prob_a": 56.2,
+        "odds_prob_draw": 25.2,
+        "odds_prob_b": 18.6,
         "attack_a": 0.566,
         "attack_b": 0.259,
         "defense_a": 0.689,
         "defense_b": 0.402,
-        "live_adj_a": 0.719,
-        "live_adj_b": 0.652
+        "live_adj_a": 0.619,
+        "live_adj_b": 0.832
       }
     },
     {
@@ -1665,9 +1534,9 @@
       "date": "2026-06-20",
       "kickoff_utc": "2026-06-20T20:00:00Z",
       "venue": "",
-      "prob_a": 79.0,
-      "prob_draw": 12.3,
-      "prob_b": 8.7,
+      "prob_a": 74.4,
+      "prob_draw": 13.8,
+      "prob_b": 11.8,
       "tip": "2:0",
       "top_results": [
         [
@@ -1698,7 +1567,9 @@
       "form_a": [
         "W"
       ],
-      "form_b": [],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -1706,15 +1577,15 @@
         "elo_a": 1616,
         "elo_b": 1474,
         "h2h_score": 0.5,
-        "odds_prob_a": 60.7,
-        "odds_prob_draw": 23.2,
+        "odds_prob_a": 61.4,
+        "odds_prob_draw": 22.6,
         "odds_prob_b": 16.0,
         "attack_a": 0.886,
         "attack_b": 0.301,
         "defense_a": 0.455,
         "defense_b": -0.158,
         "live_adj_a": 0.893,
-        "live_adj_b": 0.606
+        "live_adj_b": 0.726
       }
     },
     {
@@ -1728,9 +1599,9 @@
       "date": "2026-06-21",
       "kickoff_utc": "2026-06-21T00:00:00Z",
       "venue": "",
-      "prob_a": 59.0,
-      "prob_draw": 26.0,
-      "prob_b": 15.0,
+      "prob_a": 45.8,
+      "prob_draw": 29.5,
+      "prob_b": 24.8,
       "tip": "1:0",
       "top_results": [
         [
@@ -1754,11 +1625,13 @@
           10.1
         ]
       ],
-      "confidence_level": "high",
+      "confidence_level": "medium",
       "second_tip": "0:0",
       "klement_a": 0.17,
       "klement_b": 0.53,
-      "form_a": [],
+      "form_a": [
+        "L"
+      ],
       "form_b": [
         "L"
       ],
@@ -1769,14 +1642,14 @@
         "elo_a": 1507,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 81.3,
-        "odds_prob_draw": 11.5,
-        "odds_prob_b": 7.2,
+        "odds_prob_a": 87.0,
+        "odds_prob_draw": 8.0,
+        "odds_prob_b": 5.0,
         "attack_a": 0.241,
         "attack_b": 0,
         "defense_a": 0.212,
         "defense_b": 0,
-        "live_adj_a": 0.636,
+        "live_adj_a": 0.436,
         "live_adj_b": 0.45
       }
     },
@@ -1791,9 +1664,9 @@
       "date": "2026-06-21",
       "kickoff_utc": "2026-06-21T04:00:00Z",
       "venue": "",
-      "prob_a": 14.4,
-      "prob_draw": 23.2,
-      "prob_b": 62.4,
+      "prob_a": 10.0,
+      "prob_draw": 20.3,
+      "prob_b": 69.7,
       "tip": "0:1",
       "top_results": [
         [
@@ -1821,8 +1694,12 @@
       "second_tip": "1:1",
       "klement_a": 0.06,
       "klement_b": 0.37,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "L"
+      ],
+      "form_b": [
+        "D"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -1830,15 +1707,15 @@
         "elo_a": 1470,
         "elo_b": 1486,
         "h2h_score": 0.5,
-        "odds_prob_a": 17.9,
-        "odds_prob_draw": 26.3,
-        "odds_prob_b": 55.8,
+        "odds_prob_a": 13.9,
+        "odds_prob_draw": 23.4,
+        "odds_prob_b": 62.8,
         "attack_a": -0.127,
         "attack_b": 0.217,
         "defense_a": -0.316,
         "defense_b": -0.044,
-        "live_adj_a": 0.59,
-        "live_adj_b": 0.622
+        "live_adj_a": 0.39,
+        "live_adj_b": 0.522
       }
     },
     {
@@ -1891,9 +1768,9 @@
         "elo_a": 1568,
         "elo_b": 1450,
         "h2h_score": 1.0,
-        "odds_prob_a": 87.0,
-        "odds_prob_draw": 9.7,
-        "odds_prob_b": 3.2,
+        "odds_prob_a": 88.4,
+        "odds_prob_draw": 8.7,
+        "odds_prob_b": 2.9,
         "attack_a": 0.66,
         "attack_b": -0.216,
         "defense_a": 0.232,
@@ -1952,9 +1829,9 @@
         "elo_a": 1594,
         "elo_b": 1446,
         "h2h_score": 0.5,
-        "odds_prob_a": 68.4,
-        "odds_prob_draw": 19.9,
-        "odds_prob_b": 11.8,
+        "odds_prob_a": 68.5,
+        "odds_prob_draw": 19.8,
+        "odds_prob_b": 11.7,
         "attack_a": 0.381,
         "attack_b": -0.128,
         "defense_a": 0.584,
@@ -2196,9 +2073,9 @@
         "elo_a": 1657,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 85.5,
+        "odds_prob_a": 85.1,
         "odds_prob_draw": 10.4,
-        "odds_prob_b": 4.1,
+        "odds_prob_b": 4.5,
         "attack_a": 0.71,
         "attack_b": 0,
         "defense_a": 0.389,
@@ -2319,8 +2196,8 @@
         "elo_b": 1464,
         "h2h_score": 0.5,
         "odds_prob_a": 13.9,
-        "odds_prob_draw": 22.5,
-        "odds_prob_b": 63.6,
+        "odds_prob_draw": 22.6,
+        "odds_prob_b": 63.5,
         "attack_a": 0,
         "attack_b": 0.202,
         "defense_a": 0,
@@ -2693,8 +2570,8 @@
         "elo_b": 1460,
         "h2h_score": 0.5,
         "odds_prob_a": 0.0,
-        "odds_prob_draw": 23.6,
-        "odds_prob_b": 15.8,
+        "odds_prob_draw": 23.7,
+        "odds_prob_b": 15.9,
         "attack_a": 0,
         "attack_b": -0.881,
         "defense_a": 0,
@@ -2974,9 +2851,9 @@
       "date": "2026-06-25",
       "kickoff_utc": "2026-06-25T20:00:00Z",
       "venue": "",
-      "prob_a": 6.3,
-      "prob_draw": 16.8,
-      "prob_b": 76.9,
+      "prob_a": 3.2,
+      "prob_draw": 12.6,
+      "prob_b": 84.1,
       "tip": "0:1",
       "top_results": [
         [
@@ -3004,7 +2881,9 @@
       "second_tip": "0:2",
       "klement_a": 0.17,
       "klement_b": 0.43,
-      "form_a": [],
+      "form_a": [
+        "L"
+      ],
       "form_b": [
         "W"
       ],
@@ -3015,14 +2894,14 @@
         "elo_a": 1507,
         "elo_b": 1616,
         "h2h_score": 0.0,
-        "odds_prob_a": 21.6,
-        "odds_prob_draw": 25.6,
-        "odds_prob_b": 52.8,
+        "odds_prob_a": 21.5,
+        "odds_prob_draw": 25.4,
+        "odds_prob_b": 53.1,
         "attack_a": 0.241,
         "attack_b": 0.886,
         "defense_a": 0.212,
         "defense_b": 0.455,
-        "live_adj_a": 0.636,
+        "live_adj_a": 0.436,
         "live_adj_b": 0.893
       }
     },
@@ -3037,9 +2916,9 @@
       "date": "2026-06-25",
       "kickoff_utc": "2026-06-25T20:00:00Z",
       "venue": "",
-      "prob_a": 28.2,
-      "prob_draw": 27.3,
-      "prob_b": 44.6,
+      "prob_a": 22.6,
+      "prob_draw": 26.2,
+      "prob_b": 51.2,
       "tip": "0:1",
       "top_results": [
         [
@@ -3063,14 +2942,16 @@
           8.3
         ]
       ],
-      "confidence_level": "low",
+      "confidence_level": "medium",
       "second_tip": "0:1",
       "klement_a": 0.53,
       "klement_b": 0.11,
       "form_a": [
         "L"
       ],
-      "form_b": [],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -3078,15 +2959,15 @@
         "elo_a": 1500,
         "elo_b": 1474,
         "h2h_score": 0.5,
-        "odds_prob_a": 8.4,
-        "odds_prob_draw": 14.8,
-        "odds_prob_b": 76.7,
+        "odds_prob_a": 7.6,
+        "odds_prob_draw": 14.0,
+        "odds_prob_b": 78.4,
         "attack_a": 0,
         "attack_b": 0.301,
         "defense_a": 0,
         "defense_b": -0.158,
         "live_adj_a": 0.45,
-        "live_adj_b": 0.606
+        "live_adj_b": 0.726
       }
     },
     {
@@ -3100,9 +2981,9 @@
       "date": "2026-06-25",
       "kickoff_utc": "2026-06-25T23:00:00Z",
       "venue": "",
-      "prob_a": 4.5,
-      "prob_draw": 13.6,
-      "prob_b": 81.9,
+      "prob_a": 2.8,
+      "prob_draw": 11.0,
+      "prob_b": 86.2,
       "tip": "0:2",
       "top_results": [
         [
@@ -3130,8 +3011,12 @@
       "second_tip": "0:1",
       "klement_a": 0.06,
       "klement_b": 0.46,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "L"
+      ],
+      "form_b": [
+        "D"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -3139,15 +3024,15 @@
         "elo_a": 1470,
         "elo_b": 1662,
         "h2h_score": 0.5,
-        "odds_prob_a": 14.6,
-        "odds_prob_draw": 23.1,
-        "odds_prob_b": 62.3,
+        "odds_prob_a": 13.0,
+        "odds_prob_draw": 19.1,
+        "odds_prob_b": 67.9,
         "attack_a": -0.127,
         "attack_b": 0.566,
         "defense_a": -0.316,
         "defense_b": 0.689,
-        "live_adj_a": 0.59,
-        "live_adj_b": 0.719
+        "live_adj_a": 0.39,
+        "live_adj_b": 0.619
       }
     },
     {
@@ -3161,9 +3046,9 @@
       "date": "2026-06-25",
       "kickoff_utc": "2026-06-25T23:00:00Z",
       "venue": "",
-      "prob_a": 17.6,
-      "prob_draw": 24.6,
-      "prob_b": 57.8,
+      "prob_a": 9.3,
+      "prob_draw": 19.9,
+      "prob_b": 70.8,
       "tip": "0:1",
       "top_results": [
         [
@@ -3191,8 +3076,12 @@
       "second_tip": "0:0",
       "klement_a": 0.37,
       "klement_b": 0.53,
-      "form_a": [],
-      "form_b": [],
+      "form_a": [
+        "D"
+      ],
+      "form_b": [
+        "W"
+      ],
       "injuries_a": [],
       "injuries_b": [],
       "score_odds": {},
@@ -3200,15 +3089,15 @@
         "elo_a": 1486,
         "elo_b": 1522,
         "h2h_score": 0.5,
-        "odds_prob_a": 47.9,
+        "odds_prob_a": 44.8,
         "odds_prob_draw": 27.2,
-        "odds_prob_b": 25.0,
+        "odds_prob_b": 28.0,
         "attack_a": 0.217,
         "attack_b": 0.259,
         "defense_a": -0.044,
         "defense_b": 0.402,
-        "live_adj_a": 0.622,
-        "live_adj_b": 0.652
+        "live_adj_a": 0.522,
+        "live_adj_b": 0.832
       }
     },
     {
@@ -3452,9 +3341,9 @@
         "elo_a": 1506,
         "elo_b": 1500,
         "h2h_score": 0.5,
-        "odds_prob_a": 65.6,
-        "odds_prob_draw": 22.1,
-        "odds_prob_b": 12.3,
+        "odds_prob_a": 66.3,
+        "odds_prob_draw": 21.2,
+        "odds_prob_b": 12.5,
         "attack_a": 0.41,
         "attack_b": 0,
         "defense_a": -0.234,
@@ -3513,8 +3402,8 @@
         "elo_a": 1553,
         "elo_b": 1568,
         "h2h_score": 0.5,
-        "odds_prob_a": 17.3,
-        "odds_prob_draw": 24.2,
+        "odds_prob_a": 16.7,
+        "odds_prob_draw": 24.8,
         "odds_prob_b": 58.5,
         "attack_a": 0.317,
         "attack_b": 0.66,
@@ -3575,8 +3464,8 @@
         "elo_b": 1450,
         "h2h_score": 0.5,
         "odds_prob_a": 0.0,
-        "odds_prob_draw": 26.3,
-        "odds_prob_b": 35.4,
+        "odds_prob_draw": 25.6,
+        "odds_prob_b": 37.6,
         "attack_a": 0,
         "attack_b": -0.216,
         "defense_a": 0,
