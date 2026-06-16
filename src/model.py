@@ -22,6 +22,14 @@ class PredictionResult:
 POISSON_PATH = "data/model_poisson.json"
 XGB_PATH = "data/model_xgb.pkl"
 
+# Maps fixture team names to Poisson model team names (from historical_matches.json)
+POISSON_NAME_MAP = {
+    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
+    "Czechia": "Czech Republic",
+}
+
+POISSON_DAMPENING = 0.5
+
 
 def _fit_poisson_params(matches: list[dict]) -> dict:
     teams = sorted({m["team_a"] for m in matches} | {m["team_b"] for m in matches})
@@ -58,15 +66,22 @@ def _poisson_matrix(lam_a: float, lam_b: float, max_goals: int = 6) -> np.ndarra
 def _poisson_probs(params: dict, team_a: str, team_b: str,
                    feat: dict) -> tuple[float, float, float, list, str]:
     base = params.get("base_rate", np.log(1.2))
-    a_params = params.get(team_a, {"attack": feat.get("attack_a", 0), "defense": feat.get("defense_a", 0)})
-    b_params = params.get(team_b, {"attack": feat.get("attack_b", 0), "defense": feat.get("defense_b", 0)})
+    # Normalize team names to match Poisson model training data
+    ta = POISSON_NAME_MAP.get(team_a, team_a)
+    tb = POISSON_NAME_MAP.get(team_b, team_b)
+    a_raw = params.get(ta, params.get(team_a, {"attack": feat.get("attack_a", 0), "defense": feat.get("defense_a", 0)}))
+    b_raw = params.get(tb, params.get(team_b, {"attack": feat.get("attack_b", 0), "defense": feat.get("defense_b", 0)}))
+    # Dampen extreme historical params toward zero (reduces overfitting to small sample sizes)
+    d = 1.0 - POISSON_DAMPENING
+    a_params = {"attack": a_raw["attack"] * d, "defense": a_raw["defense"] * d}
+    b_params = {"attack": b_raw["attack"] * d, "defense": b_raw["defense"] * d}
     lam_a = np.exp(base + a_params["attack"] - b_params["defense"])
     lam_b = np.exp(base + b_params["attack"] - a_params["defense"])
 
     rank_a = feat.get("rank_a", 40)
     rank_b = feat.get("rank_b", 40)
     if rank_a > 0 and rank_b > 0 and rank_a != rank_b:
-        rank_adj = ((51 - rank_a) / (51 - rank_b)) ** 0.2
+        rank_adj = (rank_b / rank_a) ** 0.5
         lam_a = lam_a * rank_adj
         lam_b = lam_b / rank_adj
 
@@ -139,9 +154,9 @@ class WMPredictor:
         pw, pd, pl, top5, all_results = _poisson_probs(self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
-        p_a = 0.80 * pw + 0.20 * xgb_probs[0]
-        p_d = 0.80 * pd + 0.20 * xgb_probs[1]
-        p_b = 0.80 * pl + 0.20 * xgb_probs[2]
+        p_a = 0.85 * pw + 0.15 * xgb_probs[0]
+        p_d = 0.85 * pd + 0.15 * xgb_probs[1]
+        p_b = 0.85 * pl + 0.15 * xgb_probs[2]
         raw_adj = feat.get("live_adj_a", 0.5) / max(feat.get("live_adj_b", 0.5), 0.01)
         adj = max(0.6, min(1.67, raw_adj))
         p_a *= adj

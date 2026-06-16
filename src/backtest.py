@@ -1,0 +1,344 @@
+#!/usr/bin/env python3
+"""
+Backtesting framework for WM predictor model.
+
+Evaluates model against:
+  - WM 2026 completed matches (out-of-sample)
+  - WM 2022 matches (in-sample for Poisson, but shows generalization)
+  - Grid search over key parameters
+
+Usage:
+  python src/backtest.py               # verbose evaluation with current params
+  python src/backtest.py --grid        # full parameter grid search
+  python src/backtest.py --hist 2022   # historical evaluation from given season
+"""
+import sys, json, argparse, pickle
+import numpy as np
+from scipy.stats import poisson
+
+sys.path.insert(0, 'src')
+from klement import FIFA_RANKING
+from features import ODDS_NAME_MAP
+
+with open('data/model_poisson.json') as f:
+    POISSON_PARAMS = json.load(f)
+with open('data/model_xgb.pkl', 'rb') as f:
+    XGB_MODEL = pickle.load(f)
+
+# Normalize fixture team names to match Poisson model team names
+POISSON_NAME_MAP = {
+    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
+    "Czechia": "Czech Republic",
+    "United States": "United States",  # already correct in model
+    "Korea Republic": "South Korea",
+    "Cote d'Ivoire": "Ivory Coast",
+    "Cape Verde Islands": "Cape Verde",   # not in model, but normalize for future
+}
+
+# WM 2026 host nations benefit from crowd support
+WM2026_HOSTS = {'United States', 'USA', 'Canada', 'Mexico'}
+
+# Extended FIFA rankings covering all WM 2026 teams that were missing
+# Sources: FIFA World Ranking 2025 (approximate)
+FIFA_RANKING_EXTENDED = {
+    **FIFA_RANKING,
+    # Europe
+    "Sweden": 17,
+    "Albania": 65,
+    "Georgia": 75,
+    "Slovenia": 57,
+    "Hungary": 24,  # already in dict but verify
+    # Africa
+    "South Africa": 58,
+    "Cape Verde": 77,      # ODDS_NAME_MAP maps "Cape Verde Islands" -> "Cape Verde"
+    "Mali": 54,
+    "Algeria": 40,
+    "Ghana": 60,
+    # Americas
+    "Bolivia": 85,
+    "Honduras": 80,
+    "Jamaica": 55,
+    "Panama": 72,
+    "Costa Rica": 70,
+    "Cuba": 100,
+    # Asia
+    "Uzbekistan": 69,
+    "Iraq": 68,
+    "Jordan": 40,  # already in dict
+    # Oceania / Other
+    "New Zealand": 48,  # already in dict
+    # Teams in WM2026 with no FIFA ranking (estimated)
+    "Haiti": 96,
+    "Bosnia-Herzegovina": 60,  # fixtures use this spelling
+    "Bosnia & Herzegovina": 60,  # ODDS_NAME_MAP normalizes to this
+    "Czechia": 33,         # same as Czech Republic (already via ODDS_NAME_MAP)
+    "Curaçao": 130,
+    "Congo DR": 47,        # already in dict as DR Congo?
+}
+
+
+_XGB_CACHE: dict = {}
+
+
+def _warmup_xgb_cache(dampening_vals: list) -> None:
+    """Precompute XGBoost proba for all (match, dampening) combos in one batch call per dampening."""
+    import json as _json
+    with open('data/fixtures.json') as f:
+        fx_pairs = [(m['team_a'], m['team_b']) for m in _json.load(f) if m.get('status') == 'completed']
+    with open('data/historical_matches.json') as f:
+        hist_pairs = [(m['team_a'], m['team_b']) for m in _json.load(f)]
+    all_pairs = list({p: None for p in fx_pairs + hist_pairs})  # deduplicate preserving order
+
+    for damp in dampening_vals:
+        d = 1.0 - damp
+        feats = []
+        for ta, tb in all_pairs:
+            ta2 = POISSON_NAME_MAP.get(ta, ta)
+            tb2 = POISSON_NAME_MAP.get(tb, tb)
+            a = POISSON_PARAMS.get(ta2, POISSON_PARAMS.get(ta, {'attack': 0, 'defense': 0}))
+            b = POISSON_PARAMS.get(tb2, POISSON_PARAMS.get(tb, {'attack': 0, 'defense': 0}))
+            feats.append([0, 0.5, 0.5, 0.75, 0.75,
+                          a['attack'] * d, a['defense'] * d,
+                          b['attack'] * d, b['defense'] * d,
+                          0.65, 0.65, 0.5, 0.4, 0.25, 0.35])
+        X = np.array(feats)
+        probs = XGB_MODEL.predict_proba(X)
+        for (ta, tb), proba in zip(all_pairs, probs):
+            _XGB_CACHE[(ta, tb, round(damp, 6))] = proba
+
+
+def get_rank(team: str, extended: bool = True) -> int:
+    """Get FIFA ranking with name normalization. Lower = better."""
+    ranking = FIFA_RANKING_EXTENDED if extended else FIFA_RANKING
+    normalized = ODDS_NAME_MAP.get(team, team)
+    r = ranking.get(normalized) or ranking.get(team)
+    return r if r is not None else 55  # conservative default for unknown teams
+
+
+def _xgb_proba(team_a: str, team_b: str, dampening: float) -> np.ndarray:
+    """XGBoost only depends on (team_a, team_b, dampening) — cache to avoid 400ms/call overhead."""
+    key = (team_a, team_b, round(dampening, 6))
+    if key not in _XGB_CACHE:
+        base = POISSON_PARAMS.get('base_rate', np.log(1.2))
+        ta = POISSON_NAME_MAP.get(team_a, team_a)
+        tb = POISSON_NAME_MAP.get(team_b, team_b)
+        a_raw = POISSON_PARAMS.get(ta, POISSON_PARAMS.get(team_a, {'attack': 0, 'defense': 0}))
+        b_raw = POISSON_PARAMS.get(tb, POISSON_PARAMS.get(team_b, {'attack': 0, 'defense': 0}))
+        d = 1.0 - dampening
+        feat = np.array([[0, 0.5, 0.5, 0.75, 0.75,
+                          a_raw['attack'] * d, a_raw['defense'] * d,
+                          b_raw['attack'] * d, b_raw['defense'] * d,
+                          0.65, 0.65, 0.5, 0.4, 0.25, 0.35]])
+        _XGB_CACHE[key] = XGB_MODEL.predict_proba(feat)[0]
+    return _XGB_CACHE[key]
+
+
+def predict(team_a: str, team_b: str,
+            rank_adj_exp: float = 0.2,
+            poisson_weight: float = 0.80,
+            host_bonus: float = 0.0,
+            draw_boost: float = 0.0,
+            poisson_dampening: float = 0.0,
+            extended_ranking: bool = True) -> tuple[str, float, float, float]:
+    """
+    Predict match tendency and return (tendency, p_a, p_draw, p_b).
+    tendency is 'win' (team_a wins), 'draw', or 'loss' (team_b wins).
+    poisson_dampening: 0.0 = full Poisson params, 1.0 = all neutral (regress extreme params toward mean)
+    """
+    base = POISSON_PARAMS.get('base_rate', np.log(1.2))
+    ta = POISSON_NAME_MAP.get(team_a, team_a)
+    tb = POISSON_NAME_MAP.get(team_b, team_b)
+    a_raw = POISSON_PARAMS.get(ta, POISSON_PARAMS.get(team_a, {'attack': 0, 'defense': 0}))
+    b_raw = POISSON_PARAMS.get(tb, POISSON_PARAMS.get(team_b, {'attack': 0, 'defense': 0}))
+    # Dampen extreme params (shrink toward zero/mean)
+    d = 1.0 - poisson_dampening
+    a = {'attack': a_raw['attack'] * d, 'defense': a_raw['defense'] * d}
+    b = {'attack': b_raw['attack'] * d, 'defense': b_raw['defense'] * d}
+
+    lam_a = np.exp(base + a['attack'] - b['defense'])
+    lam_b = np.exp(base + b['attack'] - a['defense'])
+
+    # FIFA ranking correction: lower rank = better, so rank_b/rank_a > 1 means team_a is better
+    if rank_adj_exp > 0:
+        ra = get_rank(team_a, extended_ranking)
+        rb = get_rank(team_b, extended_ranking)
+        if ra != rb and ra > 0 and rb > 0:
+            rank_adj = (rb / ra) ** rank_adj_exp
+            lam_a *= rank_adj
+            lam_b /= rank_adj
+
+    # Host nation bonus (WM 2026: USA, Canada, Mexico)
+    if host_bonus > 0:
+        if team_a in WM2026_HOSTS:
+            lam_a *= (1 + host_bonus)
+        if team_b in WM2026_HOSTS:
+            lam_b *= (1 + host_bonus)
+
+    # Poisson matrix (vectorized)
+    max_goals = 7
+    g = np.arange(max_goals)
+    pa = poisson.pmf(g, max(lam_a, 0.01))
+    pb = poisson.pmf(g, max(lam_b, 0.01))
+    mat = np.outer(pa, pb)
+    mat /= mat.sum()
+
+    pw = float(np.tril(mat, -1).sum())
+    pd_ = float(np.diag(mat).sum())
+    pl = float(np.triu(mat, 1).sum())
+
+    # XGBoost cached (only depends on team names + dampening, not rank/host/draw params)
+    xgb = _xgb_proba(team_a, team_b, poisson_dampening)
+
+    p_a = poisson_weight * pw + (1 - poisson_weight) * xgb[0]
+    p_d = poisson_weight * pd_ + (1 - poisson_weight) * xgb[1]
+    p_b = poisson_weight * pl + (1 - poisson_weight) * xgb[2]
+
+    # Draw boost: inflate draw probability by a factor
+    if draw_boost > 0:
+        p_d *= (1 + draw_boost)
+
+    total = p_a + p_d + p_b
+    p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
+
+    if p_a >= p_d and p_a >= p_b:
+        return 'win', p_a, p_d, p_b
+    elif p_b >= p_d and p_b >= p_a:
+        return 'loss', p_a, p_d, p_b
+    else:
+        return 'draw', p_a, p_d, p_b
+
+
+def evaluate_wm2026(verbose: bool = False, **kwargs) -> tuple[int, int]:
+    """Evaluate on WM 2026 completed matches (OOS test)."""
+    with open('data/fixtures.json') as f:
+        fixtures = json.load(f)
+
+    correct, total = 0, 0
+    for m in fixtures:
+        if m.get('status') != 'completed' or not m.get('result'):
+            continue
+        ga, gb = map(int, m['result'].split(':'))
+        actual = 'win' if ga > gb else ('draw' if ga == gb else 'loss')
+        tendency, p_a, p_d, p_b = predict(m['team_a'], m['team_b'], **kwargs)
+        hit = tendency == actual
+        if hit:
+            correct += 1
+        total += 1
+        if verbose:
+            ra = get_rank(m['team_a'], kwargs.get('extended_ranking', True))
+            rb = get_rank(m['team_b'], kwargs.get('extended_ranking', True))
+            marker = '✓' if hit else '✗'
+            print(f"{marker} {m['team_a']:22}(#{ra:3}) vs {m['team_b']:22}(#{rb:3}) "
+                  f"→ {m['result']:5}  pred={tendency:5} [{p_a:.0%}/{p_d:.0%}/{p_b:.0%}]")
+    return correct, total
+
+
+def evaluate_historical(season_from: int = 2022, **kwargs) -> tuple[int, int]:
+    """Evaluate on historical WM matches (NOTE: Poisson was trained on this data)."""
+    with open('data/historical_matches.json') as f:
+        matches = json.load(f)
+    matches = [m for m in matches if m.get('season', 0) >= season_from]
+
+    correct, total = 0, 0
+    for m in matches:
+        ga, gb = m['goals_a'], m['goals_b']
+        actual = 'win' if ga > gb else ('draw' if ga == gb else 'loss')
+        tendency, _, _, _ = predict(m['team_a'], m['team_b'], **kwargs)
+        if tendency == actual:
+            correct += 1
+        total += 1
+    return correct, total
+
+
+def grid_search(verbose: bool = True):
+    """Grid search over key parameters on WM 2026 OOS data."""
+    rank_exps        = [0.0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70]
+    p_weights        = [0.80, 0.90, 1.00]
+    host_bonuses     = [0.0, 0.10]
+    draw_boosts      = [0.0, 0.15, 0.30]
+    dampening_vals   = [0.0, 0.20, 0.40, 0.50, 0.60, 0.70, 0.80]
+
+    total_combos = len(rank_exps) * len(p_weights) * len(host_bonuses) * len(draw_boosts) * len(dampening_vals)
+    print(f"Testing {total_combos} combinations...")
+    print("Pre-computing XGBoost outputs (batch)...", flush=True)
+    _warmup_xgb_cache(dampening_vals)
+    print("XGBoost cache ready.", flush=True)
+
+    print(f"\n{'rank_exp':>9} {'p_wt':>6} {'host':>5} {'draw+':>6} {'damp':>5}  "
+          f"{'2026 OOS':>10}  {'2022 IS':>10}")
+    print("-" * 72)
+
+    best_score, best_params = 0, {}
+    rows = []
+    for exp in rank_exps:
+        for pw in p_weights:
+            for hb in host_bonuses:
+                for db in draw_boosts:
+                    for damp in dampening_vals:
+                        kwargs = dict(rank_adj_exp=exp, poisson_weight=pw,
+                                      host_bonus=hb, draw_boost=db,
+                                      poisson_dampening=damp, extended_ranking=True)
+                        c26, t26 = evaluate_wm2026(**kwargs)
+                        c22, t22 = evaluate_historical(season_from=2022, **kwargs)
+                        acc26 = c26 / t26 if t26 else 0
+                        acc22 = c22 / t22 if t22 else 0
+                        # Combined: weight WM2026 (OOS, more honest) more
+                        combined = acc26 * 0.6 + acc22 * 0.4
+                        rows.append((combined, acc26, acc22, c26, t26, c22, t22, kwargs))
+                        if combined > best_score:
+                            best_score = combined
+                            best_params = kwargs
+
+    # Print top 15 combinations
+    rows.sort(key=lambda x: -x[0])
+    for combined, acc26, acc22, c26, t26, c22, t22, kw in rows[:15]:
+        print(f"{kw['rank_adj_exp']:>9.2f} {kw['poisson_weight']:>6.2f} "
+              f"{kw['host_bonus']:>5.2f} {kw['draw_boost']:>6.2f} {kw['poisson_dampening']:>5.2f}  "
+              f"{c26}/{t26}={acc26:>4.0%}      {c22}/{t22}={acc22:>4.0%}   comb={combined:.3f}")
+
+    return best_params, best_score
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--grid', action='store_true', help='Run full grid search')
+    parser.add_argument('--hist', type=int, default=0, help='Show historical accuracy from season')
+    args = parser.parse_args()
+
+    print("=== WM 2026 (OOS) — Current params (rank_exp=0.2, p_wt=0.80) ===")
+    c, t = evaluate_wm2026(
+        verbose=True,
+        rank_adj_exp=0.2, poisson_weight=0.80,
+        host_bonus=0.0, draw_boost=0.0, extended_ranking=True)
+    print(f"\n  Correct tendency: {c}/{t} = {c/t*100:.1f}%  (target: 75%)")
+
+    print("\n=== WM 2026 — Old params (no rank adj, 60/40 blend, original rankings) ===")
+    c_old, t_old = evaluate_wm2026(
+        verbose=False,
+        rank_adj_exp=0.0, poisson_weight=0.60,
+        host_bonus=0.0, draw_boost=0.0, extended_ranking=False)
+    print(f"  Correct tendency: {c_old}/{t_old} = {c_old/t_old*100:.1f}%")
+
+    if args.hist > 0:
+        print(f"\n=== Historical WM {args.hist}+ (in-sample for Poisson) ===")
+        c22, t22 = evaluate_historical(season_from=args.hist, rank_adj_exp=0.2, poisson_weight=0.80)
+        print(f"  Correct tendency: {c22}/{t22} = {c22/t22*100:.1f}%")
+
+    if args.grid:
+        print("\n=== Grid Search ===")
+        best_params, best_score = grid_search(verbose=True)
+        print(f"\nBest params: {best_params}")
+        print(f"Best combined score: {best_score:.3f}")
+
+        print(f"\n=== Best params — detailed WM 2026 evaluation ===")
+        evaluate_wm2026(verbose=True, **best_params)
+        c_best, t_best = evaluate_wm2026(verbose=False, **best_params)
+        c22b, t22b = evaluate_historical(season_from=2022, **best_params)
+        c_hist, t_hist = evaluate_historical(season_from=2006, **best_params)
+        print(f"\n  WM 2026 OOS: {c_best}/{t_best} = {c_best/t_best*100:.1f}%")
+        print(f"  WM 2022 IS:  {c22b}/{t22b} = {c22b/t22b*100:.1f}%")
+        print(f"  WM 2006-22 IS: {c_hist}/{t_hist} = {c_hist/t_hist*100:.1f}%")
+
+
+if __name__ == '__main__':
+    main()

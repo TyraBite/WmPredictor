@@ -88,6 +88,10 @@ FIFA_RANKING: dict[str, int] = {
     "Jordan": 40, "Tunisia": 41, "Norway": 42, "Scotland": 43,
     "Paraguay": 44, "Venezuela": 45, "Cameroon": 46,
     "DR Congo": 47, "New Zealand": 48,
+    # WM 2026 additions (teams missing from initial list)
+    "Sweden": 17, "South Africa": 58, "Cape Verde": 77, "Haiti": 96,
+    "Bosnia & Herzegovina": 60, "Curaçao": 130, "Albania": 65, "Georgia": 75,
+    "Uzbekistan": 69, "Iraq": 68, "Congo DR": 47,
 }
 
 
