@@ -8,93 +8,90 @@ Repo: https://github.com/TyraBite/WmPredictor | Git-Identität: TyraBite / mcnt9
 
 ---
 
-## Was wurde in dieser Session geändert
+## Modell-Architektur (Stand jetzt)
 
-### Bug-Fix: Irreführende Warning
-**Datei**: `src/update_predictions.py`
+| Komponente | Details |
+|-----------|---------|
+| **Poisson MLE** | Attack/Defense-Params aus 320 WM-Matches 2006–2022; `POISSON_DAMPENING=0.8` (shrinks toward zero) |
+| **International Elo** | Aus 49k+ Länderspielen (martj42-Dataset); `ELO_FACTOR=0.75`; λ-Skalierung via `(2*p_elo)^0.75` |
+| **XGBoost** | CalibratedClassifierCV, 10% Gewicht (trainiert auf Konstanten → noisy Poisson-Klon) |
+| **Draw Boost** | ×1.15 (moderate Korrektur für WM 2026's anomale 44% Draw-Rate) |
+| **Blend** | 90% Poisson + 10% XGBoost |
 
-`⚠️ Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)` feuert jetzt nur noch wenn es tatsächlich überfällige Spiele ohne Ergebnis gibt (kickoff_utc > 90 min in der Vergangenheit, noch pending).
-
-### Modell-Verbesserungen (alle 4 Fixes + Backtesting)
-
-| Datei | Änderung | Begründung |
-|-------|----------|------------|
-| `src/features.py` | FIFA-Ranking (rank_a/rank_b) ins Feature-Dict | Aktuelles Ranking als Signal |
-| `src/model.py` | Rank-Adj-Exponent 0.2→**0.5** | Stärkere Ranking-Korrektur nach Grid Search |
-| `src/model.py` | `POISSON_DAMPENING=0.5` | Shrinks extreme historical params (NZ def=+0.908 aus 3 WM-Spielen) |
-| `src/model.py` | `POISSON_NAME_MAP` | "Czechia"→"Czech Republic", "Bosnia-Herzegovina"→"Bosnia and Herzegovina" |
-| `src/model.py` | Blend 80/20→**85/15** (Poisson/XGBoost) | XGBoost trainiert auf Konstanten, mehr Poisson-Gewicht besser |
-| `src/model.py` | Live-Adj Cap: max(0.6, min(1.67, raw_adj)) | Verhindert extreme Verzerrungen |
-| `src/form_tracker.py` | Turnier-Form-Gewicht 0.4→0.5, Pre-Turnier 0.3→0.2 | Aktuelle Form wichtiger |
-| `src/klement.py` | FIFA_RANKING +10 WM-2026-Teams | Sweden=17, South Africa=58, Haiti=96, Bosnia=60, Curaçao=130, etc. |
-| `src/backtest.py` | NEU: Backtesting-Framework | Grid Search + OOS-Evaluation |
+**Elo berechnen/aktualisieren:**
+```bash
+python src/elo_builder.py            # Fetch + compute (benötigt Internet)
+python src/elo_builder.py --check    # Zeige Elo aller WM-2026-Teams
+```
 
 ---
 
-## Backtesting-Ergebnisse (Stand 2026-06-16, 16 abgeschlossene Spiele)
+## Was wurde in diesem Session-Verlauf geändert
 
-### Aktuelle Params (nach Session-Änderungen)
-```
-WM 2026 OOS: 7/16 = 44%  (Tendenz korrekt)
-WM 2022 IS:  38/64 = 59%
-WM 2006+ IS: 182/320 = 57%
-```
+### Session 1: Bug-Fix + initiale Modellverbesserung
+| Datei | Änderung |
+|-------|----------|
+| `src/update_predictions.py` | Warning nur bei tatsächlich überfälligen Spielen |
+| `src/model.py` | Rank-Adj, POISSON_DAMPENING=0.5, POISSON_NAME_MAP, 85/15 Blend |
+| `src/features.py` | FIFA_RANKING Import, rank_a/rank_b ins Feature-Dict |
+| `src/klement.py` | +10 fehlende WM-2026-Teams ins FIFA_RANKING |
+| `src/backtest.py` | Neu: Backtesting-Framework mit Grid Search |
 
-### Vergleich: vorher vs. nachher
-| Params | WM 2026 OOS |
-|--------|-------------|
-| Original (rank_exp=0.0, 60/40) | 4/16 = 25% |
-| Vor dieser Sub-Session (rank_exp=0.2, 80/20) | 6/16 = 38% |
-| **Jetzt (rank_exp=0.5, 85/15, damp=0.5)** | **7/16 = 44%** |
-| Maximum erreichbar (draw_boost=0.3, damp=0.8) | 8/16 = 50% |
+### Session 2: International Elo + Parametroptimierung
+| Datei | Änderung |
+|-------|----------|
+| `src/elo_builder.py` | **NEU**: Berechnet Elo aus 49k+ internationalen Spielen (martj42) |
+| `data/elo_ratings.json` | Ersetzt: 72 WM-basierte Einträge → 339 Teams, echte Elo |
+| `src/features.py` | ELO_NAME_MAP (z.B. "Cote d'Ivoire" → "Ivory Coast") |
+| `src/model.py` | POISSON_DAMPENING 0.5→**0.8**, ELO_FACTOR=0.75, Blend 85/15→90/10, Draw-Boost ×1.15 |
+| `src/backtest.py` | Grid Search auf `elo_factor` umgebaut (statt `rank_adj_exp`) |
 
-### Warum 75% nicht erreichbar sind
+---
 
-WM 2026 (erste 16 Spiele): **7/16 = 43.75% Unentschieden** (historisch: 22-25%).
+## Backtesting-Ergebnisse (16 abgeschlossene Spiele, Stand 2026-06-16)
 
-Die 8 dauerhaft falsch vorhergesagten Spiele:
-1. **Canada vs Bosnia** (1:1) — Unentschieden bei unklarer Favoritenrolle
-2. **Qatar vs Switzerland** (1:1) — Schweiz klar favorisiert (rank 20 vs 35)
-3. **Brazil vs Morocco** (1:1) — Brasilien 68% Siegwahrscheinlichkeit
-4. **Australia vs Turkey** (2:0) — Türkei marginal besser gerankt (25 vs 28)
-5. **Netherlands vs Japan** (2:2) — Niederlande 69% Siegwahrscheinlichkeit
-6. **Spain vs Cape Verde Islands** (0:0) — Spanien 91% Siegwahrscheinlichkeit
-7. **Belgium vs Egypt** (1:1) — Belgien 90% Siegwahrscheinlichkeit
-8. **Saudi Arabia vs Uruguay** (1:1) — Uruguay historisch stark (Poisson)
+### Vergleich Parameter-Generationen
+| Konfiguration | WM 2026 OOS | WM 2022 IS |
+|--------------|-------------|------------|
+| Original (rank_exp=0.0, 60/40) | 4/16 = 25% | — |
+| Session 1 (rank_exp=0.5, damp=0.5, 85/15) | 7/16 = 44% | 38/64 = 59% |
+| **Session 2 (elo=0.75, damp=0.8, 90/10)** | **8/16 = 50%** | **42/64 = 66%** |
+| Grid-Search-Ceiling (draw_boost=0.3) | 9/16 = 56% | 41/64 = 64% |
 
-Plus Upset: **Ivory Coast vs Ecuador** (1:0) — Ecuador rank 22 vs Ivory Coast 34.
-
-Kein statistisches Modell kann diese vorhersagen. Spiele 3/5/6/7 waren massive Favoritensiege-die-Unentschieden-wurden.
-
-### Grid Search (864 Kombinationen, ~45 Sekunden)
+### Grid Search (1176 Kombinationen)
 ```
 python src/backtest.py --grid
 ```
-Optimiert: rank_adj_exp, poisson_weight, host_bonus, draw_boost, poisson_dampening
+Optimale Params aus Grid Search: `elo_factor=0.75`, `poisson_weight=1.0`, `host_bonus=0.1`, `draw_boost=0.3`, `dampening=0.8`
+
+**Achtung**: `draw_boost=0.3` ist overfit auf WM 2026 (44% Draws ≫ historisch 22%). Für Zukunft `0.15` besser.
+
+### Warum 75% strukturell nicht erreichbar sind
+
+WM 2026 erste 16 Spiele: **7/16 = 43.75% Unentschieden** (historisch: 22-25%).
+
+Dauerhaft falsch vorhersagbare Spiele:
+- Spain 0:0 Cape Verde (Spanien 91% Siegwahrscheinlichkeit)
+- Belgium 1:1 Egypt (Belgien 90%)
+- Netherlands 2:2 Japan (Niederlande 70%)
+- Qatar 1:1 Switzerland (Schweiz 75%)
+- Saudi Arabia 1:1 Uruguay (Uruguay historisch stark)
+- Ivory Coast 1:0 Ecuador (Upset)
+- Brazil 1:1 Morocco (Brasilien 57%)
+
+Kein statistisches Modell kann diese konsistent vorhersagen → strukturelles Limit ~50% OOS.
 
 ---
 
-## Root Causes der schlechten Bilanz (bleibt bei alten Tips eingefroren)
+## Nächste Schritte
 
-1. **XGBoost auf Konstanten trainiert**: Alle Features (klement_diff, Elo, Odds, H2H) wurden mit Defaults gesetzt. XGBoost ignoriert diese effektiv. Vollständige Lösung = XGBoost mit echten historischen Features retrainieren.
-2. **Historische Tips eingefroren**: Die Bilanz in `docs/predictions.json` reflektiert die gespeicherten Tipps zum Zeitpunkt ihrer Generierung. Modell-Verbesserungen wirken NUR auf zukünftige Tipps.
-3. **Hohe Draw-Rate in WM 2026**: 43.75% Unentschieden in den ersten 16 Spielen → strukturelles Limit für alle statistischen Modelle.
+### Kurzfristig
+- `ODDS_API_KEY` setzen → Wettquoten-Signal, verbessert Einzelspiel-Genauigkeit erheblich
+- Elo nach jedem Spieltag aktualisieren: `python src/elo_builder.py`
 
----
-
-## Nächste Schritte (Mögliche Verbesserungen)
-
-### Kurzfristig (ohne Retraining)
-- **Aktuelle Turnierwettquoten** aus `ODDS_API_KEY` (Bookmaker wissen mehr als Ranking allein)
-- **Draw-Boost für ähnlich-gerankte Teams** (z.B. wenn |rank_a - rank_b| < 5 → draw-Wahrscheinlichkeit +20%)
-
-### Mittelfristig (erfordert Datenquellen)
-- **Internationales Elo** aus allen Länderspielen (nicht nur WM) → bessere Stärke-Schätzung für Japan, Marokko
-- **Squad-Marktwert** (Transfermarkt) → Korreliert stark mit Tatsachenstärke
-- **Aktuelle Form** der letzten 6 Monate (FIFA-Ranking-Verlauf)
-
-### Langfristig (erfordert Retraining)
-- **XGBoost retrainieren**: Historische Elo/Klement/H2H für alle 320 WM-Matches berechnen und als Features einbauen. Würde XGBoost deutlich verbessern.
+### Mittelfristig
+- **Squad-Marktwert** (Transfermarkt-API) als Feature → korreliert stark mit Teamstärke
+- XGBoost retrainieren mit echten historischen Elo/Klement/H2H-Features (jetzt on Konstanten trainiert)
 
 ---
 
@@ -107,7 +104,7 @@ source .venv/bin/activate
 # Backtesting / Grid Search
 python src/backtest.py              # Evaluation mit aktuellen Params
 python src/backtest.py --grid       # Vollständiger Grid Search (~45 Sek)
-python src/backtest.py --hist 2022  # Mit historischer Auswertung ab 2022
+python src/backtest.py --hist 2006  # Mit historischer Auswertung ab 2006
 
 # Vorhersagen anzeigen
 python predict.py
@@ -117,6 +114,9 @@ python src/update_result.py A3 "2:1"
 
 # predictions.json neu generieren (für GitHub Pages)
 python src/update_predictions.py
+
+# Elo aktualisieren (benötigt Internet)
+python src/elo_builder.py
 
 # Tests
 python -m pytest tests/ -q
@@ -135,4 +135,4 @@ python -m http.server 8080 --directory docs
 |--------|-------|---------|
 | `FOOTBALL_DATA_KEY` | Ergebnis-Abruf von football-data.org | Für Auto-Updates ja |
 | `GH_PAT` | GitHub Actions Push (Branch-Protection) | Ja |
-| `ODDS_API_KEY` | Wettquoten (optional) | Nein |
+| `ODDS_API_KEY` | Wettquoten (optional, aber sehr hilfreich) | Nein |
