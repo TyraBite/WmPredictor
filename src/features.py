@@ -16,6 +16,16 @@ ODDS_NAME_MAP = {
     "United States": "USA",
 }
 
+# Maps fixture team names to names used in data/elo_ratings.json (martj42 dataset)
+ELO_NAME_MAP = {
+    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
+    "Cape Verde Islands": "Cape Verde",
+    "Congo DR": "DR Congo",
+    "Czechia": "Czech Republic",
+    "Korea Republic": "South Korea",
+    "Cote d'Ivoire": "Ivory Coast",
+}
+
 
 def _h2h_score(team_a: str, team_b: str) -> float:
     if not os.path.exists(HISTORICAL_PATH):
@@ -135,8 +145,8 @@ def build(team_a: str, team_b: str, venue: str) -> dict:
         "klement_diff": ka.get("klement_score", 0.5) - kb.get("klement_score", 0.5),
         "climate_sim_a": 1 - abs(climate_a - venue_temp) / 40,
         "climate_sim_b": 1 - abs(climate_b - venue_temp) / 40,
-        "elo_a": elo_data.get(team_a, 1500.0),
-        "elo_b": elo_data.get(team_b, 1500.0),
+        "elo_a": elo_data.get(ELO_NAME_MAP.get(team_a, team_a), elo_data.get(team_a, 1500.0)),
+        "elo_b": elo_data.get(ELO_NAME_MAP.get(team_b, team_b), elo_data.get(team_b, 1500.0)),
         "attack_a": 0.0,
         "defense_a": 0.0,
         "attack_b": 0.0,

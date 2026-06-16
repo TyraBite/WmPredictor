@@ -18,7 +18,10 @@ from scipy.stats import poisson
 
 sys.path.insert(0, 'src')
 from klement import FIFA_RANKING
-from features import ODDS_NAME_MAP
+from features import ODDS_NAME_MAP, ELO_NAME_MAP
+
+with open('data/elo_ratings.json') as f:
+    ELO_RATINGS = json.load(f)
 
 with open('data/model_poisson.json') as f:
     POISSON_PARAMS = json.load(f)
@@ -115,6 +118,12 @@ def get_rank(team: str, extended: bool = True) -> int:
     return r if r is not None else 55  # conservative default for unknown teams
 
 
+def get_elo(team: str) -> float:
+    """Get international Elo rating (from martj42 dataset). Default 1500."""
+    normalized = ELO_NAME_MAP.get(team, team)
+    return ELO_RATINGS.get(normalized) or ELO_RATINGS.get(team) or 1500.0
+
+
 def _xgb_proba(team_a: str, team_b: str, dampening: float) -> np.ndarray:
     """XGBoost only depends on (team_a, team_b, dampening) — cache to avoid 400ms/call overhead."""
     key = (team_a, team_b, round(dampening, 6))
@@ -134,16 +143,17 @@ def _xgb_proba(team_a: str, team_b: str, dampening: float) -> np.ndarray:
 
 
 def predict(team_a: str, team_b: str,
-            rank_adj_exp: float = 0.2,
-            poisson_weight: float = 0.80,
+            elo_factor: float = 0.5,
+            poisson_weight: float = 0.85,
             host_bonus: float = 0.0,
             draw_boost: float = 0.0,
-            poisson_dampening: float = 0.0,
-            extended_ranking: bool = True) -> tuple[str, float, float, float]:
+            poisson_dampening: float = 0.5,
+            **_kwargs) -> tuple[str, float, float, float]:
     """
     Predict match tendency and return (tendency, p_a, p_draw, p_b).
-    tendency is 'win' (team_a wins), 'draw', or 'loss' (team_b wins).
-    poisson_dampening: 0.0 = full Poisson params, 1.0 = all neutral (regress extreme params toward mean)
+    elo_factor: exponent for (2*p_elo)^elo_factor Poisson λ scaling.
+                0.0 = no Elo adjustment, 0.5 = current default.
+    poisson_dampening: 0.0 = full Poisson params, 1.0 = all neutral.
     """
     base = POISSON_PARAMS.get('base_rate', np.log(1.2))
     ta = POISSON_NAME_MAP.get(team_a, team_a)
@@ -158,14 +168,15 @@ def predict(team_a: str, team_b: str,
     lam_a = np.exp(base + a['attack'] - b['defense'])
     lam_b = np.exp(base + b['attack'] - a['defense'])
 
-    # FIFA ranking correction: lower rank = better, so rank_b/rank_a > 1 means team_a is better
-    if rank_adj_exp > 0:
-        ra = get_rank(team_a, extended_ranking)
-        rb = get_rank(team_b, extended_ranking)
-        if ra != rb and ra > 0 and rb > 0:
-            rank_adj = (rb / ra) ** rank_adj_exp
-            lam_a *= rank_adj
-            lam_b /= rank_adj
+    # International Elo adjustment (from ~49k historical international matches)
+    if elo_factor > 0:
+        elo_a = get_elo(team_a)
+        elo_b = get_elo(team_b)
+        if elo_a != elo_b:
+            p_elo_a = 1.0 / (1.0 + 10.0 ** ((elo_b - elo_a) / 400.0))
+            elo_scale = (2.0 * p_elo_a) ** elo_factor
+            lam_a *= elo_scale
+            lam_b /= elo_scale
 
     # Host nation bonus (WM 2026: USA, Canada, Mexico)
     if host_bonus > 0:
@@ -252,47 +263,45 @@ def evaluate_historical(season_from: int = 2022, **kwargs) -> tuple[int, int]:
 
 def grid_search(verbose: bool = True):
     """Grid search over key parameters on WM 2026 OOS data."""
-    rank_exps        = [0.0, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70]
-    p_weights        = [0.80, 0.90, 1.00]
+    elo_factors      = [0.0, 0.25, 0.50, 0.75, 1.0, 1.5, 2.0]
+    p_weights        = [0.80, 0.85, 0.90, 1.00]
     host_bonuses     = [0.0, 0.10]
     draw_boosts      = [0.0, 0.15, 0.30]
     dampening_vals   = [0.0, 0.20, 0.40, 0.50, 0.60, 0.70, 0.80]
 
-    total_combos = len(rank_exps) * len(p_weights) * len(host_bonuses) * len(draw_boosts) * len(dampening_vals)
+    total_combos = len(elo_factors) * len(p_weights) * len(host_bonuses) * len(draw_boosts) * len(dampening_vals)
     print(f"Testing {total_combos} combinations...")
     print("Pre-computing XGBoost outputs (batch)...", flush=True)
     _warmup_xgb_cache(dampening_vals)
     print("XGBoost cache ready.", flush=True)
 
-    print(f"\n{'rank_exp':>9} {'p_wt':>6} {'host':>5} {'draw+':>6} {'damp':>5}  "
+    print(f"\n{'elo_fac':>8} {'p_wt':>6} {'host':>5} {'draw+':>6} {'damp':>5}  "
           f"{'2026 OOS':>10}  {'2022 IS':>10}")
     print("-" * 72)
 
     best_score, best_params = 0, {}
     rows = []
-    for exp in rank_exps:
+    for ef in elo_factors:
         for pw in p_weights:
             for hb in host_bonuses:
                 for db in draw_boosts:
                     for damp in dampening_vals:
-                        kwargs = dict(rank_adj_exp=exp, poisson_weight=pw,
+                        kwargs = dict(elo_factor=ef, poisson_weight=pw,
                                       host_bonus=hb, draw_boost=db,
-                                      poisson_dampening=damp, extended_ranking=True)
+                                      poisson_dampening=damp)
                         c26, t26 = evaluate_wm2026(**kwargs)
                         c22, t22 = evaluate_historical(season_from=2022, **kwargs)
                         acc26 = c26 / t26 if t26 else 0
                         acc22 = c22 / t22 if t22 else 0
-                        # Combined: weight WM2026 (OOS, more honest) more
                         combined = acc26 * 0.6 + acc22 * 0.4
                         rows.append((combined, acc26, acc22, c26, t26, c22, t22, kwargs))
                         if combined > best_score:
                             best_score = combined
                             best_params = kwargs
 
-    # Print top 15 combinations
     rows.sort(key=lambda x: -x[0])
     for combined, acc26, acc22, c26, t26, c22, t22, kw in rows[:15]:
-        print(f"{kw['rank_adj_exp']:>9.2f} {kw['poisson_weight']:>6.2f} "
+        print(f"{kw['elo_factor']:>8.2f} {kw['poisson_weight']:>6.2f} "
               f"{kw['host_bonus']:>5.2f} {kw['draw_boost']:>6.2f} {kw['poisson_dampening']:>5.2f}  "
               f"{c26}/{t26}={acc26:>4.0%}      {c22}/{t22}={acc22:>4.0%}   comb={combined:.3f}")
 
@@ -305,23 +314,23 @@ def main():
     parser.add_argument('--hist', type=int, default=0, help='Show historical accuracy from season')
     args = parser.parse_args()
 
-    print("=== WM 2026 (OOS) — Current params (rank_exp=0.2, p_wt=0.80) ===")
+    print("=== WM 2026 (OOS) — Current params (elo_factor=0.5, damp=0.5, p_wt=0.85) ===")
     c, t = evaluate_wm2026(
         verbose=True,
-        rank_adj_exp=0.2, poisson_weight=0.80,
-        host_bonus=0.0, draw_boost=0.0, extended_ranking=True)
-    print(f"\n  Correct tendency: {c}/{t} = {c/t*100:.1f}%  (target: 75%)")
+        elo_factor=0.5, poisson_weight=0.85,
+        host_bonus=0.0, draw_boost=0.0, poisson_dampening=0.5)
+    print(f"\n  Correct tendency: {c}/{t} = {c/t*100:.1f}%")
 
-    print("\n=== WM 2026 — Old params (no rank adj, 60/40 blend, original rankings) ===")
+    print("\n=== WM 2026 — Old baseline (no Elo adj, 60/40 blend) ===")
     c_old, t_old = evaluate_wm2026(
         verbose=False,
-        rank_adj_exp=0.0, poisson_weight=0.60,
-        host_bonus=0.0, draw_boost=0.0, extended_ranking=False)
+        elo_factor=0.0, poisson_weight=0.60,
+        host_bonus=0.0, draw_boost=0.0, poisson_dampening=0.0)
     print(f"  Correct tendency: {c_old}/{t_old} = {c_old/t_old*100:.1f}%")
 
     if args.hist > 0:
-        print(f"\n=== Historical WM {args.hist}+ (in-sample for Poisson) ===")
-        c22, t22 = evaluate_historical(season_from=args.hist, rank_adj_exp=0.2, poisson_weight=0.80)
+        print(f"\n=== Historical WM {args.hist}+ ===")
+        c22, t22 = evaluate_historical(season_from=args.hist, elo_factor=0.5, poisson_weight=0.85, poisson_dampening=0.5)
         print(f"  Correct tendency: {c22}/{t22} = {c22/t22*100:.1f}%")
 
     if args.grid:

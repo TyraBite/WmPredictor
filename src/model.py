@@ -28,7 +28,8 @@ POISSON_NAME_MAP = {
     "Czechia": "Czech Republic",
 }
 
-POISSON_DAMPENING = 0.5
+POISSON_DAMPENING = 0.8
+ELO_FACTOR = 0.75
 
 
 def _fit_poisson_params(matches: list[dict]) -> dict:
@@ -78,12 +79,13 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
     lam_a = np.exp(base + a_params["attack"] - b_params["defense"])
     lam_b = np.exp(base + b_params["attack"] - a_params["defense"])
 
-    rank_a = feat.get("rank_a", 40)
-    rank_b = feat.get("rank_b", 40)
-    if rank_a > 0 and rank_b > 0 and rank_a != rank_b:
-        rank_adj = (rank_b / rank_a) ** 0.5
-        lam_a = lam_a * rank_adj
-        lam_b = lam_b / rank_adj
+    elo_a = feat.get("elo_a", 1500.0)
+    elo_b = feat.get("elo_b", 1500.0)
+    if ELO_FACTOR > 0 and elo_a != elo_b:
+        p_elo_a = 1.0 / (1.0 + 10.0 ** ((elo_b - elo_a) / 400.0))
+        elo_scale = (2.0 * p_elo_a) ** ELO_FACTOR
+        lam_a = lam_a * elo_scale
+        lam_b = lam_b / elo_scale
 
     mat = _poisson_matrix(lam_a, lam_b)
     n = mat.shape[0]
@@ -154,9 +156,11 @@ class WMPredictor:
         pw, pd, pl, top5, all_results = _poisson_probs(self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
-        p_a = 0.85 * pw + 0.15 * xgb_probs[0]
-        p_d = 0.85 * pd + 0.15 * xgb_probs[1]
-        p_b = 0.85 * pl + 0.15 * xgb_probs[2]
+        p_a = 0.90 * pw + 0.10 * xgb_probs[0]
+        p_d = 0.90 * pd + 0.10 * xgb_probs[1]
+        p_b = 0.90 * pl + 0.10 * xgb_probs[2]
+        # WM 2026 has anomalously high draw rate (44% vs historical 22%); apply moderate boost
+        p_d *= 1.15
         raw_adj = feat.get("live_adj_a", 0.5) / max(feat.get("live_adj_b", 0.5), 0.01)
         adj = max(0.6, min(1.67, raw_adj))
         p_a *= adj
