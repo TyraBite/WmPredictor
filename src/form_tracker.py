@@ -81,7 +81,7 @@ def get_adjustment(team: str,
     pf = entry.get("pre_tournament_form", 0.5)
     impact = injuries.get(team, {}).get("impact_score", 0.0)
 
-    return 0.4 * tf + 0.3 * pf + 0.3 * (1.0 + impact)
+    return 0.5 * tf + 0.2 * pf + 0.3 * (1.0 + impact)
 
 
 def update_all(store, form_path: str = FORM_PATH, injury_path: str = INJURY_PATH) -> None:

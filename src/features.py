@@ -1,6 +1,7 @@
 import json
 import os
 from form_tracker import get_adjustment
+from klement import FIFA_RANKING
 
 KLEMENT_PATH = "data/klement_scores.json"
 ELO_PATH = "data/elo_ratings.json"
@@ -146,4 +147,6 @@ def build(team_a: str, team_b: str, venue: str) -> dict:
         "odds_prob_a": odds_a,
         "odds_prob_draw": odds_draw,
         "odds_prob_b": odds_b,
+        "rank_a": FIFA_RANKING.get(ODDS_NAME_MAP.get(team_a, team_a), FIFA_RANKING.get(team_a, 40)),
+        "rank_b": FIFA_RANKING.get(ODDS_NAME_MAP.get(team_b, team_b), FIFA_RANKING.get(team_b, 40)),
     }

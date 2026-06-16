@@ -2,7 +2,7 @@
 import json
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 sys.path.insert(0, "src")
 from dotenv import load_dotenv
 load_dotenv()
@@ -82,7 +82,15 @@ def build_predictions_json(
     if not os.environ.get("ODDS_API_KEY"):
         warnings.append("Wettquoten nicht verfügbar (ODDS_API_KEY fehlt)")
     if not os.environ.get("FOOTBALL_DATA_KEY"):
-        warnings.append("Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)")
+        now = datetime.now(timezone.utc)
+        overdue = [
+            m for m in store.pending()
+            if m.get("kickoff_utc") and
+               datetime.fromisoformat(m["kickoff_utc"].replace("Z", "+00:00")) <
+               now - timedelta(minutes=90)
+        ]
+        if overdue:
+            warnings.append("Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)")
 
     # Build pending matches
     pending_out = []

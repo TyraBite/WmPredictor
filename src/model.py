@@ -63,6 +63,13 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
     lam_a = np.exp(base + a_params["attack"] - b_params["defense"])
     lam_b = np.exp(base + b_params["attack"] - a_params["defense"])
 
+    rank_a = feat.get("rank_a", 40)
+    rank_b = feat.get("rank_b", 40)
+    if rank_a > 0 and rank_b > 0 and rank_a != rank_b:
+        rank_adj = ((51 - rank_a) / (51 - rank_b)) ** 0.2
+        lam_a = lam_a * rank_adj
+        lam_b = lam_b / rank_adj
+
     mat = _poisson_matrix(lam_a, lam_b)
     n = mat.shape[0]
     p_win = float(np.tril(mat, -1).sum())
@@ -132,12 +139,13 @@ class WMPredictor:
         pw, pd, pl, top5, all_results = _poisson_probs(self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
-        p_a = 0.6 * pw + 0.4 * xgb_probs[0]
-        p_d = 0.6 * pd + 0.4 * xgb_probs[1]
-        p_b = 0.6 * pl + 0.4 * xgb_probs[2]
-        adj = feat.get("live_adj_a", 0.5) / max(feat.get("live_adj_b", 0.5), 0.01)
+        p_a = 0.80 * pw + 0.20 * xgb_probs[0]
+        p_d = 0.80 * pd + 0.20 * xgb_probs[1]
+        p_b = 0.80 * pl + 0.20 * xgb_probs[2]
+        raw_adj = feat.get("live_adj_a", 0.5) / max(feat.get("live_adj_b", 0.5), 0.01)
+        adj = max(0.6, min(1.67, raw_adj))
         p_a *= adj
-        p_b /= max(adj, 0.01)
+        p_b /= adj
         total = p_a + p_d + p_b
         if total > 0:
             p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
