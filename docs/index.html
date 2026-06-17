@@ -188,6 +188,7 @@
   function yesterdayBroadcast() { const s=new Date(Date.now()-_SIX_H); s.setDate(s.getDate()-1); return s.toLocaleDateString("en-CA"); }
   function tomorrowBroadcast()  { const s=new Date(Date.now()-_SIX_H); s.setDate(s.getDate()+1); return s.toLocaleDateString("en-CA"); }
   function pendingBroadcastDate(m) { return m.kickoff_utc ? broadcastDateOf(new Date(m.kickoff_utc)) : m.date; }
+  function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   function fmtDate(s) {
     const months=["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
     const d=new Date(s+"T12:00:00");
@@ -234,19 +235,19 @@
 
   // ── Card renderers ────────────────────────────────────────────────────────
   function renderPending(m) {
-    const grp=m.group?`GRUPPE ${m.group}`:fmtPhase(m.phase).toUpperCase();
+    const grp=m.group?`GRUPPE ${esc(m.group)}`:fmtPhase(m.phase).toUpperCase();
     const bA=(m.prob_a||0).toFixed(0),bD=(m.prob_draw||0).toFixed(0),bB=(m.prob_b||0).toFixed(0);
     const hasInj=(m.injuries_a&&m.injuries_a.length)||(m.injuries_b&&m.injuries_b.length);
     const top3=(m.top_results||[]).slice(0,3);
     const tipsHtml=top3.map((t,i)=>
-      `<span class="${i===0?"tip-value":"tip-alt"}">${t[0]}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
+      `<span class="${i===0?"tip-value":"tip-alt"}">${esc(t[0])}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
     ).join('<span class="tip-sep">·</span>');
-    return `<div class="card" onclick="openDetail(allMatches['${m.match_id}'])">
+    return `<div class="card" data-mid="${esc(m.match_id)}">
   <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc,m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
-    <span>${m.flag_a||""} ${m.team_a}</span>
+    <span>${esc(m.flag_a||"")} ${esc(m.team_a)}</span>
     <span class="vs">vs</span>
-    <span>${m.team_b} ${m.flag_b||""}</span>
+    <span>${esc(m.team_b)} ${esc(m.flag_b||"")}</span>
   </div>
   <hr class="card-divider"/>
   <div class="tip-row"><span class="tip-label">Tipps:</span>${tipsHtml}</div>
@@ -263,12 +264,12 @@
     <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
   </div>
   <hr class="card-divider"/>
-  <div class="form-row">🔥 Form: ${m.team_a} ${formDots(m.form_a)} &nbsp; ${m.team_b} ${formDots(m.form_b)}</div>
-  ${hasInj?`<div class="injuries-row">🚑 <span class="highlight">${m.team_a}: ${(m.injuries_a||[]).join(", ")||"–"}</span> | ${m.team_b}: ${(m.injuries_b||[]).join(", ")||"–"}</div>`:""}
+  <div class="form-row">🔥 Form: ${esc(m.team_a)} ${formDots(m.form_a)} &nbsp; ${esc(m.team_b)} ${formDots(m.form_b)}</div>
+  ${hasInj?`<div class="injuries-row">🚑 <span class="highlight">${esc(m.team_a)}: ${(m.injuries_a||[]).map(esc).join(", ")||"–"}</span> | ${esc(m.team_b)}: ${(m.injuries_b||[]).map(esc).join(", ")||"–"}</div>`:""}
 </div>`;
   }
   function renderCompleted(m) {
-    const grp=m.group?`GRUPPE ${m.group}`:fmtPhase(m.phase).toUpperCase();
+    const grp=m.group?`GRUPPE ${esc(m.group)}`:fmtPhase(m.phase).toUpperCase();
     const pa=m.prob_a!=null?m.prob_a.toFixed(0):"0";
     const pd=m.prob_draw!=null?m.prob_draw.toFixed(0):"0";
     const pb=m.prob_b!=null?m.prob_b.toFixed(0):"0";
@@ -276,11 +277,11 @@
     return `<div class="card">
   <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDate(m.date)}</div>
   <div class="teams">
-    <span>${m.flag_a||""} ${m.team_a}</span><span class="vs">vs</span><span>${m.team_b} ${m.flag_b||""}</span>
+    <span>${esc(m.flag_a||"")} ${esc(m.team_a)}</span><span class="vs">vs</span><span>${esc(m.team_b)} ${esc(m.flag_b||"")}</span>
   </div>
   <hr class="card-divider"/>
-  <div class="result-big">${m.result||"–"}</div>
-  <div class="result-tip-row"><span>Tipp war: <strong>${m.tip}</strong></span>${accuracyBadge(m.accuracy)}</div>
+  <div class="result-big">${esc(m.result||"–")}</div>
+  <div class="result-tip-row"><span>Tipp war: <strong>${esc(m.tip)}</strong></span>${accuracyBadge(m.accuracy)}</div>
   ${hasProbs?`<div class="prob-bar">
     <div class="bar-a" style="width:${pa}%"></div>
     <div class="bar-draw" style="width:${pd}%"></div>
@@ -342,7 +343,7 @@
   function renderDetail(m) {
     const ef = m.explanation_factors || {};
     const so = m.score_odds || {};
-    const grp = m.group ? `Gruppe ${m.group}` : fmtPhase(m.phase);
+    const grp = m.group ? `Gruppe ${esc(m.group)}` : fmtPhase(m.phase);
     const top5 = (m.top_results || []).slice(0, 5);
     const maxProb = top5.length ? top5[0][1] : 1;
 
@@ -351,7 +352,7 @@
       const [ga, gb] = t[0].split(":").map(Number);
       const type = ga > gb ? "w" : ga < gb ? "l" : "d";
       const color = type==="w" ? "var(--win)" : type==="d" ? "var(--draw)" : "var(--loss)";
-      const lbl = type==="w" ? m.team_a+" gewinnt" : type==="l" ? m.team_b+" gewinnt" : "Unentschieden";
+      const lbl = type==="w" ? esc(m.team_a)+" gewinnt" : type==="l" ? esc(m.team_b)+" gewinnt" : "Unentschieden";
       const barW = maxProb > 0 ? (t[1]/maxProb*100).toFixed(0) : 0;
       const bm = so[t[0]];
       const bmHtml = bm ? `<span class="score-bm">BM ${bm}%</span>` : `<span></span>`;
@@ -374,7 +375,7 @@
     const oddsB = ef.odds_prob_b != null ? ef.odds_prob_b+"%" : "–";
 
     return `
-<div class="detail-teams">${m.flag_a||""} ${m.team_a} <span style="color:var(--muted);font-weight:400">vs</span> ${m.team_b} ${m.flag_b||""}</div>
+<div class="detail-teams">${esc(m.flag_a||"")} ${esc(m.team_a)} <span style="color:var(--muted);font-weight:400">vs</span> ${esc(m.team_b)} ${esc(m.flag_b||"")}</div>
 <div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}</div>
 <div class="detail-section"><h3>Top 5 Ergebnisse</h3></div>
 ${scoreRows}
@@ -408,6 +409,10 @@ ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
     if (e.target === document.getElementById("detail-overlay")) closeDetail();
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+  document.addEventListener("click", e => {
+    const card = e.target.closest(".card[data-mid]");
+    if (card) openDetail(allMatches[card.dataset.mid]);
+  });
 
   // ── Main ─────────────────────────────────────────────────────────────────
   async function init() {
@@ -443,7 +448,7 @@ ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
         pending.length ? `${pending.length} ausstehende Spiele` : "Alle Spiele abgeschlossen";
 
       // HEUTE section
-      let heuteHtml = sectionHeader("HEUTE", data.tournament_phase);
+      let heuteHtml = sectionHeader("HEUTE", data.tournament_phase ? esc(data.tournament_phase) : null);
       heuteHtml += heuteMatches.length
         ? heuteMatches.map(renderPending).join("")
         : `<p class="section-empty">Keine ausstehenden Spiele</p>`;
