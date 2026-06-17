@@ -1,248 +1,175 @@
-# Handoff: WM 2026 Predictor — Model Improvement Session
+# Handoff: WM 2026 Predictor — Score Tip Improvements
 
 **Generated**: 2026-06-17
-**Branch**: main (up to date with origin/main)
-**Status**: In Progress — model improvements committed, further improvements possible
-
----
+**Branch**: main (up to date with origin)
+**Status**: Ready for Review / In Progress (next: push to GitHub Pages)
 
 ## Goal
 
-Improve the WM 2026 match prediction accuracy (tendency + goal difference). Target was 75% tendency accuracy, determined to be structurally impossible (~50% is the true ceiling given 7+ draws in first 20 matches from heavy favorites).
-
----
+Win the company Kicktipp round by improving exact score predictions. The model was restructured to use a dual-lambda system (conservative lambdas for win/draw/loss probabilities, expressive lambdas for score tip selection) that was grid-search validated to improve Kicktipp points by 17% on completed WM 2026 matches.
 
 ## Completed
 
-- [x] Fixed irrelevant warning (`⚠️ Live-Updates nicht verfügbar`) — now only fires when matches are genuinely overdue
-- [x] Integrated international Elo from martj42 dataset (49k+ matches, 339 teams) replacing FIFA ranking adjustment
-- [x] `src/elo_builder.py` — new script to compute/refresh Elo ratings
-- [x] Backtesting framework (`src/backtest.py`) with grid search (1176 combos, ~45 sec via XGBoost batch cache)
-- [x] Parameter tuning: `POISSON_DAMPENING=0.8`, `ELO_FACTOR=0.75`, 90/10 Poisson/XGBoost blend
-- [x] Score tip improvement: `TIP_DAMPENING=0.3` gives 2:0, 3:1 for clear favorites instead of always 1:0
-- [x] All changes committed to main; 37/40 tests pass (3 pre-existing network test failures)
-
-**OOS accuracy progression:**
-| Config | WM 2026 OOS (20 matches) |
-|--------|--------------------------|
-| Original baseline | 7/20 = 35% |
-| After Elo + dampening | **10/20 = 50%** |
-| Grid search ceiling (draw_boost=0.3, overfit) | ~11/20 |
-
----
+- [x] `details.html` — two-tab page: "Vergangene Tipps" (completed, grouped by date desc) + "Alle Vorhersagen" (pending, grouped by broadcast date asc)
+- [x] 6 AM broadcast day boundary — matches at 01:00 local show under previous evening's date
+- [x] XSS fixes — all JSON fields escaped via `esc()`, `onclick` replaced with `data-mid` event delegation
+- [x] Dual-lambda score tip system — `TIP_DAMPENING=0.3` + `GOALS_SCALE=1.5` (grid-search validated: 28/80 Kicktipp pts vs 24/80 baseline)
+- [x] Grid-search infrastructure — `classify_score()`, `evaluate_wm2026_scores()`, `score_grid_search()`, `--score-grid` flag in `backtest.py`
+- [x] Tip composition section in detail view — shows λ Modell vs λ Tipp with bars + expected goal diff → chosen tip
+- [x] Lambda fields stored in `predictions.json` — `explanation_factors.{prob,tip}_lambda_{a,b}`
+- [x] Flag fixes — 12 teams had `🏳` fallback (Algeria, Bosnia, Cape Verde, Congo DR, Curaçao, Czechia, Ghana, Haiti, Norway, Paraguay, Sweden, Uzbekistan); patched in `fixtures.json` + `bootstrap_fixtures.py`
+- [x] `.editorconfig` — LF line endings for Rider on Windows
 
 ## Not Yet Done
 
-- [ ] XGBoost retraining with real historical features (currently trained on constants → noisy Poisson clone)
-- [ ] Squad market value data (Transfermarkt) as additional signal
-- [ ] `ODDS_API_KEY` integration — bookmaker odds would significantly improve single-match accuracy
-- [ ] Refresh Elo after each matchday: `python src/elo_builder.py` (needs internet)
-- [ ] Uncommitted mode change in `src/model.py` (100644→100755): minor, can `git add src/model.py && git commit -m "fix file mode"`
-
----
+- [ ] Push to GitHub Pages (`git push` — Actions deploy automatically)
+- [ ] Bookmaker `score_odds` not yet used for tip selection — currently display-only in the detail view; could blend bookmaker exact-score probabilities into tip-lambda selection
+- [ ] Over/Under market from Odds API not yet fetched — would calibrate total expected goals
+- [ ] 3 failing unit tests in `tests/test_data_fetcher.py` (pre-existing bug, see Warnings)
 
 ## Failed Approaches (Don't Repeat These)
 
-**FIFA ranking-based Poisson adjustment** (replaced by Elo):
-- `((51 - rank_a) / (51 - rank_b)) ** exp` applied to λ
-- Problem: USA ranked #11, Paraguay #44 → model correctly predicted USA wins. But NZ ranked #48 with WM 2010 defense=0.908 overpowered the ranking signal. Elo (49k matches) is more accurate.
+**Simple `round(lam_a):round(lam_b)` for score tip:**
+With `POISSON_DAMPENING=0.8`, lambdas compress to ~0.5–1.7. `round(1.73)=2`, `round(0.55)=1` → always tips 2:1 or 1:0. The spread is too narrow to produce 2:0 or 3:1. Fix: use a second lambda pair with `TIP_DAMPENING=0.3` (less dampened = wider spread), then pick the most probable score in the probability matrix that has the expected goal difference.
 
-**`rank_adj_exp` parameter** in backtest.py:
-- Was replaced with `elo_factor` parameter. Any code that passes `rank_adj_exp=...` will silently be ignored via `**_kwargs`.
-
-**Grid search taking 6.8 hours**:
-- CalibratedClassifierCV takes ~400ms per single call
-- Fix: `_warmup_xgb_cache()` in `backtest.py` — batch all teams at once, ~281ms total per dampening value. Grid search now ~45 seconds.
-
-**draw_boost=0.3** from grid search:
-- Gives 9/16=56% OOS but is overfit to WM 2026's anomalous 44% draw rate (historical: 22-25%). Model uses 1.15x draw boost (moderate). Using 0.3 would hurt historical accuracy: 56%→50% IS.
-
-**`POISSON_DAMPENING=0.5` for score tips**:
-- With d=0.2 (80% dampening), lambda differences are too small (0.5–1.7 range), always rounding to diff=+1 (always tips 1:0). Fixed by separate `TIP_DAMPENING=0.3`.
-
----
+**`POISSON_DAMPENING` as single parameter for both probs and tip:**
+Lowering the main dampening to improve score margins breaks win/draw/loss accuracy (model overtips upsets). The separation into two lambda systems (prob-λ stays at 0.8, tip-λ uses 0.3 × 1.5 scale) solves this.
 
 ## Key Decisions
 
 | Decision | Rationale |
 |----------|-----------|
-| `POISSON_DAMPENING=0.8` | Reduces WM-sample-size overfitting: NZ has defense=0.908 from 3 WM 2010 games, Paraguay defense=0.991 from WM 2010. 80% dampening stops these from dominating. |
-| `TIP_DAMPENING=0.3` separate from `POISSON_DAMPENING` | Probability accuracy needs conservative lambdas; score tips need expressive lambdas. Two separate concerns. |
-| `ELO_FACTOR=0.75` | Larger than 0.5 because Elo is calibrated from 49k international matches, more reliable than 320 WM-only Poisson params for new teams. |
-| 90/10 Poisson/XGBoost blend | XGBoost was trained with all features as constants (elo=1500, klement=0, odds=0.4) → it can't use klement/Elo/h2h features. It's essentially a noisy Poisson clone. |
-| Draw boost 1.15x | WM 2026 group stage has anomalously high draw rate (44% vs 22% historical). Moderate boost, not 1.30x (which would overfit). |
-
----
+| `TIP_DAMPENING=0.3`, `GOALS_SCALE=1.5` | Grid-search on 20 completed WM 2026 matches; best Kicktipp pts (28/80 = 35%) |
+| Tip selected from probability matrix at computed `exp_diff` | Keeps candidate scores probabilistically consistent — picks highest P(score) at the expected goal diff |
+| `score_odds` display-only (not used for tip) | Blending bookmaker exact-score P into tip-lambda selection not yet implemented |
+| Flags patched directly in `fixtures.json` | `bootstrap_fixtures.py` only runs once at init; flags must live in the JSON to survive across runs |
+| Broadcast day = local calendar date minus 6 hours | Matches at 01:00 local "belong" to yesterday's viewing slot |
 
 ## Current State
 
-**Working:**
-- Model predicts tendency correctly 50% OOS (10/20 matches)
-- Score tips: Germany 2:0, Argentina 2:0, Spain 2:0 for clear favorites (was always 1:0)
-- Elo ratings for 339 teams in `data/elo_ratings.json`
-- Grid search in ~45 seconds via XGBoost batch caching
+**Working**: All 72 WM 2026 fixtures, 52 pending with tips, 20 completed with accuracy tracking. Detail modal shows tip composition (dual-lambda breakdown). All flags correct. GitHub Pages at `https://tyrabite.github.io/WmPredictor/`.
 
-**Broken/Limitations:**
-- `update_predictions.py` accuracy stats (0 Differenz, 7 Tendenz, 13 Daneben) reflect **old stored tips** from before this session — not current model quality. Stats will improve as new matches are played.
-- 3 network tests in `test_data_fetcher.py` fail (pre-existing, not related to model)
-- XGBoost trained on constants — major accuracy ceiling
-
-**Uncommitted changes:**
-- `data/fixtures.json` — new match results entered
-- `data/form_cache.json` — form data updated
-- `docs/predictions.json` — predictions regenerated (latest from `update_predictions.py`)
-- `src/model.py` — file mode change only (100644→100755), content is correct
-
----
-
-## Architecture
-
-```
-src/
-  model.py           # WMPredictor: Poisson MLE + XGBoost ensemble
-  backtest.py        # OOS evaluation + grid search (standalone, fast)
-  elo_builder.py     # Compute Elo from martj42 CSV (~49k matches)
-  features.py        # Feature builder (Elo lookup, odds, H2H, climate)
-  update_predictions.py  # Regenerates docs/predictions.json
-  update_result.py   # Enter match result: python src/update_result.py A3 "2:1"
-  form_tracker.py    # Tracks tournament/pre-tournament form
-  klement.py         # FIFA_RANKING dict + Klement score computation
-data/
-  model_poisson.json # Fitted Poisson attack/defense params (WM 2006–2022)
-  model_xgb.pkl      # Calibrated XGBoost model
-  elo_ratings.json   # 339 teams, full international Elo (martj42 source)
-  fixtures.json      # WM 2026 fixture list + results
-  historical_matches.json  # WM 2006–2022 results (Poisson training data)
-docs/predictions.json      # Published to GitHub Pages
-```
-
----
-
-## Key Code Signatures
-
-```python
-# src/model.py — constants
-POISSON_DAMPENING = 0.8   # probability lambdas
-TIP_DAMPENING     = 0.3   # score tip lambdas (more expressive)
-ELO_FACTOR        = 0.75  # Elo λ scaling: (2*p_elo)^ELO_FACTOR
-
-# _poisson_probs() — returns 7 values now
-def _poisson_probs(params, team_a, team_b, feat) \
-    -> tuple[float, float, float, list, list, float, float]:
-    # returns: p_win, p_draw, p_loss, top5, all_results, lam_a_tip, lam_b_tip
-
-# WMPredictor.predict() — tip logic
-raw_diff = lam_a_tip - lam_b_tip
-if p_a >= p_d and p_a >= p_b:
-    exp_diff = max(1, round(raw_diff))   # win → at least +1
-elif p_b >= p_d and p_b >= p_a:
-    exp_diff = min(-1, round(raw_diff))  # loss → at most -1
-else:
-    exp_diff = 0                          # draw → 0
-candidates = [(s, p) for s, p in all_results
-              if int(s.split(':')[0]) - int(s.split(':')[1]) == exp_diff]
-tip = candidates[0][0] if candidates else all_results[0][0]
-```
-
-```python
-# src/backtest.py — standalone evaluation (doesn't use features.py or model.py's WMPredictor)
-def predict(team_a, team_b,
-            elo_factor=0.5,
-            poisson_weight=0.85,
-            host_bonus=0.0,
-            draw_boost=0.0,
-            poisson_dampening=0.5,
-            **_kwargs) -> tuple[str, float, float, float]:
-    # returns: ('win'|'draw'|'loss', p_a, p_draw, p_b)
-```
-
-```python
-# src/features.py — ELO_NAME_MAP normalizes fixture names to martj42 names
-ELO_NAME_MAP = {
-    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
-    "Cape Verde Islands": "Cape Verde",
-    "Congo DR": "DR Congo",
-    "Czechia": "Czech Republic",
-    "Korea Republic": "South Korea",
-    "Cote d'Ivoire": "Ivory Coast",
-}
-```
-
----
+**Uncommitted Changes**: Only file-mode drifts on `src/model.py` and `data/form_cache.json` — no content changes, safe to ignore.
 
 ## Files to Know
 
 | File | Why It Matters |
 |------|----------------|
-| `src/model.py` | Core model — `POISSON_DAMPENING`, `TIP_DAMPENING`, `ELO_FACTOR` constants here |
-| `src/backtest.py` | Fastest way to evaluate parameter changes; run `--grid` for full search |
-| `src/elo_builder.py` | Re-run after each matchday to update Elo from completed WM matches |
-| `data/elo_ratings.json` | 339-team Elo (martj42); used in `features.py` and `backtest.py` |
-| `data/model_poisson.json` | Attack/defense params; trained once on historical WM data |
+| `src/model.py` | Dual-lambda system; `POISSON_DAMPENING`, `TIP_DAMPENING`, `GOALS_SCALE` constants; `PredictionResult` dataclass with lambda fields |
+| `src/backtest.py` | `score_grid_search()`, `evaluate_wm2026_scores()`, `classify_score()` — use `--score-grid` to re-validate |
+| `src/update_predictions.py` | Stores `prob_lambda_{a,b}` and `tip_lambda_{a,b}` in `explanation_factors` |
+| `src/bootstrap_fixtures.py` | `FLAG` dict — add new team name variants here when API returns unexpected names |
+| `data/fixtures.json` | Source of truth for team names and flags; flags stored here (not re-fetched from API) |
+| `docs/index.html` | Main GitHub Pages app; `renderDetail()` shows tip composition section |
+| `docs/details.html` | Two-tab view; same `renderDetail()` logic as index.html — **must be kept in sync manually** |
+| `docs/predictions.json` | Generated output; re-run `python src/update_predictions.py` after any model change |
 
----
+## Code Context
+
+**Dual-lambda system** (`src/model.py`):
+```python
+POISSON_DAMPENING = 0.8   # for win/draw/loss probability matrix
+TIP_DAMPENING     = 0.3   # for score tip selection (less dampened = wider margins)
+GOALS_SCALE       = 1.5   # multiplies both tip-lambdas (shifts toward higher-scoring tips)
+
+# In _poisson_probs() — returns 9-tuple:
+# p_win, p_draw, p_loss, top5, all_results, lam_a_tip, lam_b_tip, lam_a_prob, lam_b_prob
+d = 1.0 - POISSON_DAMPENING
+lam_a = exp(base + atk_a*d - def_b*d) * elo_scale   # probability matrix lambdas
+lam_b = exp(base + atk_b*d - def_a*d) / elo_scale
+
+d_tip = 1.0 - TIP_DAMPENING
+lam_a_tip = exp(base + atk_a*d_tip - def_b*d_tip) * elo_scale * GOALS_SCALE
+lam_b_tip = exp(base + atk_b*d_tip - def_a*d_tip) / elo_scale * GOALS_SCALE
+
+# In predict() — tip selection:
+raw_diff = lam_a_tip - lam_b_tip
+if p_a wins:   exp_diff = max(1, round(raw_diff))
+elif p_b wins: exp_diff = min(-1, round(raw_diff))
+else:          exp_diff = 0
+# picks highest-prob score in probability matrix with exactly exp_diff goal difference
+```
+
+**PredictionResult** (`src/model.py`):
+```python
+@dataclass
+class PredictionResult:
+    prob_a: float; prob_draw: float; prob_b: float
+    top_results: list[tuple[str, float]] = field(default_factory=list)
+    tip: str = ""
+    prob_lambda_a: float = 0.0; prob_lambda_b: float = 0.0
+    tip_lambda_a: float = 0.0;  tip_lambda_b: float = 0.0
+```
+
+**predictions.json shape** (pending match, abbreviated):
+```json
+{
+  "match_id": "A1", "team_a": "Portugal", "flag_a": "🇵🇹",
+  "tip": "2:0", "prob_a": 58.2, "prob_draw": 27.8, "prob_b": 14.0,
+  "top_results": [["1:0", 14.2], ["0:0", 10.1]],
+  "score_odds": {"2:0": 12.5, "1:0": 18.3},
+  "explanation_factors": {
+    "elo_a": 2048, "elo_b": 1412,
+    "prob_lambda_a": 1.503, "prob_lambda_b": 0.633,
+    "tip_lambda_a": 3.032,  "tip_lambda_b": 0.865
+  }
+}
+```
+
+Note: `prob_a/draw/b` stored as **0–100** (not 0–1).
+
+**Broadcast day helper** (duplicated in both HTML files):
+```javascript
+const _SIX_H = 6 * 60 * 60 * 1000;
+function broadcastDateOf(dt) { return new Date(dt.getTime() - _SIX_H).toLocaleDateString("en-CA"); }
+function pendingBroadcastDate(m) { return m.kickoff_utc ? broadcastDateOf(new Date(m.kickoff_utc)) : m.date; }
+```
+
+**Tip composition section** in `renderDetail()` (both HTML files — keep in sync):
+```javascript
+if (ef.tip_lambda_a != null && ef.prob_lambda_a != null) {
+  const rawDiff = ef.tip_lambda_a - ef.tip_lambda_b;
+  const sign = rawDiff >= 0 ? '+' : '';
+  // renders: factorRow("λ Modell (D=0.8)", ...) + factorRow("λ Tipp (D=0.3, ×1.5)", ...)
+  // + <div class="tip-derivation">Erw. Tordiff: <strong>+2.2</strong> → Tipp: 2:0</div>
+}
+```
 
 ## Resume Instructions
 
-```bash
-cd wm-predictor
-source .venv/bin/activate
+1. Activate venv: `source .venv/bin/activate` (Linux) or `.venv\Scripts\activate` (Windows)
 
-# Evaluate current model on all completed WM 2026 matches
-python src/backtest.py
+2. Verify model state:
+   ```bash
+   python src/backtest.py --score-grid
+   ```
+   Expected: baseline 24/80 pts, best grid `tip_dampening=0.3, goals_scale=1.5` → 28/80 pts
 
-# Full grid search (~45 seconds)
-python src/backtest.py --grid
+3. After any model change, regenerate predictions:
+   ```bash
+   python src/update_predictions.py
+   ```
+   Expected: `✅ 52 ausstehende Spiele → docs/predictions.json`
 
-# Enter new result + regenerate predictions
-python src/update_result.py <match_id> "<score>"  # e.g. A3 "2:1"
-python src/update_predictions.py
-
-# Update Elo after new matches (needs internet)
-python src/elo_builder.py
-
-# Tests (expect 37/40 — 3 network tests pre-fail)
-python -m pytest tests/ -q
-
-# Local preview
-python -m http.server 8080 --directory docs
-```
-
-**Verifying score tips work correctly:**
-```bash
-python -c "
-import sys; sys.path.insert(0,'src')
-from model import WMPredictor; from features import build
-m = WMPredictor(); m.load()
-for ta, tb in [('Germany','Curaçao'),('Argentina','Bolivia'),('France','Algeria')]:
-    r = m.predict(build(ta, tb, ''), ta, tb)
-    print(f'{ta} vs {tb}: tip={r.tip}  [{r.prob_a:.0%}/{r.prob_draw:.0%}/{r.prob_b:.0%}]')
-"
-# Expected: Germany 2:0, Argentina 2:0, France 1:0 (or similar)
-```
-
----
+4. Push to publish to GitHub Pages:
+   ```bash
+   git push
+   ```
 
 ## Setup Required
 
-| Secret | Purpose | Required |
-|--------|---------|----------|
-| `FOOTBALL_DATA_KEY` | Auto-fetch results from football-data.org | Yes (for CI auto-update) |
-| `GH_PAT` | GitHub Actions push (branch protection) | Yes (for CI) |
-| `ODDS_API_KEY` | Bookmaker odds (major signal improvement if used) | No |
-
-**Git identity** (personal project):
-```bash
-git config user.email "mcnt94@googlemail.com"
-git config user.name "TyraBite"
-```
-
----
+- `.env` with `FOOTBALL_DATA_KEY` (required) and `ODDS_API_KEY` (optional — without it, bookmaker odds default to 40%/25%/35% and `score_odds` is empty)
+- Python 3.11+, `pip install -r requirements.txt`
+- Git identity for commits: `TyraBite / mcnt94@googlemail.com` — **never add Co-Authored-By lines**
 
 ## Warnings
 
-- **Never use `Co-Authored-By: Claude`** in commits for this repo — user preference
-- **`backtest.py` uses its own params** (elo_factor=0.5 hardcoded in `main()`), separate from `model.py`'s `ELO_FACTOR=0.75`. They're intentionally different tools: backtest for experimentation, model for production.
-- **Stats in `update_predictions.py` reflect past tips**, not current model. "0 Differenz" in output is because old tips (before these improvements) were stored. New matches will count correctly.
-- `_poisson_probs()` now returns **7 values** (added `lam_a_tip, lam_b_tip`). Any code calling it must unpack 7 values.
-- The 3 failing tests in `test_data_fetcher.py` are pre-existing network failures — `requests.exceptions.HTTPError: 404 Client Error` for `example.com`. Not related to model changes.
+**3 failing tests** (`tests/test_data_fetcher.py`): Tests patch `data_fetcher.requests.get` but `data_fetcher.py` uses `_session().get()` (a `requests.Session` with retry adapter). Mock target is wrong so real HTTP calls go through, hitting example.com → 404. Fix: patch `requests.Session.get` or mock `data_fetcher._session`. Left unfixed per user preference (no test-only API changes).
+
+**`renderDetail()` duplicated** in `index.html` and `details.html` — changes to one must be manually mirrored to the other. No shared JS file.
+
+**`form_cache.json` always dirty** — `update_predictions.py` calls `form_tracker.update_all()` which rewrites the file on every run. Intentional — GitHub Action commits fresh form data after each matchday.
+
+**File mode drift** (644→755) on WSL for files under `/workspace` — cosmetic. Can ignore or set `git config core.fileMode false`.
+
+**`score_odds` in predictions.json** is a dict keyed by score string (e.g. `"2:1": 8.5`) representing bookmaker implied probability in %. Stored for display only — not used in tip selection.
