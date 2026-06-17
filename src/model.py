@@ -29,6 +29,7 @@ POISSON_NAME_MAP = {
 }
 
 POISSON_DAMPENING = 0.8
+TIP_DAMPENING     = 0.3   # less dampened → wider lambda spread for score tip margin
 ELO_FACTOR = 0.75
 
 
@@ -65,27 +66,31 @@ def _poisson_matrix(lam_a: float, lam_b: float, max_goals: int = 6) -> np.ndarra
 
 
 def _poisson_probs(params: dict, team_a: str, team_b: str,
-                   feat: dict) -> tuple[float, float, float, list, str]:
+                   feat: dict) -> tuple[float, float, float, list, list, float, float]:
     base = params.get("base_rate", np.log(1.2))
-    # Normalize team names to match Poisson model training data
     ta = POISSON_NAME_MAP.get(team_a, team_a)
     tb = POISSON_NAME_MAP.get(team_b, team_b)
     a_raw = params.get(ta, params.get(team_a, {"attack": feat.get("attack_a", 0), "defense": feat.get("defense_a", 0)}))
     b_raw = params.get(tb, params.get(team_b, {"attack": feat.get("attack_b", 0), "defense": feat.get("defense_b", 0)}))
-    # Dampen extreme historical params toward zero (reduces overfitting to small sample sizes)
+
+    # Probability lambdas (conservative dampening → accurate win/draw/loss probs)
     d = 1.0 - POISSON_DAMPENING
-    a_params = {"attack": a_raw["attack"] * d, "defense": a_raw["defense"] * d}
-    b_params = {"attack": b_raw["attack"] * d, "defense": b_raw["defense"] * d}
-    lam_a = np.exp(base + a_params["attack"] - b_params["defense"])
-    lam_b = np.exp(base + b_params["attack"] - a_params["defense"])
+    lam_a = np.exp(base + a_raw["attack"] * d - b_raw["defense"] * d)
+    lam_b = np.exp(base + b_raw["attack"] * d - a_raw["defense"] * d)
 
     elo_a = feat.get("elo_a", 1500.0)
     elo_b = feat.get("elo_b", 1500.0)
+    elo_scale = 1.0
     if ELO_FACTOR > 0 and elo_a != elo_b:
         p_elo_a = 1.0 / (1.0 + 10.0 ** ((elo_b - elo_a) / 400.0))
         elo_scale = (2.0 * p_elo_a) ** ELO_FACTOR
-        lam_a = lam_a * elo_scale
-        lam_b = lam_b / elo_scale
+        lam_a *= elo_scale
+        lam_b /= elo_scale
+
+    # Tip lambdas (less dampened → wider margin spread for score prediction)
+    d_tip = 1.0 - TIP_DAMPENING
+    lam_a_tip = np.exp(base + a_raw["attack"] * d_tip - b_raw["defense"] * d_tip) * elo_scale
+    lam_b_tip = np.exp(base + b_raw["attack"] * d_tip - a_raw["defense"] * d_tip) / elo_scale
 
     mat = _poisson_matrix(lam_a, lam_b)
     n = mat.shape[0]
@@ -95,7 +100,7 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
 
     results = [(f"{i}:{j}", float(mat[i, j])) for i in range(n) for j in range(n)]
     results.sort(key=lambda x: -x[1])
-    return p_win, p_draw, p_loss, results[:5], results
+    return p_win, p_draw, p_loss, results[:5], results, lam_a_tip, lam_b_tip
 
 
 def _feat_to_array(feat: dict) -> np.ndarray:
@@ -153,7 +158,8 @@ class WMPredictor:
         self._xgb.fit(X_arr, y_arr)
 
     def predict(self, feat: dict, team_a: str = "A", team_b: str = "B") -> PredictionResult:
-        pw, pd, pl, top5, all_results = _poisson_probs(self._poisson_params, team_a, team_b, feat)
+        pw, pd, pl, top5, all_results, lam_a_tip, lam_b_tip = _poisson_probs(
+            self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
         p_a = 0.90 * pw + 0.10 * xgb_probs[0]
@@ -168,14 +174,18 @@ class WMPredictor:
         total = p_a + p_d + p_b
         if total > 0:
             p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
-        # Tip from the direction of the final blended probability (Poisson+XGBoost+Odds+Live)
+        # Tip: expected goal difference from tip-lambdas (TIP_DAMPENING=0.3, less conservative)
+        # Allows 2:0, 3:1 etc. for clear favorites instead of always 1:0
+        raw_diff = lam_a_tip - lam_b_tip
         if p_a >= p_d and p_a >= p_b:
-            cat = [(s, p) for s, p in all_results if int(s.split(":")[0]) > int(s.split(":")[1])]
+            exp_diff = max(1, round(raw_diff))
         elif p_b >= p_d and p_b >= p_a:
-            cat = [(s, p) for s, p in all_results if int(s.split(":")[0]) < int(s.split(":")[1])]
+            exp_diff = min(-1, round(raw_diff))
         else:
-            cat = [(s, p) for s, p in all_results if s.split(":")[0] == s.split(":")[1]]
-        tip = cat[0][0] if cat else all_results[0][0]
+            exp_diff = 0
+        candidates = [(s, p) for s, p in all_results
+                      if int(s.split(":")[0]) - int(s.split(":")[1]) == exp_diff]
+        tip = candidates[0][0] if candidates else all_results[0][0]
         return PredictionResult(
             prob_a=round(p_a, 4), prob_draw=round(p_d, 4), prob_b=round(p_b, 4),
             top_results=top5, tip=tip,
