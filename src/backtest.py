@@ -148,19 +148,19 @@ def predict(team_a: str, team_b: str,
             host_bonus: float = 0.0,
             draw_boost: float = 0.0,
             poisson_dampening: float = 0.5,
-            **_kwargs) -> tuple[str, float, float, float]:
+            tip_dampening: float = 0.3,
+            goals_scale: float = 1.0,
+            **_kwargs) -> tuple[str, float, float, float, str]:
     """
-    Predict match tendency and return (tendency, p_a, p_draw, p_b).
-    elo_factor: exponent for (2*p_elo)^elo_factor Poisson λ scaling.
-                0.0 = no Elo adjustment, 0.5 = current default.
-    poisson_dampening: 0.0 = full Poisson params, 1.0 = all neutral.
+    Predict match tendency + score tip. Returns (tendency, p_a, p_draw, p_b, tip).
+    tip_dampening: less dampening = wider lambda spread for score tip (0.3 = current).
+    goals_scale:   multiplier on tip lambdas — >1 shifts tips toward higher-scoring games.
     """
     base = POISSON_PARAMS.get('base_rate', np.log(1.2))
     ta = POISSON_NAME_MAP.get(team_a, team_a)
     tb = POISSON_NAME_MAP.get(team_b, team_b)
     a_raw = POISSON_PARAMS.get(ta, POISSON_PARAMS.get(team_a, {'attack': 0, 'defense': 0}))
     b_raw = POISSON_PARAMS.get(tb, POISSON_PARAMS.get(team_b, {'attack': 0, 'defense': 0}))
-    # Dampen extreme params (shrink toward zero/mean)
     d = 1.0 - poisson_dampening
     a = {'attack': a_raw['attack'] * d, 'defense': a_raw['defense'] * d}
     b = {'attack': b_raw['attack'] * d, 'defense': b_raw['defense'] * d}
@@ -168,7 +168,7 @@ def predict(team_a: str, team_b: str,
     lam_a = np.exp(base + a['attack'] - b['defense'])
     lam_b = np.exp(base + b['attack'] - a['defense'])
 
-    # International Elo adjustment (from ~49k historical international matches)
+    elo_scale = 1.0
     if elo_factor > 0:
         elo_a = get_elo(team_a)
         elo_b = get_elo(team_b)
@@ -178,14 +178,12 @@ def predict(team_a: str, team_b: str,
             lam_a *= elo_scale
             lam_b /= elo_scale
 
-    # Host nation bonus (WM 2026: USA, Canada, Mexico)
     if host_bonus > 0:
         if team_a in WM2026_HOSTS:
             lam_a *= (1 + host_bonus)
         if team_b in WM2026_HOSTS:
             lam_b *= (1 + host_bonus)
 
-    # Poisson matrix (vectorized)
     max_goals = 7
     g = np.arange(max_goals)
     pa = poisson.pmf(g, max(lam_a, 0.01))
@@ -197,26 +195,47 @@ def predict(team_a: str, team_b: str,
     pd_ = float(np.diag(mat).sum())
     pl = float(np.triu(mat, 1).sum())
 
-    # XGBoost cached (only depends on team names + dampening, not rank/host/draw params)
     xgb = _xgb_proba(team_a, team_b, poisson_dampening)
 
     p_a = poisson_weight * pw + (1 - poisson_weight) * xgb[0]
     p_d = poisson_weight * pd_ + (1 - poisson_weight) * xgb[1]
     p_b = poisson_weight * pl + (1 - poisson_weight) * xgb[2]
 
-    # Draw boost: inflate draw probability by a factor
     if draw_boost > 0:
         p_d *= (1 + draw_boost)
 
     total = p_a + p_d + p_b
     p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
 
+    tendency = ('win' if p_a >= p_d and p_a >= p_b else
+                'loss' if p_b >= p_d and p_b >= p_a else 'draw')
+
+    # Score tip with separate (less dampened) lambdas
+    d_tip = 1.0 - tip_dampening
+    lam_a_tip = np.exp(base + a_raw['attack'] * d_tip - b_raw['defense'] * d_tip) * elo_scale * goals_scale
+    lam_b_tip = np.exp(base + b_raw['attack'] * d_tip - a_raw['defense'] * d_tip) / elo_scale * goals_scale
+
+    pa_t = poisson.pmf(g, max(lam_a_tip, 0.01))
+    pb_t = poisson.pmf(g, max(lam_b_tip, 0.01))
+    mat_t = np.outer(pa_t, pb_t)
+    mat_t /= mat_t.sum()
+
+    all_results = sorted(
+        [(f"{i}:{j}", float(mat_t[i, j])) for i in range(max_goals) for j in range(max_goals)],
+        key=lambda x: -x[1]
+    )
+    raw_diff = lam_a_tip - lam_b_tip
     if p_a >= p_d and p_a >= p_b:
-        return 'win', p_a, p_d, p_b
+        exp_diff = max(1, round(raw_diff))
     elif p_b >= p_d and p_b >= p_a:
-        return 'loss', p_a, p_d, p_b
+        exp_diff = min(-1, round(raw_diff))
     else:
-        return 'draw', p_a, p_d, p_b
+        exp_diff = 0
+    candidates = [(s, p) for s, p in all_results
+                  if int(s.split(':')[0]) - int(s.split(':')[1]) == exp_diff]
+    tip = candidates[0][0] if candidates else all_results[0][0]
+
+    return tendency, p_a, p_d, p_b, tip
 
 
 def evaluate_wm2026(verbose: bool = False, **kwargs) -> tuple[int, int]:
@@ -230,7 +249,7 @@ def evaluate_wm2026(verbose: bool = False, **kwargs) -> tuple[int, int]:
             continue
         ga, gb = map(int, m['result'].split(':'))
         actual = 'win' if ga > gb else ('draw' if ga == gb else 'loss')
-        tendency, p_a, p_d, p_b = predict(m['team_a'], m['team_b'], **kwargs)
+        tendency, p_a, p_d, p_b, tip = predict(m['team_a'], m['team_b'], **kwargs)
         hit = tendency == actual
         if hit:
             correct += 1
@@ -240,7 +259,7 @@ def evaluate_wm2026(verbose: bool = False, **kwargs) -> tuple[int, int]:
             rb = get_rank(m['team_b'], kwargs.get('extended_ranking', True))
             marker = '✓' if hit else '✗'
             print(f"{marker} {m['team_a']:22}(#{ra:3}) vs {m['team_b']:22}(#{rb:3}) "
-                  f"→ {m['result']:5}  pred={tendency:5} [{p_a:.0%}/{p_d:.0%}/{p_b:.0%}]")
+                  f"→ {m['result']:5}  pred={tendency:5} tip={tip:5} [{p_a:.0%}/{p_d:.0%}/{p_b:.0%}]")
     return correct, total
 
 
@@ -254,11 +273,84 @@ def evaluate_historical(season_from: int = 2022, **kwargs) -> tuple[int, int]:
     for m in matches:
         ga, gb = m['goals_a'], m['goals_b']
         actual = 'win' if ga > gb else ('draw' if ga == gb else 'loss')
-        tendency, _, _, _ = predict(m['team_a'], m['team_b'], **kwargs)
+        tendency, _, _, _, _ = predict(m['team_a'], m['team_b'], **kwargs)
         if tendency == actual:
             correct += 1
         total += 1
     return correct, total
+
+
+def classify_score(tip: str, result: str) -> str:
+    if tip == result:
+        return 'exact'
+    try:
+        ta, tb = map(int, tip.split(':'))
+        ra, rb = map(int, result.split(':'))
+        if (ta - tb) == (ra - rb):
+            return 'difference'
+        if ((ta > tb) == (ra > rb)) and ((ta == tb) == (ra == rb)):
+            return 'tendency'
+    except (ValueError, AttributeError):
+        pass
+    return 'wrong'
+
+
+def evaluate_wm2026_scores(verbose: bool = False, **kwargs) -> tuple[dict, int, int]:
+    """Evaluate score tip quality on completed WM 2026 matches.
+    Returns (counts, total, kicktipp_pts) where kicktipp_pts uses 4/3/2/0 scoring.
+    """
+    with open('data/fixtures.json') as f:
+        fixtures = json.load(f)
+
+    counts = {'exact': 0, 'difference': 0, 'tendency': 0, 'wrong': 0}
+    for m in fixtures:
+        if m.get('status') != 'completed' or not m.get('result'):
+            continue
+        _, _, _, _, tip = predict(m['team_a'], m['team_b'], **kwargs)
+        acc = classify_score(tip, m['result'])
+        counts[acc] += 1
+        if verbose:
+            marker = '🏆' if acc == 'exact' else ('📏' if acc == 'difference' else
+                                                   ('↗' if acc == 'tendency' else '✗'))
+            print(f"{marker} {m['team_a']:22} vs {m['team_b']:22} "
+                  f"tip={tip:5} result={m['result']:5} [{acc}]")
+
+    total = sum(counts.values())
+    kpts = counts['exact'] * 4 + counts['difference'] * 3 + counts['tendency'] * 2
+    return counts, total, kpts
+
+
+def score_grid_search() -> dict:
+    """Grid search over tip_dampening × goals_scale, optimizing Kicktipp score (4/3/2/0)."""
+    tip_dampening_vals = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+    goals_scale_vals   = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.8, 2.0]
+
+    # Use current production tendency params (model.py constants)
+    base_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
+                       poisson_weight=0.90, draw_boost=0.15)
+
+    rows = []
+    for td in tip_dampening_vals:
+        for gs in goals_scale_vals:
+            counts, total, kpts = evaluate_wm2026_scores(
+                **base_kwargs, tip_dampening=td, goals_scale=gs)
+            rows.append((kpts, td, gs, counts, total))
+
+    rows.sort(key=lambda x: (-x[0], x[1], x[2]))
+
+    max_pts = (rows[0][4] if rows else 1) * 4
+    print(f"\n{'TipDamp':>8} {'GoalSc':>7}  Exact  Diff  Tend  Wrong   KickPts (max {max_pts})")
+    print("─" * 65)
+    for kpts, td, gs, counts, total in rows[:20]:
+        bar = kpts * 20 // max_pts if max_pts else 0
+        print(f"{td:>8.1f} {gs:>7.1f}  {counts['exact']:5d} {counts['difference']:5d} "
+              f"{counts['tendency']:5d} {counts['wrong']:5d}   "
+              f"{kpts:3d}pts  {'█' * bar}")
+
+    best = rows[0]
+    print(f"\n→ Best: tip_dampening={best[1]}, goals_scale={best[2]}  "
+          f"({best[0]}pts / {best[4] * 4}max)")
+    return {'tip_dampening': best[1], 'goals_scale': best[2]}
 
 
 def grid_search(verbose: bool = True):
@@ -311,6 +403,7 @@ def grid_search(verbose: bool = True):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--grid', action='store_true', help='Run full grid search')
+    parser.add_argument('--score-grid', action='store_true', help='Run score tip grid search')
     parser.add_argument('--hist', type=int, default=0, help='Show historical accuracy from season')
     args = parser.parse_args()
 
@@ -333,8 +426,17 @@ def main():
         c22, t22 = evaluate_historical(season_from=args.hist, elo_factor=0.5, poisson_weight=0.85, poisson_dampening=0.5)
         print(f"  Correct tendency: {c22}/{t22} = {c22/t22*100:.1f}%")
 
+    # Score baseline
+    prod_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
+                       poisson_weight=0.90, draw_boost=0.15)
+    print("\n=== WM 2026 — Score tips (production params, default dampening) ===")
+    sc, st, skpts = evaluate_wm2026_scores(verbose=True, **prod_kwargs)
+    max_kpts = st * 4
+    print(f"\n  Exact: {sc['exact']}  Diff: {sc['difference']}  Tend: {sc['tendency']}  Wrong: {sc['wrong']}")
+    print(f"  Kicktipp-Punkte: {skpts} / {max_kpts}  ({skpts/max_kpts*100:.1f}%)")
+
     if args.grid:
-        print("\n=== Grid Search ===")
+        print("\n=== Grid Search (tendency) ===")
         best_params, best_score = grid_search(verbose=True)
         print(f"\nBest params: {best_params}")
         print(f"Best combined score: {best_score:.3f}")
@@ -347,6 +449,17 @@ def main():
         print(f"\n  WM 2026 OOS: {c_best}/{t_best} = {c_best/t_best*100:.1f}%")
         print(f"  WM 2022 IS:  {c22b}/{t22b} = {c22b/t22b*100:.1f}%")
         print(f"  WM 2006-22 IS: {c_hist}/{t_hist} = {c_hist/t_hist*100:.1f}%")
+
+    if args.score_grid:
+        print("\n=== Score Grid Search ===")
+        best_score_params = score_grid_search()
+        print(f"\n=== Best score params — verbose ===")
+        evaluate_wm2026_scores(verbose=True, **prod_kwargs,
+                               **best_score_params)
+        sc2, st2, kpts2 = evaluate_wm2026_scores(**prod_kwargs, **best_score_params)
+        print(f"\n  → tip_dampening={best_score_params['tip_dampening']}, "
+              f"goals_scale={best_score_params['goals_scale']}")
+        print(f"  Kicktipp-Punkte: {kpts2} / {st2*4}  ({kpts2/(st2*4)*100:.1f}%)")
 
 
 if __name__ == '__main__':

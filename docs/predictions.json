@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-17T07:37:41.708471+00:00",
+  "updated_at": "2026-06-17T09:47:42.540939+00:00",
   "tournament_phase": "Gruppenphase",
   "warnings": [],
   "stats": {
@@ -346,7 +346,7 @@
       "prob_a": 58.2,
       "prob_draw": 27.8,
       "prob_b": 14.0,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -529,7 +529,7 @@
       "prob_a": 9.6,
       "prob_draw": 23.4,
       "prob_b": 67.0,
-      "tip": "0:2",
+      "tip": "0:3",
       "top_results": [
         [
           "0:1",
@@ -720,7 +720,7 @@
       "prob_a": 50.6,
       "prob_draw": 30.6,
       "prob_b": 18.8,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -1240,7 +1240,7 @@
       "prob_a": 53.8,
       "prob_draw": 30.0,
       "prob_b": 16.3,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -1305,7 +1305,7 @@
       "prob_a": 3.2,
       "prob_draw": 14.0,
       "prob_b": 82.9,
-      "tip": "0:3",
+      "tip": "0:4",
       "top_results": [
         [
           "0:2",
@@ -1370,7 +1370,7 @@
       "prob_a": 69.4,
       "prob_draw": 21.4,
       "prob_b": 9.2,
-      "tip": "3:0",
+      "tip": "5:0",
       "top_results": [
         [
           "1:0",
@@ -1435,7 +1435,7 @@
       "prob_a": 50.7,
       "prob_draw": 30.8,
       "prob_b": 18.4,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -1500,7 +1500,7 @@
       "prob_a": 56.1,
       "prob_draw": 29.3,
       "prob_b": 14.5,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -1695,7 +1695,7 @@
       "prob_a": 74.2,
       "prob_draw": 19.8,
       "prob_b": 6.0,
-      "tip": "2:0",
+      "tip": "3:0",
       "top_results": [
         [
           "1:0",
@@ -1890,7 +1890,7 @@
       "prob_a": 55.9,
       "prob_draw": 28.8,
       "prob_b": 15.3,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -1951,7 +1951,7 @@
       "prob_a": 59.8,
       "prob_draw": 26.5,
       "prob_b": 13.6,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -2012,7 +2012,7 @@
       "prob_a": 11.0,
       "prob_draw": 23.5,
       "prob_b": 65.4,
-      "tip": "0:3",
+      "tip": "0:5",
       "top_results": [
         [
           "0:1",
@@ -2073,7 +2073,7 @@
       "prob_a": 59.0,
       "prob_draw": 26.8,
       "prob_b": 14.2,
-      "tip": "2:0",
+      "tip": "3:0",
       "top_results": [
         [
           "1:0",
@@ -2134,7 +2134,7 @@
       "prob_a": 51.8,
       "prob_draw": 30.2,
       "prob_b": 18.0,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -2199,7 +2199,7 @@
       "prob_a": 54.3,
       "prob_draw": 30.4,
       "prob_b": 15.3,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -2394,7 +2394,7 @@
       "prob_a": 5.2,
       "prob_draw": 18.5,
       "prob_b": 76.2,
-      "tip": "0:1",
+      "tip": "0:2",
       "top_results": [
         [
           "0:1",
@@ -2459,7 +2459,7 @@
       "prob_a": 4.9,
       "prob_draw": 16.7,
       "prob_b": 78.4,
-      "tip": "0:2",
+      "tip": "0:3",
       "top_results": [
         [
           "0:2",
@@ -2524,7 +2524,7 @@
       "prob_a": 9.2,
       "prob_draw": 24.7,
       "prob_b": 66.0,
-      "tip": "0:1",
+      "tip": "0:2",
       "top_results": [
         [
           "0:1",
@@ -2589,7 +2589,7 @@
       "prob_a": 3.8,
       "prob_draw": 12.2,
       "prob_b": 84.1,
-      "tip": "0:2",
+      "tip": "0:3",
       "top_results": [
         [
           "0:2",
@@ -2654,7 +2654,7 @@
       "prob_a": 1.8,
       "prob_draw": 10.3,
       "prob_b": 87.9,
-      "tip": "0:4",
+      "tip": "0:5",
       "top_results": [
         [
           "0:2",
@@ -2914,7 +2914,7 @@
       "prob_a": 12.1,
       "prob_draw": 25.6,
       "prob_b": 62.3,
-      "tip": "0:2",
+      "tip": "0:3",
       "top_results": [
         [
           "0:1",
@@ -3044,7 +3044,7 @@
       "prob_a": 14.7,
       "prob_draw": 27.3,
       "prob_b": 58.0,
-      "tip": "0:1",
+      "tip": "0:2",
       "top_results": [
         [
           "0:1",
@@ -3304,7 +3304,7 @@
       "prob_a": 6.5,
       "prob_draw": 18.5,
       "prob_b": 75.0,
-      "tip": "0:4",
+      "tip": "0:2",
       "top_results": [
         [
           "0:2",
@@ -3365,7 +3365,7 @@
       "prob_a": 58.4,
       "prob_draw": 27.6,
       "prob_b": 14.0,
-      "tip": "1:0",
+      "tip": "2:0",
       "top_results": [
         [
           "1:0",
@@ -3548,7 +3548,7 @@
       "prob_a": 1.7,
       "prob_draw": 7.3,
       "prob_b": 91.0,
-      "tip": "0:4",
+      "tip": "0:2",
       "top_results": [
         [
           "0:2",

@@ -30,6 +30,7 @@ POISSON_NAME_MAP = {
 
 POISSON_DAMPENING = 0.8
 TIP_DAMPENING     = 0.3   # less dampened → wider lambda spread for score tip margin
+GOALS_SCALE       = 1.5   # scales tip-lambdas up → higher-scoring tips (verified by grid search)
 ELO_FACTOR = 0.75
 
 
@@ -87,10 +88,10 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
         lam_a *= elo_scale
         lam_b /= elo_scale
 
-    # Tip lambdas (less dampened → wider margin spread for score prediction)
+    # Tip lambdas (less dampened + scaled up → higher-scoring score predictions)
     d_tip = 1.0 - TIP_DAMPENING
-    lam_a_tip = np.exp(base + a_raw["attack"] * d_tip - b_raw["defense"] * d_tip) * elo_scale
-    lam_b_tip = np.exp(base + b_raw["attack"] * d_tip - a_raw["defense"] * d_tip) / elo_scale
+    lam_a_tip = np.exp(base + a_raw["attack"] * d_tip - b_raw["defense"] * d_tip) * elo_scale * GOALS_SCALE
+    lam_b_tip = np.exp(base + b_raw["attack"] * d_tip - a_raw["defense"] * d_tip) / elo_scale * GOALS_SCALE
 
     mat = _poisson_matrix(lam_a, lam_b)
     n = mat.shape[0]
