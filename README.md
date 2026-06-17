@@ -1,6 +1,8 @@
 # WM 2026 Predictor
 
-Tiplu-internes WM 2026 Wettbüro-Tool. Zeigt Vorhersagen für ausstehende Spiele basierend auf dem Klement-Modell (Bevölkerung, BIP, Klima, FIFA-Ranking) ergänzt durch Live-Elo-Ratings, Turnierform und Verletzungsanpassungen.
+Tiplu-internes WM 2026 Wettbüro-Tool. Zeigt Vorhersagen für ausstehende Spiele basierend auf einem Ensemble-Modell (Poisson-MLE + XGBoost), das mit internationalem Elo (49.000+ Länderspiele), Turnierform, Klement-Scores (Bevölkerung, BIP, Klima) und Verletzungsanpassungen arbeitet.
+
+**Live:** https://tyrabite.github.io/WmPredictor/
 
 ---
 
@@ -19,7 +21,7 @@ Tiplu-internes WM 2026 Wettbüro-Tool. Zeigt Vorhersagen für ausstehende Spiele
 Der Key wird für den Spielplan-Abruf und täglich zum Laden aktueller Ergebnisse verwendet. Außerdem lädt er historische WM-Daten (2006–2022) für das Vorhersagemodell.
 
 1. Gehe auf [football-data.org](https://www.football-data.org/client/register) und registriere dich
-2. Der Key kommt per E-Mail — kein Kreditkarte nötig
+2. Der Key kommt per E-Mail — keine Kreditkarte nötig
 3. Den Key als `FOOTBALL_DATA_KEY` in `.env` eintragen (siehe Setup-Schritt 2)
 
 > **Hinweis:** Der kostenlose Plan reicht für den Betrieb aus. Das Tool cached alle Antworten 24 Stunden in `data/cache/`, sodass API-Anfragen auf ein Minimum reduziert werden.
@@ -58,8 +60,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Danach ist `python` im Terminal immer das aus der aktivierten venv. Die venv muss in jeder neuen Terminal-Session erneut aktiviert werden (`activate`). Alternativ kann jeder Befehl direkt mit `.venv\Scripts\python` (Windows) bzw. `.venv/bin/python` (Linux/macOS) aufgerufen werden.
-
 ### Schritt 2 — API-Keys konfigurieren
 
 **Windows:**
@@ -81,7 +81,7 @@ ODDS_API_KEY=dein_key_hier   # kann leer bleiben
 
 ### Schritt 3 — Spieldaten laden
 
-Dieser Schritt ruft die football-data.org-API einmalig ab und speichert alle WM-2026-Spielpaarungen (Gruppenphase + KO-Bracket) in `data/fixtures.json`.
+Dieser Schritt ruft die football-data.org-API einmalig ab und speichert alle WM-2026-Spielpaarungen in `data/fixtures.json`.
 
 ```bash
 python src/bootstrap_fixtures.py
@@ -92,17 +92,19 @@ Erwartete Ausgabe:
 Written 72 group + 32 KO slots → data/fixtures.json
 ```
 
-Die 48 Gruppenspiele enthalten bereits Teams, Datum und Spielort. Die 32 KO-Slots sind als Platzhalter angelegt und werden automatisch befüllt, sobald die Gruppenphase durch ist.
+### Schritt 4 — Elo-Ratings berechnen (benötigt Internet)
 
-### Schritt 4 — Statische Scores und Elo-Ratings ~~berechnen~~ (entfällt)
+Berechnet internationale Elo-Ratings für alle 339 aktiven Nationalmannschaften aus 49.000+ historischen Länderspielen (Quelle: [martj42/international_results](https://github.com/martj42/international_results)) und aktualisiert sie mit den bisher gespielten WM-2026-Ergebnissen.
 
-`data/klement_scores.json` und `data/elo_ratings.json` sind bereits im Repository enthalten. Dieser Schritt ist nicht mehr nötig.
+```bash
+python src/elo_builder.py
+```
 
-> `src/klement.py` bleibt im Repo falls die Daten nach einer Regeländerung (FIFA-Ranking, neue WM-Ergebnisse) neu berechnet werden sollen.
+> `data/elo_ratings.json` ist bereits im Repository enthalten und aktuell. Dieser Schritt ist nur nötig, wenn die Ratings nach neuen Spielen aktualisiert werden sollen.
 
 ### Schritt 5 — Vorhersagemodell trainieren
 
-Das Modell (Poisson-MLE + XGBoost-Ensemble) wird auf den historischen WM-Daten aus Schritt 4 trainiert und anschließend gespeichert.
+Das Modell (Poisson-MLE + XGBoost-Ensemble) wird auf den historischen WM-Daten 2006–2022 trainiert.
 
 ```bash
 python -c "
@@ -116,12 +118,6 @@ p.train(matches)
 p.save()
 print('Modell gespeichert.')
 "
-```
-
-Erwartete Ausgabe:
-```
-Trainiere auf N Spielen...
-Modell gespeichert.
 ```
 
 Erzeugte Dateien:
@@ -144,8 +140,6 @@ python predict.py
 python predict.py "Germany" "France"
 ```
 
-`predict.py` ruft automatisch Ergebnisse ab, wenn `FOOTBALL_DATA_KEY` gesetzt ist und vergangene Spiele noch als ausstehend markiert sind. Ein manueller Abruf ist daher in der Regel nicht nötig.
-
 ### Ergebnis nach einem Spiel eintragen
 
 Die Match-ID steht in der Ausgabe von `predict.py` und entspricht dem Schema `A1`, `B3`, `R32_4` etc.
@@ -154,7 +148,15 @@ Die Match-ID steht in der Ausgabe von `predict.py` und entspricht dem Schema `A1
 python src/update_result.py A1 "2:1"
 ```
 
-Das Ergebnis wird in `data/fixtures.json` gespeichert und die Turnierform aller Teams sofort neu berechnet.
+Das Ergebnis wird in `data/fixtures.json` gespeichert und die Turnierform sofort neu berechnet. Anschließend `update_predictions.py` ausführen.
+
+### predictions.json für GitHub Pages aktualisieren
+
+```bash
+python src/update_predictions.py
+```
+
+Regeneriert `docs/predictions.json`. Sollte nach jedem eingetragenen Ergebnis ausgeführt werden.
 
 ### Verletzung oder Sperre melden
 
@@ -166,18 +168,23 @@ python src/add_injury.py "Germany" "Wirtz" injured -0.12
 python src/add_injury.py "France" "Mbappe" suspended -0.20
 ```
 
-Der `impact_score` gibt an, wie stark das Team durch den Ausfall geschwächt wird. Als Richtwert:
+Der `impact_score` gibt an, wie stark das Team geschwächt wird:
 - `-0.05` bis `-0.10` — Stammkraft fehlt, Ersatz vorhanden
 - `-0.12` bis `-0.20` — wichtiger Spieler, spürbare Schwächung
 - `-0.20` bis `-0.30` — Schlüsselspieler (Top-Torschütze, Stammkeeper)
 
-### predictions.json für GitHub Pages aktualisieren
+### Modell-Genauigkeit evaluieren
 
 ```bash
-python src/update_predictions.py
-```
+# Evaluation mit aktuellen Parametern (alle bisherigen WM-2026-Spiele)
+python src/backtest.py
 
-Dies regeneriert `docs/predictions.json`, die von der Web-App geladen wird. Sollte nach jedem eingetragenen Ergebnis und nach jeder Verletzungsmeldung ausgeführt werden.
+# Parameter-Grid-Search (~45 Sekunden, 1176 Kombinationen)
+python src/backtest.py --grid
+
+# Mit historischen WM-Daten ab einem Jahr
+python src/backtest.py --hist 2022
+```
 
 ---
 
@@ -195,6 +202,7 @@ Im GitHub-Repository unter **Settings → Secrets and variables → Actions** fo
 | Secret | Wert | Pflicht |
 |--------|------|---------|
 | `FOOTBALL_DATA_KEY` | Key aus football-data.org | Ja |
+| `GH_PAT` | Personal Access Token (für Branch-Protection) | Ja |
 | `ODDS_API_KEY` | Key aus the-odds-api.com | Nein |
 
 ---
@@ -206,13 +214,29 @@ Im GitHub-Repository unter **Settings → Secrets and variables → Actions** fo
 3. **Branch:** `main`, Ordner: `/docs`
 4. Speichern — die App ist dann unter `https://<username>.github.io/<repo>/` erreichbar
 
-Die Web-App lädt automatisch `docs/predictions.json` und ist in drei Sektionen gegliedert:
+Die Web-App ist in drei Sektionen gegliedert:
 
 | Sektion | Inhalt |
 |---------|--------|
-| **HEUTE** | Mindestens 3 ausstehende Spiele — zuerst die heutigen, dann die nächsten. Anstoßzeit in der lokalen Zeitzone des Browsers. Jede Karte zeigt die 3 wahrscheinlichsten Ergebnisse sowie ein Confidence-Badge (Sicher / Knapp / Unsicher). |
-| **GESTERN** | Abgeschlossene Spiele vom Vortag mit Ergebnis und Accuracy-Badge (Exakt / Differenz ✓ / Tendenz ✓ / Daneben). Wird ausgeblendet wenn leer. |
-| **GENAUIGKEIT** | Gesamtstatistik aller getippten Spiele als farbige Leiste und Kennzahlen. Wird erst angezeigt wenn mindestens ein Spiel gespielt wurde. |
+| **HEUTE** | Ausstehende Spiele — zuerst die heutigen, dann die nächsten. Anstoßzeit in lokaler Zeitzone. Jede Karte zeigt die 3 wahrscheinlichsten Ergebnisse sowie ein Confidence-Badge. |
+| **GESTERN** | Abgeschlossene Spiele vom Vortag mit Ergebnis und Accuracy-Badge (Exakt / Differenz ✓ / Tendenz ✓ / Daneben). |
+| **GENAUIGKEIT** | Gesamtstatistik aller getippten Spiele als farbige Leiste. |
+
+---
+
+## Modell-Architektur
+
+Das Vorhersagemodell kombiniert drei Signale:
+
+| Komponente | Gewicht | Details |
+|-----------|---------|---------|
+| **Poisson MLE** | 90% | Attack/Defense-Parameter aus 320 WM-Spielen 2006–2022; gedämpft mit `POISSON_DAMPENING=0.8` |
+| **Internationales Elo** | — | Skaliert die Poisson-Lambdas via `(2·p_elo)^0.75`; aus 49k+ Länderspielen (martj42-Datensatz) |
+| **XGBoost** | 10% | Kalibrierter Klassifikator; aktuell auf Konstanten trainiert (kein eigenständiger Mehrwert) |
+
+**Tipp-Generierung:** Verwendet `TIP_DAMPENING=0.3` (ausdrucksstärker als die Wahrscheinlichkeits-Lambdas) — erlaubt Tipps wie 2:0 und 3:1 für klare Favoriten statt immer 1:0.
+
+**Aktuelle OOS-Genauigkeit (WM 2026):** 10/20 = 50% (Tendenz korrekt)
 
 ---
 
@@ -221,28 +245,34 @@ Die Web-App lädt automatisch `docs/predictions.json` und ist in drei Sektionen 
 ```
 wm-predictor/
 ├── src/
-│   ├── bootstrap_fixtures.py   # Einmalig: WM-Spielplan von API-Football laden
-│   ├── klement.py              # Einmalig: Klement-Scores + Elo-Ratings berechnen
+│   ├── bootstrap_fixtures.py   # Einmalig: WM-Spielplan von API laden
+│   ├── elo_builder.py          # Internationales Elo aus martj42-Datensatz berechnen
+│   ├── klement.py              # Klement-Scores + FIFA-Ranking-Tabelle
 │   ├── data_fetcher.py         # HTTP-Client mit 24h-Cache
 │   ├── fixtures.py             # Spielplan lesen/schreiben (FixtureStore)
 │   ├── form_tracker.py         # Turnierform + Live-Anpassung berechnen
 │   ├── features.py             # Feature-Vektor für Vorhersagemodell bauen
 │   ├── model.py                # Poisson-MLE + XGBoost-Ensemble (WMPredictor)
+│   ├── backtest.py             # OOS-Evaluation + Parameter-Grid-Search
 │   ├── fetch_results.py        # Täglich: aktuelle Ergebnisse abrufen
 │   ├── update_result.py        # Manuell: Ergebnis eintragen
 │   ├── update_predictions.py   # predictions.json regenerieren
 │   └── add_injury.py           # Verletzung/Sperre melden
 ├── predict.py                  # CLI-Einstiegspunkt
 ├── data/
-│   ├── fixtures.json           # Spielplan + Status (Bootstrap-Output)
+│   ├── fixtures.json           # Spielplan + Status
 │   ├── injuries.json           # Manuelle Verletzungsdaten
 │   ├── klement_scores.json     # Klement-Scores (klement.py-Output)
-│   ├── elo_ratings.json        # Elo-Ratings (klement.py-Output)
-│   ├── historical_matches.json # Historische WM-Daten 2006–2022 (im Repo enthalten)
+│   ├── elo_ratings.json        # Internationales Elo für 339 Teams (elo_builder.py-Output)
+│   ├── historical_matches.json # Historische WM-Daten 2006–2022
+│   ├── model_poisson.json      # Trainierte Poisson-Parameter
+│   ├── model_xgb.pkl           # Trainierter XGBoost-Klassifikator
 │   ├── form_cache.json         # Turnierform-Cache (automatisch)
 │   └── cache/                  # HTTP-Response-Cache (automatisch, .gitignore)
 ├── docs/
 │   ├── index.html              # GitHub Pages Web-App
 │   └── predictions.json        # Vorhersage-Output (update_predictions.py)
+├── tests/                      # Pytest-Tests (37/40 bestehen; 3 Netzwerktests schlagen lokal fehl)
+├── HANDOFF.md                  # Technischer Kontext für AI-Agenten
 └── .github/workflows/          # GitHub Actions
 ```
