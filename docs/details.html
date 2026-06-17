@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WM 2026 Tipps</title>
+<title>WM 2026 — Alle Tipps</title>
 <style>
   :root {
     --bg: #1a1a2e; --card: #16213e; --accent: #ffd700;
@@ -13,12 +13,22 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif;
          max-width: 420px; margin: 0 auto; padding: 12px; }
-  header { text-align: center; padding: 20px 0 12px; }
+  header { text-align: center; padding: 20px 0 4px; }
   header h1 { color: var(--accent); font-size: 1.4rem; letter-spacing: .04em; }
-  header p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
-  .warning { background: #7a6000; color: #ffe082; padding: 10px 14px;
-             border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px; display: none; }
-  .warning.visible { display: block; }
+
+  .back-link { display: block; text-align: center; font-size: 0.78rem; color: var(--muted);
+               text-decoration: none; margin: 6px 0 16px; letter-spacing: .02em; }
+  .back-link:hover { color: var(--accent); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 1px; margin-bottom: 16px; background: #111;
+          border-radius: 10px; overflow: hidden; }
+  .tab-btn { flex: 1; padding: 11px 8px; font-size: 0.82rem; font-weight: 600;
+             background: var(--card); border: none; color: var(--muted); cursor: pointer;
+             transition: background 120ms, color 120ms; }
+  .tab-btn.active { background: var(--accent); color: #1a1a2e; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
 
   /* Section headers */
   .section-header { border-left: 3px solid var(--accent); padding-left: 10px;
@@ -27,9 +37,9 @@
                        text-transform: uppercase; letter-spacing: .08em; }
   .section-header p  { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
   .section-empty { font-size: 0.85rem; color: var(--muted); text-align: center;
-                   padding: 12px 0 4px; }
+                   padding: 20px 0; }
 
-  /* Cards (shared) */
+  /* Cards */
   .card { background: var(--card); border-radius: 12px; padding: 14px 16px;
           margin-bottom: 14px; cursor: pointer; transition: filter 120ms; }
   .card:active { filter: brightness(1.12); }
@@ -99,10 +109,8 @@
 
   footer { text-align: center; font-size: 0.75rem; color: var(--muted); padding: 20px 0; }
   #loading { text-align: center; color: var(--muted); padding: 40px; }
-  .details-link { display: inline-block; font-size: 0.78rem; color: var(--muted); text-decoration: none; margin-top: 6px; letter-spacing: .02em; }
-  .details-link:hover { color: var(--accent); }
 
-  /* ── Detail Modal ── */
+  /* Detail Modal */
   #detail-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.72); z-index: 200;
@@ -127,8 +135,6 @@
                     margin: 16px 0 10px; }
   .detail-section h3 { font-size: 0.72rem; font-weight: 700; color: var(--accent);
                        text-transform: uppercase; letter-spacing: .08em; }
-
-  /* Score rows in detail */
   .score-row { display: grid; grid-template-columns: 36px 1fr 52px 1fr auto;
                align-items: center; gap: 6px; padding: 5px 6px; border-radius: 6px;
                margin-bottom: 4px; }
@@ -142,8 +148,6 @@
   .score-row-w { background: rgba(76,175,80,.08); }
   .score-row-d { background: rgba(255,152,0,.08); }
   .score-row-l { background: rgba(244,67,54,.08); }
-
-  /* Factor rows in detail */
   .factor-row { display: grid; grid-template-columns: 1fr 44px 80px 44px;
                 align-items: center; gap: 6px; margin-bottom: 8px; }
   .factor-label { font-size: 0.75rem; color: var(--muted); }
@@ -159,15 +163,18 @@
 <body>
 <header>
   <h1>⚽ WM 2026 Tipps</h1>
-  <p id="header-subtitle">Lade Vorhersagen…</p>
-  <a href="details.html" class="details-link">Alle Tipps &amp; Vorhersagen →</a>
 </header>
-<div id="warning-banner" class="warning"></div>
+<a href="index.html" class="back-link">← Zurück zur Übersicht</a>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="past">Vergangene Tipps</button>
+  <button class="tab-btn" data-tab="future">Alle Vorhersagen</button>
+</div>
+
 <div id="loading">⏳ Lade…</div>
 <div id="app" style="display:none">
-  <div id="section-heute"></div>
-  <div id="section-gestern"></div>
-  <div id="section-genauigkeit"></div>
+  <div id="tab-past" class="tab-content active"></div>
+  <div id="tab-future" class="tab-content"></div>
 </div>
 <footer id="footer"></footer>
 
@@ -180,14 +187,15 @@
 </div>
 
 <script>
-  // ── Helpers ──────────────────────────────────────────────────────────────
-  // Day boundary: 06:00 local time. Matches before 06:00 belong to the previous broadcast day.
+  // ── Broadcast-day helpers (06:00 local boundary) ─────────────────────────
   const _SIX_H = 6 * 60 * 60 * 1000;
   function broadcastDateOf(dt) { return new Date(dt.getTime() - _SIX_H).toLocaleDateString("en-CA"); }
   function todayBroadcast()     { return broadcastDateOf(new Date()); }
   function yesterdayBroadcast() { const s=new Date(Date.now()-_SIX_H); s.setDate(s.getDate()-1); return s.toLocaleDateString("en-CA"); }
   function tomorrowBroadcast()  { const s=new Date(Date.now()-_SIX_H); s.setDate(s.getDate()+1); return s.toLocaleDateString("en-CA"); }
   function pendingBroadcastDate(m) { return m.kickoff_utc ? broadcastDateOf(new Date(m.kickoff_utc)) : m.date; }
+
+  // ── Format helpers ────────────────────────────────────────────────────────
   function fmtDate(s) {
     const months=["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
     const d=new Date(s+"T12:00:00");
@@ -197,7 +205,8 @@
     if (kickoff_utc) {
       const d=new Date(kickoff_utc);
       const bDay=broadcastDateOf(d);
-      const dateLabel=bDay===todayBroadcast()?"Heute":bDay===tomorrowBroadcast()?"Morgen":fmtDate(bDay);
+      const td=todayBroadcast(), tm=tomorrowBroadcast();
+      const dateLabel=bDay===td?"Heute":bDay===tm?"Morgen":fmtDate(bDay);
       const time=d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
       return `${dateLabel}, ${time} Uhr`;
     }
@@ -208,15 +217,17 @@
             "quarter_final":"Viertelfinale","semi_final":"Halbfinale","final":"Finale",
             "third_place":"Spiel um Platz 3"}[p]||p;
   }
+  function groupLabel(bd) {
+    const td=todayBroadcast(), tm=tomorrowBroadcast();
+    if (bd===td) return "Heute";
+    if (bd===tm) return "Morgen";
+    return fmtDate(bd);
+  }
   function formDots(arr) {
     if (!arr||!arr.length) return '<span style="color:var(--muted)">–</span>';
     return arr.map(r=>r==="W"?'<span class="dot-W">●</span>':
                       r==="D"?'<span class="dot-D">◑</span>':
                               '<span class="dot-L">○</span>').join(" ");
-  }
-  function tipWinner(m) {
-    const [ga,gb]=(m.tip||"0:0").split(":").map(Number);
-    if(ga>gb) return m.team_a; if(gb>ga) return m.team_b; return "Unentschieden";
   }
   function confidenceBadge(level) {
     const map={high:["badge-high","Sicher"],medium:["badge-medium","Knapp"],low:["badge-low","Unsicher"]};
@@ -311,23 +322,31 @@
   </div>
 </div>`;
   }
-  function sectionHeader(title,subtitle) {
+  function sectionHeader(title, subtitle) {
     return `<div class="section-header"><h2>${title}</h2>${subtitle?`<p>${subtitle}</p>`:""}</div>`;
   }
+
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  document.querySelectorAll(".tab-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      const name = b.dataset.tab;
+      document.querySelectorAll(".tab-btn").forEach(x => x.classList.toggle("active", x.dataset.tab === name));
+      document.querySelectorAll(".tab-content").forEach(x => x.classList.toggle("active", x.id === "tab-" + name));
+    });
+  });
 
   // ── Detail Modal ──────────────────────────────────────────────────────────
   let allMatches = {};
 
   function splitBar(a, b, invertForLower) {
-    const fa = parseFloat(a), fb = parseFloat(b);
-    if (isNaN(fa) || isNaN(fb) || fa + fb === 0) return [50, 50];
-    if (invertForLower) return [fb/(fa+fb)*100, fa/(fa+fb)*100];
+    const fa=parseFloat(a), fb=parseFloat(b);
+    if(isNaN(fa)||isNaN(fb)||fa+fb===0) return [50,50];
+    if(invertForLower) return [fb/(fa+fb)*100, fa/(fa+fb)*100];
     return [fa/(fa+fb)*100, fb/(fa+fb)*100];
   }
   function factorRow(label, valA, valB, invertForLower) {
-    const [pA, pB] = splitBar(valA, valB, invertForLower);
-    const dispA = valA != null ? valA : "–";
-    const dispB = valB != null ? valB : "–";
+    const [pA,pB]=splitBar(valA,valB,invertForLower);
+    const dispA=valA!=null?valA:"–"; const dispB=valB!=null?valB:"–";
     return `<div class="factor-row">
   <span class="factor-label">${label}</span>
   <span class="factor-val factor-val-a">${dispA}</span>
@@ -338,23 +357,19 @@
   <span class="factor-val factor-val-b">${dispB}</span>
 </div>`;
   }
-
   function renderDetail(m) {
-    const ef = m.explanation_factors || {};
-    const so = m.score_odds || {};
-    const grp = m.group ? `Gruppe ${m.group}` : fmtPhase(m.phase);
-    const top5 = (m.top_results || []).slice(0, 5);
-    const maxProb = top5.length ? top5[0][1] : 1;
-
-    // Score rows
-    const scoreRows = top5.map(t => {
-      const [ga, gb] = t[0].split(":").map(Number);
-      const type = ga > gb ? "w" : ga < gb ? "l" : "d";
-      const color = type==="w" ? "var(--win)" : type==="d" ? "var(--draw)" : "var(--loss)";
-      const lbl = type==="w" ? m.team_a+" gewinnt" : type==="l" ? m.team_b+" gewinnt" : "Unentschieden";
-      const barW = maxProb > 0 ? (t[1]/maxProb*100).toFixed(0) : 0;
-      const bm = so[t[0]];
-      const bmHtml = bm ? `<span class="score-bm">BM ${bm}%</span>` : `<span></span>`;
+    const ef=m.explanation_factors||{}; const so=m.score_odds||{};
+    const grp=m.group?`Gruppe ${m.group}`:fmtPhase(m.phase);
+    const top5=(m.top_results||[]).slice(0,5);
+    const maxProb=top5.length?top5[0][1]:1;
+    const scoreRows=top5.map(t=>{
+      const [ga,gb]=t[0].split(":").map(Number);
+      const type=ga>gb?"w":ga<gb?"l":"d";
+      const color=type==="w"?"var(--win)":type==="d"?"var(--draw)":"var(--loss)";
+      const lbl=type==="w"?m.team_a+" gewinnt":type==="l"?m.team_b+" gewinnt":"Unentschieden";
+      const barW=maxProb>0?(t[1]/maxProb*100).toFixed(0):0;
+      const bm=so[t[0]];
+      const bmHtml=bm?`<span class="score-bm">BM ${bm}%</span>`:`<span></span>`;
       return `<div class="score-row score-row-${type}">
   <span class="score-val" style="color:${color}">${t[0]}</span>
   <div class="score-bar-track"><div class="score-bar-fill" style="width:${barW}%;background:${color}"></div></div>
@@ -363,115 +378,108 @@
   ${bmHtml}
 </div>`;
     }).join("");
-
-    // Build h2h display
-    const h2h = ef.h2h_score != null ? ef.h2h_score : null;
-    const h2hA = h2h != null ? (h2h*100).toFixed(0)+"%" : "–";
-    const h2hB = h2h != null ? ((1-h2h)*100).toFixed(0)+"%" : "–";
-
-    // Odds
-    const oddsA = ef.odds_prob_a != null ? ef.odds_prob_a+"%" : "–";
-    const oddsB = ef.odds_prob_b != null ? ef.odds_prob_b+"%" : "–";
-
+    const h2h=ef.h2h_score!=null?ef.h2h_score:null;
+    const h2hA=h2h!=null?(h2h*100).toFixed(0)+"%":"–";
+    const h2hB=h2h!=null?((1-h2h)*100).toFixed(0)+"%":"–";
     return `
 <div class="detail-teams">${m.flag_a||""} ${m.team_a} <span style="color:var(--muted);font-weight:400">vs</span> ${m.team_b} ${m.flag_b||""}</div>
 <div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}</div>
 <div class="detail-section"><h3>Top 5 Ergebnisse</h3></div>
 ${scoreRows}
 <div class="detail-section"><h3>Modell-Faktoren</h3></div>
-${factorRow("Tendenz-Quoten", ef.odds_prob_a != null ? ef.odds_prob_a+"%" : null, ef.odds_prob_b != null ? ef.odds_prob_b+"%" : null)}
+${factorRow("Tendenz-Quoten", ef.odds_prob_a!=null?ef.odds_prob_a+"%":null, ef.odds_prob_b!=null?ef.odds_prob_b+"%":null)}
 ${factorRow("ELO-Rating", ef.elo_a, ef.elo_b)}
-${factorRow("Kopf an Kopf", h2hA !== "–" ? h2hA : null, h2hB !== "–" ? h2hB : null)}
+${factorRow("Kopf an Kopf", h2hA!=="–"?h2hA:null, h2hB!=="–"?h2hB:null)}
 ${factorRow("Klement-Score", m.klement_a, m.klement_b)}
 ${factorRow("Angriff (Poisson)", ef.attack_a, ef.attack_b)}
 ${factorRow("Abwehr (Poisson)", ef.defense_a, ef.defense_b, true)}
 ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
   }
-
   function openDetail(m) {
-    if (!m) return;
-    document.getElementById("detail-content").innerHTML = renderDetail(m);
-    const overlay = document.getElementById("detail-overlay");
-    const panel   = document.getElementById("detail-panel");
+    if(!m) return;
+    document.getElementById("detail-content").innerHTML=renderDetail(m);
+    const overlay=document.getElementById("detail-overlay");
+    const panel=document.getElementById("detail-panel");
     overlay.classList.add("open");
-    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add("open")));
-    panel.scrollTop = 0;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>panel.classList.add("open")));
+    panel.scrollTop=0;
   }
   function closeDetail() {
-    const panel = document.getElementById("detail-panel");
-    const overlay = document.getElementById("detail-overlay");
+    const panel=document.getElementById("detail-panel");
+    const overlay=document.getElementById("detail-overlay");
     panel.classList.remove("open");
-    setTimeout(() => overlay.classList.remove("open"), 290);
+    setTimeout(()=>overlay.classList.remove("open"),290);
   }
-
-  document.getElementById("detail-overlay").addEventListener("click", e => {
-    if (e.target === document.getElementById("detail-overlay")) closeDetail();
+  document.getElementById("detail-overlay").addEventListener("click", e=>{
+    if(e.target===document.getElementById("detail-overlay")) closeDetail();
   });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeDetail(); });
 
   // ── Main ─────────────────────────────────────────────────────────────────
   async function init() {
-    const todayBD = todayBroadcast(), yestBD = yesterdayBroadcast();
     try {
-      const r = await fetch("predictions.json?_=" + Date.now());
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      const data = await r.json();
-      document.getElementById("loading").style.display = "none";
-      document.getElementById("app").style.display = "block";
+      const r=await fetch("predictions.json?_="+Date.now());
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const data=await r.json();
+      document.getElementById("loading").style.display="none";
+      document.getElementById("app").style.display="block";
 
-      if (data.warnings && data.warnings.length) {
-        const b = document.getElementById("warning-banner");
-        b.textContent = "⚠️ " + data.warnings.join(" | ");
-        b.classList.add("visible");
+      const pending=data.pending_matches||[];
+      const completed=data.completed_matches||[];
+      pending.forEach(m=>{ allMatches[m.match_id]=m; });
+
+      // ── Tab 1: Vergangene Tipps ──────────────────────────────────────────
+      let pastHtml="";
+      if(data.stats && data.stats.played>0) {
+        pastHtml += sectionHeader("GENAUIGKEIT", `${data.stats.played} Spiel${data.stats.played!==1?"e":""} gespielt`);
+        pastHtml += renderStats(data.stats);
       }
-
-      const pending = data.pending_matches || [];
-      const completed = data.completed_matches || [];
-
-      // Build lookup for click handler
-      pending.forEach(m => { allMatches[m.match_id] = m; });
-
-      // HEUTE: at least 3 matches — today first, fill with upcoming if needed
-      const todayPending  = pending.filter(m => pendingBroadcastDate(m) === todayBD);
-      const futurePending = pending.filter(m => pendingBroadcastDate(m) > todayBD);
-      const heuteMatches  = todayPending.length >= 3
-        ? todayPending
-        : [...todayPending, ...futurePending].slice(0, Math.max(3, todayPending.length));
-      const yesterdayCompleted = completed.filter(m => m.date === yestBD);
-
-      document.getElementById("header-subtitle").textContent =
-        pending.length ? `${pending.length} ausstehende Spiele` : "Alle Spiele abgeschlossen";
-
-      // HEUTE section
-      let heuteHtml = sectionHeader("HEUTE", data.tournament_phase);
-      heuteHtml += heuteMatches.length
-        ? heuteMatches.map(renderPending).join("")
-        : `<p class="section-empty">Keine ausstehenden Spiele</p>`;
-      document.getElementById("section-heute").innerHTML = heuteHtml;
-
-      // GESTERN section
-      if (yesterdayCompleted.length) {
-        let gestHtml = sectionHeader("GESTERN", "Abgeschlossene Spiele");
-        gestHtml += yesterdayCompleted.map(renderCompleted).join("");
-        document.getElementById("section-gestern").innerHTML = gestHtml;
+      if(completed.length) {
+        // Group by date descending (newest first)
+        const dateMap=new Map();
+        for(const m of completed) {
+          if(!dateMap.has(m.date)) dateMap.set(m.date,[]);
+          dateMap.get(m.date).push(m);
+        }
+        const sortedDates=[...dateMap.keys()].sort().reverse();
+        for(const d of sortedDates) {
+          pastHtml += sectionHeader(fmtDate(d));
+          pastHtml += dateMap.get(d).map(renderCompleted).join("");
+        }
+      } else {
+        pastHtml += `<p class="section-empty">Noch keine Spiele gespielt</p>`;
       }
+      document.getElementById("tab-past").innerHTML=pastHtml;
 
-      // GENAUIGKEIT section
-      const stats = data.stats;
-      if (stats && stats.played > 0) {
-        let accHtml = sectionHeader("GENAUIGKEIT", `${stats.played} Spiel${stats.played!==1?"e":""} gespielt`);
-        accHtml += renderStats(stats);
-        document.getElementById("section-genauigkeit").innerHTML = accHtml;
+      // ── Tab 2: Alle Vorhersagen ──────────────────────────────────────────
+      let futureHtml="";
+      if(pending.length) {
+        // Group by broadcast date ascending
+        const bdMap=new Map();
+        for(const m of pending) {
+          const bd=pendingBroadcastDate(m);
+          if(!bdMap.has(bd)) bdMap.set(bd,[]);
+          bdMap.get(bd).push(m);
+        }
+        const sortedBDs=[...bdMap.keys()].sort();
+        for(const bd of sortedBDs) {
+          const matches=bdMap.get(bd);
+          futureHtml += sectionHeader(groupLabel(bd), `${matches.length} Spiel${matches.length!==1?"e":""}`);
+          futureHtml += matches.map(renderPending).join("");
+        }
+      } else {
+        futureHtml=`<p class="section-empty">Keine ausstehenden Spiele</p>`;
       }
+      document.getElementById("tab-future").innerHTML=futureHtml;
 
-      if (data.updated_at) {
-        const ts = new Date(data.updated_at);
-        document.getElementById("footer").textContent =
-          "Letzte Aktualisierung: " + ts.toLocaleDateString("de-DE") + " " +
+      if(data.updated_at) {
+        const ts=new Date(data.updated_at);
+        document.getElementById("footer").textContent=
+          "Letzte Aktualisierung: "+ts.toLocaleDateString("de-DE")+" "+
           ts.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"});
       }
     } catch(e) {
-      document.getElementById("loading").textContent = "⚠️ Fehler beim Laden.";
+      document.getElementById("loading").textContent="⚠️ Fehler beim Laden.";
     }
   }
   init();
