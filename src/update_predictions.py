@@ -164,6 +164,10 @@ def build_predictions_json(
                 "defense_b": round(feat["defense_b"], 3),
                 "live_adj_a": round(feat.get("live_adj_a", 0.5), 3),
                 "live_adj_b": round(feat.get("live_adj_b", 0.5), 3),
+                "prob_lambda_a": round(r.prob_lambda_a, 3),
+                "prob_lambda_b": round(r.prob_lambda_b, 3),
+                "tip_lambda_a": round(r.tip_lambda_a, 3),
+                "tip_lambda_b": round(r.tip_lambda_b, 3),
             },
         })
 

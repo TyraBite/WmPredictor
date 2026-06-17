@@ -179,7 +179,10 @@ Der `impact_score` gibt an, wie stark das Team geschwächt wird:
 # Evaluation mit aktuellen Parametern (alle bisherigen WM-2026-Spiele)
 python src/backtest.py
 
-# Parameter-Grid-Search (~45 Sekunden, 1176 Kombinationen)
+# Score-Tipp-Grid-Search: tip_dampening × goals_scale optimieren (Kicktipp-Punkte)
+python src/backtest.py --score-grid
+
+# Tendenz-Parameter-Grid-Search (~45 Sekunden, 1176 Kombinationen)
 python src/backtest.py --grid
 
 # Mit historischen WM-Daten ab einem Jahr
@@ -234,7 +237,23 @@ Das Vorhersagemodell kombiniert drei Signale:
 | **Internationales Elo** | — | Skaliert die Poisson-Lambdas via `(2·p_elo)^0.75`; aus 49k+ Länderspielen (martj42-Datensatz) |
 | **XGBoost** | 10% | Kalibrierter Klassifikator; aktuell auf Konstanten trainiert (kein eigenständiger Mehrwert) |
 
-**Tipp-Generierung:** Verwendet `TIP_DAMPENING=0.3` (ausdrucksstärker als die Wahrscheinlichkeits-Lambdas) — erlaubt Tipps wie 2:0 und 3:1 für klare Favoriten statt immer 1:0.
+### Duales Lambda-System
+
+Das Modell verwendet zwei Lambda-Paare mit unterschiedlicher Dämpfung:
+
+| Lambda-Typ | Dämpfung | Zweck |
+|-----------|----------|-------|
+| **λ Modell** | `POISSON_DAMPENING=0.8` | Konservativ; treibt die Win/Draw/Loss-Wahrscheinlichkeiten |
+| **λ Tipp** | `TIP_DAMPENING=0.3` × `GOALS_SCALE=1.5` | Expressiver; wählt den Ergebnistipp aus größerer Torerwartung |
+
+**Logik:** Aus λ Tipp wird die erwartete Tordifferenz berechnet (`lam_a_tip − lam_b_tip`), gerundet und auf das wahrscheinlichste Ergebnis mit genau dieser Differenz aus der Modell-Matrix gemappt. So entstehen Tipps wie 2:0 oder 3:1 für klare Favoriten statt immer 1:0.
+
+**Grid-Search-Ergebnis (20 WM-2026-Spiele, Kicktipp-Punkte 4/3/2/0):**
+
+| Parameter | Exakt | Differenz | Tendenz | Kicktipp-Pts |
+|-----------|-------|-----------|---------|--------------|
+| Baseline (D=0.8, scale=1.0) | 1 | 2 | 7 | 24/80 (30%) |
+| **Optimal (D=0.3, scale=1.5)** | **4** | **0** | **6** | **28/80 (35%)** |
 
 **Aktuelle OOS-Genauigkeit (WM 2026):** 10/20 = 50% (Tendenz korrekt)
 
@@ -270,7 +289,8 @@ wm-predictor/
 │   ├── form_cache.json         # Turnierform-Cache (automatisch)
 │   └── cache/                  # HTTP-Response-Cache (automatisch, .gitignore)
 ├── docs/
-│   ├── index.html              # GitHub Pages Web-App
+│   ├── index.html              # GitHub Pages Hauptseite (heutige Spiele)
+│   ├── details.html            # Alle Tipps & Vorhersagen (zwei Tabs)
 │   └── predictions.json        # Vorhersage-Output (update_predictions.py)
 ├── tests/                      # Pytest-Tests (37/40 bestehen; 3 Netzwerktests schlagen lokal fehl)
 ├── HANDOFF.md                  # Technischer Kontext für AI-Agenten

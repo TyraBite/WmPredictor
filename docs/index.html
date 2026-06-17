@@ -154,6 +154,9 @@
                   background: #2a2a4a; display: flex; }
   .factor-bar-a { background: var(--win); }
   .factor-bar-b { background: var(--loss); }
+  .tip-derivation { font-size: 0.78rem; color: var(--muted); text-align: center;
+                    padding: 2px 0 8px; }
+  .tip-derivation strong { color: var(--text); }
 </style>
 </head>
 <body>
@@ -365,20 +368,29 @@
 </div>`;
     }).join("");
 
+    // Tipp-Zusammensetzung (dual-lambda section)
+    let tipCompositionHtml = '';
+    if (ef.tip_lambda_a != null && ef.prob_lambda_a != null) {
+      const rawDiff = ef.tip_lambda_a - ef.tip_lambda_b;
+      const sign = rawDiff >= 0 ? '+' : '';
+      tipCompositionHtml = `
+<div class="detail-section"><h3>Tipp-Zusammensetzung</h3></div>
+${factorRow("λ Modell (D=0.8)", ef.prob_lambda_a.toFixed(2), ef.prob_lambda_b.toFixed(2))}
+${factorRow("λ Tipp (D=0.3, ×1.5)", ef.tip_lambda_a.toFixed(2), ef.tip_lambda_b.toFixed(2))}
+<div class="tip-derivation">Erw. Tordiff: <strong>${sign}${rawDiff.toFixed(1)}</strong> → Tipp: <strong style="color:var(--accent)">${esc(m.tip||"?")}</strong></div>`;
+    }
+
     // Build h2h display
     const h2h = ef.h2h_score != null ? ef.h2h_score : null;
     const h2hA = h2h != null ? (h2h*100).toFixed(0)+"%" : "–";
     const h2hB = h2h != null ? ((1-h2h)*100).toFixed(0)+"%" : "–";
-
-    // Odds
-    const oddsA = ef.odds_prob_a != null ? ef.odds_prob_a+"%" : "–";
-    const oddsB = ef.odds_prob_b != null ? ef.odds_prob_b+"%" : "–";
 
     return `
 <div class="detail-teams">${esc(m.flag_a||"")} ${esc(m.team_a)} <span style="color:var(--muted);font-weight:400">vs</span> ${esc(m.team_b)} ${esc(m.flag_b||"")}</div>
 <div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}</div>
 <div class="detail-section"><h3>Top 5 Ergebnisse</h3></div>
 ${scoreRows}
+${tipCompositionHtml}
 <div class="detail-section"><h3>Modell-Faktoren</h3></div>
 ${factorRow("Tendenz-Quoten", ef.odds_prob_a != null ? ef.odds_prob_a+"%" : null, ef.odds_prob_b != null ? ef.odds_prob_b+"%" : null)}
 ${factorRow("ELO-Rating", ef.elo_a, ef.elo_b)}

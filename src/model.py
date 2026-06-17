@@ -17,6 +17,10 @@ class PredictionResult:
     prob_b: float
     top_results: list[tuple[str, float]] = field(default_factory=list)
     tip: str = ""
+    prob_lambda_a: float = 0.0
+    prob_lambda_b: float = 0.0
+    tip_lambda_a: float = 0.0
+    tip_lambda_b: float = 0.0
 
 
 POISSON_PATH = "data/model_poisson.json"
@@ -101,7 +105,7 @@ def _poisson_probs(params: dict, team_a: str, team_b: str,
 
     results = [(f"{i}:{j}", float(mat[i, j])) for i in range(n) for j in range(n)]
     results.sort(key=lambda x: -x[1])
-    return p_win, p_draw, p_loss, results[:5], results, lam_a_tip, lam_b_tip
+    return p_win, p_draw, p_loss, results[:5], results, lam_a_tip, lam_b_tip, lam_a, lam_b
 
 
 def _feat_to_array(feat: dict) -> np.ndarray:
@@ -159,7 +163,7 @@ class WMPredictor:
         self._xgb.fit(X_arr, y_arr)
 
     def predict(self, feat: dict, team_a: str = "A", team_b: str = "B") -> PredictionResult:
-        pw, pd, pl, top5, all_results, lam_a_tip, lam_b_tip = _poisson_probs(
+        pw, pd, pl, top5, all_results, lam_a_tip, lam_b_tip, lam_a_prob, lam_b_prob = _poisson_probs(
             self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
         xgb_probs = self._xgb.predict_proba(X)[0]
@@ -190,6 +194,10 @@ class WMPredictor:
         return PredictionResult(
             prob_a=round(p_a, 4), prob_draw=round(p_d, 4), prob_b=round(p_b, 4),
             top_results=top5, tip=tip,
+            prob_lambda_a=round(lam_a_prob, 3),
+            prob_lambda_b=round(lam_b_prob, 3),
+            tip_lambda_a=round(lam_a_tip, 3),
+            tip_lambda_b=round(lam_b_tip, 3),
         )
 
     def save(self, poisson_path: str = POISSON_PATH, xgb_path: str = XGB_PATH) -> None:
