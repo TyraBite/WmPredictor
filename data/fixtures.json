@@ -445,8 +445,8 @@
     "date": "2026-06-19",
     "kickoff_utc": "2026-06-19T22:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "0:1",
     "api_id": 537342
   },
   {
@@ -460,8 +460,8 @@
     "date": "2026-06-20",
     "kickoff_utc": "2026-06-20T00:30:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "3:0",
     "api_id": 537341
   },
   {
@@ -475,8 +475,8 @@
     "date": "2026-06-20",
     "kickoff_utc": "2026-06-20T03:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "0:1",
     "api_id": 537347
   },
   {
@@ -490,8 +490,8 @@
     "date": "2026-06-20",
     "kickoff_utc": "2026-06-20T17:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "5:1",
     "api_id": 537359
   },
   {
