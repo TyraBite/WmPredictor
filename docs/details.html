@@ -422,7 +422,7 @@ ${ouLine}
     const h2hB=h2h!=null?((1-h2h)*100).toFixed(0)+"%":"–";
     return `
 <div class="detail-teams">${esc(m.flag_a||"")} ${esc(m.team_a)} <span style="color:var(--muted);font-weight:400">vs</span> ${esc(m.team_b)} ${esc(m.flag_b||"")}</div>
-<div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}</div>
+<div class="detail-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc, m.date)}${m.venue?` &nbsp;•&nbsp; 📍 ${esc(m.venue)}`:""}</div>
 <div class="detail-section"><h3>Top 5 Ergebnisse</h3></div>
 ${scoreRows}
 ${tipCompositionHtml}
