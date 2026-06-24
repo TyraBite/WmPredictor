@@ -177,14 +177,15 @@ Der `impact_score` gibt an, wie stark das Team geschwächt wird:
 # Evaluation mit aktuellen Parametern (alle bisherigen WM-2026-Spiele)
 python src/backtest.py
 
-# Score-Tipp-Grid-Search: tip_dampening × goals_scale optimieren (Kicktipp-Punkte)
+# Score-Tipp-Grid-Search: tip_dampening × goals_scale optimieren
+# Kombiniert WM-2026-OOS (60%) + historische WM 2006–2022 (40%)
 python src/backtest.py --score-grid
 
 # Tendenz-Parameter-Grid-Search (~45 Sekunden, 1176 Kombinationen)
 python src/backtest.py --grid
 
-# Mit historischen WM-Daten ab einem Jahr
-python src/backtest.py --hist 2022
+# Nur historische WM-Simulation (kein OOS-Anteil)
+python src/backtest.py --hist-scores
 ```
 
 ---
@@ -215,13 +216,24 @@ Im GitHub-Repository unter **Settings → Secrets and variables → Actions** fo
 3. **Branch:** `main`, Ordner: `/docs`
 4. Speichern — die App ist dann unter `https://<username>.github.io/<repo>/` erreichbar
 
-Die Web-App ist in drei Sektionen gegliedert:
+Die Web-App besteht aus zwei Seiten:
+
+**Hauptseite (`index.html`)** — drei Sektionen:
 
 | Sektion | Inhalt |
 |---------|--------|
-| **HEUTE** | Ausstehende Spiele — zuerst die heutigen, dann die nächsten. Anstoßzeit in lokaler Zeitzone. Jede Karte zeigt die 3 wahrscheinlichsten Ergebnisse sowie ein Confidence-Badge. |
+| **HEUTE** | Ausstehende Spiele — zuerst die heutigen, dann die nächsten. Anstoßzeit in lokaler Zeitzone. Jede Karte zeigt den Modelltipp groß (inkl. erwarteter Tordifferenz) und die 3 wahrscheinlichsten Ergebnisse klein darunter. |
 | **GESTERN** | Abgeschlossene Spiele vom Vortag mit Ergebnis und Accuracy-Badge (Exakt / Differenz ✓ / Tendenz ✓ / Daneben). |
 | **GENAUIGKEIT** | Gesamtstatistik aller getippten Spiele als farbige Leiste. |
+
+**Detailseite (`details.html`)** — zwei Tabs:
+
+| Tab | Inhalt |
+|-----|--------|
+| **Alle Vorhersagen** (Standard) | Alle ausstehenden Spiele gegliedert nach Datum; Detailmodal mit Tipp-Zusammensetzung, Modell-Faktoren und Buchmacherquoten. |
+| **Vergangene Tipps** | Alle abgeschlossenen Spiele mit Accuracy. |
+
+Im Detailmodal kann per Swipe (Touch), Pfeiltasten oder ‹ › Buttons zwischen Spielen navigiert werden.
 
 ---
 
@@ -239,21 +251,23 @@ Das Vorhersagemodell kombiniert drei Signale:
 
 Das Modell verwendet zwei Lambda-Paare mit unterschiedlicher Dämpfung:
 
-| Lambda-Typ | Dämpfung | Zweck |
-|-----------|----------|-------|
+| Lambda-Typ | Parameter | Zweck |
+|-----------|-----------|-------|
 | **λ Modell** | `POISSON_DAMPENING=0.8` | Konservativ; treibt die Win/Draw/Loss-Wahrscheinlichkeiten |
-| **λ Tipp** | `TIP_DAMPENING=0.3` × `GOALS_SCALE=1.5` | Expressiver; wählt den Ergebnistipp aus größerer Torerwartung |
+| **λ Tipp** | `TIP_DAMPENING=0.6` × `GOALS_SCALE=1.8` | Expressiver; bestimmt den Ergebnistipp |
 
-**Logik:** Aus λ Tipp wird die erwartete Tordifferenz berechnet (`lam_a_tip − lam_b_tip`), gerundet und auf das wahrscheinlichste Ergebnis mit genau dieser Differenz aus der Modell-Matrix gemappt. So entstehen Tipps wie 2:0 oder 3:1 für klare Favoriten statt immer 1:0.
+**Tipp-Selektion:** Aus λ Tipp wird direkt eine Poisson-Matrix aufgebaut. Optionale Buchmacher-Ergebnisquoten werden eingeblended (`SCORE_ODDS_BLEND=0.3`). Falls die Odds API Over/Under-Quoten liefert, werden die Tipp-Lambdas auf die implizierte Gesamttor-Erwartung skaliert. Dann wird das wahrscheinlichste Ergebnis in der richtigen Siegrichtung (Sieg A / Unentschieden / Sieg B) als Tipp gewählt.
 
-**Grid-Search-Ergebnis (20 WM-2026-Spiele, Kicktipp-Punkte 4/3/2/0):**
+**Draw-Boost:** `p_draw *= 1.30` — korrigiert die systematische Untervorhersage von Unentschieden bei Turnieren (WM 2026: ~44% Remisquote in der Gruppenphase, historisch ~22%).
 
-| Parameter | Exakt | Differenz | Tendenz | Kicktipp-Pts |
-|-----------|-------|-----------|---------|--------------|
-| Baseline (D=0.8, scale=1.0) | 1 | 2 | 7 | 24/80 (30%) |
-| **Optimal (D=0.3, scale=1.5)** | **4** | **0** | **6** | **28/80 (35%)** |
+**Grid-Search-Ergebnis (kombiniert: 60% WM-2026-OOS + 40% WM-2006–2022-IS, Kicktipp-Punkte 4/3/2/0):**
 
-**Aktuelle OOS-Genauigkeit (WM 2026):** 10/20 = 50% (Tendenz korrekt)
+| Parameter | Kicktipp-Pts |
+|-----------|--------------|
+| Baseline (D=0.8, scale=1.0, kein Draw-Boost) | 24/80 (30%) |
+| **Optimal (D=0.6, scale=1.8, Draw-Boost=1.30)** | **77/192 (40%)** |
+
+**Aktuelle OOS-Genauigkeit (WM 2026, 48 Spiele):** Exakt 4 · Differenz 2 · Tendenz 17 — Kicktipp-Punkte 77/192 (40%)
 
 ---
 
