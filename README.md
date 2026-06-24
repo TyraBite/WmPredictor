@@ -1,8 +1,6 @@
 # WM 2026 Predictor
 
-Tiplu-internes WM 2026 Wettbüro-Tool. Zeigt Vorhersagen für ausstehende Spiele basierend auf einem Ensemble-Modell (Poisson-MLE + XGBoost), das mit internationalem Elo (49.000+ Länderspiele), Turnierform, Klement-Scores (Bevölkerung, BIP, Klima) und Verletzungsanpassungen arbeitet.
-
-**Live:** https://tyrabite.github.io/WmPredictor/
+Zeigt Vorhersagen für ausstehende Spiele basierend auf einem Ensemble-Modell (Poisson-MLE + XGBoost), das mit internationalem Elo (49.000+ Länderspiele), Turnierform, Klement-Scores (Bevölkerung, BIP, Klima) und Verletzungsanpassungen arbeitet.
 
 ---
 
