@@ -67,6 +67,7 @@
 
   /* Pending: tip row */
   .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+  .tip-diff  { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
   .tip-label { font-size: 0.8rem; color: var(--muted); }
   .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
   .tip-alt   { font-size: 0.95rem; font-weight: 600; color: var(--text); }
@@ -256,6 +257,8 @@
     const tipsHtml=top3.map((t,i)=>
       `<span class="${i===0?"tip-value":"tip-alt"}">${esc(t[0])}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
     ).join('<span class="tip-sep">·</span>');
+    const ef=m.explanation_factors||{};
+    const tordiffHtml=(ef.tip_lambda_a!=null&&ef.tip_lambda_b!=null)?`<div class="tip-diff">Erw. Tordiff: <strong>${ef.tip_lambda_a-ef.tip_lambda_b>=0?"+":""}${(ef.tip_lambda_a-ef.tip_lambda_b).toFixed(1)}</strong> → Tipp: <strong style="color:var(--accent)">${esc(m.tip||"?")}</strong></div>`:"";
     return `<div class="card" data-mid="${esc(m.match_id)}">
   <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc,m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
@@ -265,6 +268,7 @@
   </div>
   <hr class="card-divider"/>
   <div class="tip-row"><span class="tip-label">Tipps:</span>${tipsHtml}</div>
+  ${tordiffHtml}
   <div class="prob-bar">
     <div class="bar-a" style="width:${bA}%"></div>
     <div class="bar-draw" style="width:${bD}%"></div>
