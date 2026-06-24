@@ -66,13 +66,17 @@
   .dot-L { color: var(--loss); }
 
   /* Pending: tip row */
+  .main-tip-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .main-tip-label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .main-tip-score { font-size: 1.7rem; font-weight: 800; color: var(--accent); letter-spacing: .02em; line-height: 1; }
+  .main-tip-meta  { font-size: 0.72rem; color: var(--muted); }
   .tip-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
-  .tip-diff  { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
-  .tip-label { font-size: 0.8rem; color: var(--muted); }
-  .tip-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
-  .tip-alt   { font-size: 0.95rem; font-weight: 600; color: var(--text); }
-  .tip-prob  { font-size: 0.72rem; color: var(--muted); }
-  .tip-sep   { color: var(--muted); font-size: 0.75rem; }
+  .tip-diff  { display: none; }
+  .tip-label { font-size: 0.75rem; color: var(--muted); }
+  .tip-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .tip-alt   { font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+  .tip-prob  { font-size: 0.68rem; color: var(--muted); }
+  .tip-sep   { color: var(--muted); font-size: 0.7rem; }
 
   .badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
            font-size: 0.7rem; font-weight: 700; letter-spacing: .03em; }
@@ -258,7 +262,13 @@
       `<span class="${i===0?"tip-value":"tip-alt"}">${esc(t[0])}</span><span class="tip-prob">${t[1].toFixed(1)}%</span>`
     ).join('<span class="tip-sep">·</span>');
     const ef=m.explanation_factors||{};
-    const tordiffHtml=(ef.tip_lambda_a!=null&&ef.tip_lambda_b!=null)?`<div class="tip-diff">Erw. Tordiff: <strong>${ef.tip_lambda_a-ef.tip_lambda_b>=0?"+":""}${(ef.tip_lambda_a-ef.tip_lambda_b).toFixed(1)}</strong> → Tipp: <strong style="color:var(--accent)">${esc(m.tip||"?")}</strong></div>`:"";
+    const tordiff=(ef.tip_lambda_a!=null&&ef.tip_lambda_b!=null)?(ef.tip_lambda_a-ef.tip_lambda_b):null;
+    const tordiffLabel=tordiff!=null?`Tordiff: ${tordiff>=0?"+":""}${tordiff.toFixed(1)}`:"";
+    const mainTipHtml=`<div class="main-tip-row">
+  <span class="main-tip-label">Unser Tipp</span>
+  <span class="main-tip-score">${esc(m.tip||"?")}</span>
+  ${tordiffLabel?`<span class="main-tip-meta">${tordiffLabel}</span>`:""}
+</div>`;
     return `<div class="card" data-mid="${esc(m.match_id)}">
   <div class="card-meta">${grp} &nbsp;•&nbsp; ${fmtDateTime(m.kickoff_utc,m.date)} ${confidenceBadge(m.confidence_level||"medium")}</div>
   <div class="teams">
@@ -267,8 +277,8 @@
     <span>${esc(m.team_b)} ${esc(m.flag_b||"")}</span>
   </div>
   <hr class="card-divider"/>
-  <div class="tip-row"><span class="tip-label">Tipps:</span>${tipsHtml}</div>
-  ${tordiffHtml}
+  ${mainTipHtml}
+  <div class="tip-row"><span class="tip-label">Wahrschl.:</span>${tipsHtml}</div>
   <div class="prob-bar">
     <div class="bar-a" style="width:${bA}%"></div>
     <div class="bar-draw" style="width:${bD}%"></div>
