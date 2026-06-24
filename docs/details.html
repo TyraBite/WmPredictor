@@ -387,10 +387,15 @@
     if(ef.tip_lambda_a!=null&&ef.prob_lambda_a!=null){
       const rawDiff=ef.tip_lambda_a-ef.tip_lambda_b;
       const sign=rawDiff>=0?'+':'';
+      const lambdaLabel=ef.over_2_5!=null?'λ Tipp (D=0.3, O/U kalibriert)':'λ Tipp (D=0.3, ×1.5)';
+      const ouLine=ef.over_2_5!=null
+        ?`<div class="tip-derivation">📊 O/U 2.5: ${ef.over_2_5}% über | Erw. Gesamt: ${ef.ou_total!=null?ef.ou_total.toFixed(1):"–"} Tore</div>`
+        :'';
       tipCompositionHtml=`
 <div class="detail-section"><h3>Tipp-Zusammensetzung</h3></div>
 ${factorRow("λ Modell (D=0.8)", ef.prob_lambda_a.toFixed(2), ef.prob_lambda_b.toFixed(2))}
-${factorRow("λ Tipp (D=0.3, ×1.5)", ef.tip_lambda_a.toFixed(2), ef.tip_lambda_b.toFixed(2))}
+${factorRow(lambdaLabel, ef.tip_lambda_a.toFixed(2), ef.tip_lambda_b.toFixed(2))}
+${ouLine}
 <div class="tip-derivation">Erw. Tordiff: <strong>${sign}${rawDiff.toFixed(1)}</strong> → Tipp: <strong style="color:var(--accent)">${esc(m.tip||"?")}</strong></div>`;
     }
     const h2h=ef.h2h_score!=null?ef.h2h_score:null;

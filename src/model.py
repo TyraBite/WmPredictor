@@ -32,10 +32,11 @@ POISSON_NAME_MAP = {
     "Czechia": "Czech Republic",
 }
 
-POISSON_DAMPENING = 0.8
-TIP_DAMPENING     = 0.3   # less dampened → wider lambda spread for score tip margin
-GOALS_SCALE       = 1.5   # scales tip-lambdas up → higher-scoring tips (verified by grid search)
-ELO_FACTOR = 0.75
+POISSON_DAMPENING  = 0.8
+TIP_DAMPENING      = 0.3   # less dampened → wider lambda spread for score tip margin
+GOALS_SCALE        = 1.5   # baseline tip-lambda scale; overridden per-match by O/U calibration
+ELO_FACTOR         = 0.75
+SCORE_ODDS_BLEND   = 0.3   # bookmaker correct_score weight in tip selection (0 = model only)
 
 
 def _fit_poisson_params(matches: list[dict]) -> dict:
@@ -162,7 +163,8 @@ class WMPredictor:
         self._xgb = CalibratedClassifierCV(base, cv=cv, method="isotonic")
         self._xgb.fit(X_arr, y_arr)
 
-    def predict(self, feat: dict, team_a: str = "A", team_b: str = "B") -> PredictionResult:
+    def predict(self, feat: dict, team_a: str = "A", team_b: str = "B",
+                score_odds: dict | None = None) -> PredictionResult:
         pw, pd, pl, top5, all_results, lam_a_tip, lam_b_tip, lam_a_prob, lam_b_prob = _poisson_probs(
             self._poisson_params, team_a, team_b, feat)
         X = _feat_to_array(feat)
@@ -179,18 +181,39 @@ class WMPredictor:
         total = p_a + p_d + p_b
         if total > 0:
             p_a, p_d, p_b = p_a / total, p_d / total, p_b / total
-        # Tip: expected goal difference from tip-lambdas (TIP_DAMPENING=0.3, less conservative)
-        # Allows 2:0, 3:1 etc. for clear favorites instead of always 1:0
-        raw_diff = lam_a_tip - lam_b_tip
+
+        # O/U calibration: scale tip-lambdas to bookmaker-implied total goals when available
+        ou_total = feat.get("ou_total")
+        if ou_total:
+            current_total = lam_a_tip + lam_b_tip
+            if current_total > 0:
+                scale = ou_total / current_total
+                lam_a_tip *= scale
+                lam_b_tip *= scale
+
+        # Tip selection: tip-lambda Poisson matrix (considers absolute goal counts, not just diff)
+        # Blend with bookmaker correct_score odds, then filter by win direction
+        tip_mat = _poisson_matrix(lam_a_tip, lam_b_tip)
+        nt = tip_mat.shape[0]
+        tip_scored = {f"{i}:{j}": float(tip_mat[i, j]) for i in range(nt) for j in range(nt)}
+
+        if score_odds:
+            for s, pct in score_odds.items():
+                if s in tip_scored:
+                    tip_scored[s] = ((1 - SCORE_ODDS_BLEND) * tip_scored[s]
+                                     + SCORE_ODDS_BLEND * (pct / 100))
+
         if p_a >= p_d and p_a >= p_b:
-            exp_diff = max(1, round(raw_diff))
+            cands = {s: v for s, v in tip_scored.items()
+                     if int(s.split(":")[0]) > int(s.split(":")[1])}
         elif p_b >= p_d and p_b >= p_a:
-            exp_diff = min(-1, round(raw_diff))
+            cands = {s: v for s, v in tip_scored.items()
+                     if int(s.split(":")[1]) > int(s.split(":")[0])}
         else:
-            exp_diff = 0
-        candidates = [(s, p) for s, p in all_results
-                      if int(s.split(":")[0]) - int(s.split(":")[1]) == exp_diff]
-        tip = candidates[0][0] if candidates else all_results[0][0]
+            cands = {s: v for s, v in tip_scored.items()
+                     if s.split(":")[0] == s.split(":")[1]}
+        tip = max(cands, key=cands.get) if cands else max(tip_scored, key=tip_scored.get)
+
         return PredictionResult(
             prob_a=round(p_a, 4), prob_draw=round(p_d, 4), prob_b=round(p_b, 4),
             top_results=top5, tip=tip,

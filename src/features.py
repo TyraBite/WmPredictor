@@ -122,6 +122,57 @@ def fetch_score_odds(team_a: str, team_b: str) -> dict:
     return {}
 
 
+def fetch_totals_odds(team_a: str, team_b: str) -> dict:
+    """Returns Over/Under implied probs + expected total goals from bookmaker totals market, or {} if unavailable."""
+    key = os.environ.get("ODDS_API_KEY")
+    if not key:
+        return {}
+    try:
+        from data_fetcher import fetch
+        from scipy.stats import poisson as _poisson
+        from scipy.optimize import brentq
+        data = fetch(ODDS_API_URL, params={"apiKey": key, "regions": "eu",
+                                           "markets": "totals", "oddsFormat": "decimal"},
+                     ttl_hours=1)
+        odds_a = ODDS_NAME_MAP.get(team_a, team_a)
+        odds_b = ODDS_NAME_MAP.get(team_b, team_b)
+        for event in data:
+            home = event.get("home_team", "")
+            away = event.get("away_team", "")
+            if {odds_a, odds_b} != {home, away}:
+                continue
+            for bm in event.get("bookmakers", [])[:1]:
+                for mkt in bm.get("markets", []):
+                    if mkt["key"] != "totals":
+                        continue
+                    raw = {}
+                    for o in mkt.get("outcomes", []):
+                        name = o.get("name", "").lower()
+                        point = o.get("point")
+                        price = o.get("price", 0)
+                        if price > 0 and point is not None:
+                            raw[(name, float(point))] = 1 / price
+                    over_25 = raw.get(("over", 2.5), 0)
+                    under_25 = raw.get(("under", 2.5), 0)
+                    if over_25 > 0 and under_25 > 0:
+                        p_over = over_25 / (over_25 + under_25)
+                        try:
+                            ou_total = brentq(
+                                lambda lam: _poisson.cdf(2, lam) - (1 - p_over),
+                                0.1, 10.0,
+                            )
+                        except Exception:
+                            ou_total = None
+                        return {
+                            "ou_total": round(ou_total, 2) if ou_total is not None else None,
+                            "over_2_5": round(p_over * 100, 1),
+                            "under_2_5": round((1 - p_over) * 100, 1),
+                        }
+    except Exception:
+        pass
+    return {}
+
+
 def build(team_a: str, team_b: str, venue: str) -> dict:
     klement = {}
     if os.path.exists(KLEMENT_PATH):

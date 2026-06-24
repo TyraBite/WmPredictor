@@ -7,7 +7,7 @@ sys.path.insert(0, "src")
 from dotenv import load_dotenv
 load_dotenv()
 from fixtures import FixtureStore
-from features import build as build_features, fetch_score_odds
+from features import build as build_features, fetch_score_odds, fetch_totals_odds
 from model import WMPredictor, PredictionResult
 from form_tracker import update_all
 
@@ -96,12 +96,15 @@ def build_predictions_json(
     pending_out = []
     for m in store.pending():
         feat = build_features(m["team_a"], m["team_b"], m["venue"])
+        score_odds = fetch_score_odds(m["team_a"], m["team_b"])
+        totals = fetch_totals_odds(m["team_a"], m["team_b"])
+        feat["ou_total"] = totals.get("ou_total")
         if predictor._xgb:
             feat["attack_a"] = predictor._poisson_params.get(m["team_a"], {}).get("attack", 0)
             feat["defense_a"] = predictor._poisson_params.get(m["team_a"], {}).get("defense", 0)
             feat["attack_b"] = predictor._poisson_params.get(m["team_b"], {}).get("attack", 0)
             feat["defense_b"] = predictor._poisson_params.get(m["team_b"], {}).get("defense", 0)
-            r = predictor.predict(feat, m["team_a"], m["team_b"])
+            r = predictor.predict(feat, m["team_a"], m["team_b"], score_odds=score_odds)
         else:
             r = PredictionResult(0.4, 0.25, 0.35,
                                  [("1:1", 0.10), ("1:0", 0.09), ("0:1", 0.08)], "1:1")
@@ -124,8 +127,6 @@ def build_predictions_json(
                  [f"{p} 🟥" for p in inj_a_entry.get("suspended", [])])
         inj_b = ([f"{p} ❌" for p in inj_b_entry.get("injured", [])] +
                  [f"{p} 🟥" for p in inj_b_entry.get("suspended", [])])
-
-        score_odds = fetch_score_odds(m["team_a"], m["team_b"])
         pending_out.append({
             "match_id": m["match_id"],
             "group": m.get("group"),
@@ -168,6 +169,8 @@ def build_predictions_json(
                 "prob_lambda_b": round(r.prob_lambda_b, 3),
                 "tip_lambda_a": round(r.tip_lambda_a, 3),
                 "tip_lambda_b": round(r.tip_lambda_b, 3),
+                "ou_total": totals.get("ou_total"),
+                "over_2_5": totals.get("over_2_5"),
             },
         })
 
