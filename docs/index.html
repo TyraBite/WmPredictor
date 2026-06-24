@@ -66,7 +66,6 @@
   .tip-alt   { font-size: 0.85rem; font-weight: 500; color: var(--muted); }
   .tip-prob  { font-size: 0.68rem; color: var(--muted); }
   .tip-sep   { color: var(--muted); font-size: 0.7rem; }
-  .tip-diff  { display: none; }
 
   .badge { display: inline-block; padding: 2px 7px; border-radius: 10px;
            font-size: 0.7rem; font-weight: 700; letter-spacing: .03em; }
@@ -125,6 +124,11 @@
   #detail-panel.open { transform: translateY(0); }
   .detail-drag { width: 36px; height: 4px; background: #444; border-radius: 2px;
                  margin: 0 auto 16px; }
+  .detail-close { position: absolute; top: 14px; right: 14px; background: none; border: none;
+                  color: var(--muted); font-size: 1.2rem; cursor: pointer; padding: 4px 8px;
+                  border-radius: 6px; line-height: 1; }
+  .detail-close:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+  #detail-panel { position: relative; }
   .detail-teams { font-size: 1.1rem; font-weight: 700; text-align: center; margin-bottom: 4px; }
   .detail-meta  { font-size: 0.78rem; color: var(--muted); text-align: center;
                   text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
@@ -180,9 +184,10 @@
 <footer id="footer"></footer>
 
 <!-- Detail Modal -->
-<div id="detail-overlay">
-  <div id="detail-panel">
+<div id="detail-overlay" role="presentation">
+  <div id="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-content">
     <div class="detail-drag"></div>
+    <button class="detail-close" onclick="closeDetail()" aria-label="Schließen">✕</button>
     <div id="detail-content"></div>
   </div>
 </div>
@@ -213,7 +218,7 @@
     return fmtDate(date);
   }
   function fmtPhase(p) {
-    return {"group":"Gruppenphase","round_of_32":"Achtelfinale","round_of_16":"Sechzehntelfinale",
+    return {"group":"Gruppenphase","round_of_32":"Sechzehntelfinale","round_of_16":"Achtelfinale",
             "quarter_final":"Viertelfinale","semi_final":"Halbfinale","final":"Finale",
             "third_place":"Spiel um Platz 3"}[p]||p;
   }
@@ -274,11 +279,11 @@
     <div class="bar-b" style="width:${bB}%"></div>
   </div>
   <div class="prob-row">
-    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span>
+    <span class="prob-a">S ${(m.prob_a||0).toFixed(1)}%</span>
     <span class="prob-sep">•</span>
-    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span>
+    <span class="prob-draw">U ${(m.prob_draw||0).toFixed(1)}%</span>
     <span class="prob-sep">•</span>
-    <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
+    <span class="prob-b">N ${(m.prob_b||0).toFixed(1)}%</span>
   </div>
   <hr class="card-divider"/>
   <div class="form-row">🔥 Form: ${esc(m.team_a)} ${formDots(m.form_a)} &nbsp; ${esc(m.team_b)} ${formDots(m.form_b)}</div>
@@ -298,16 +303,16 @@
   </div>
   <hr class="card-divider"/>
   <div class="result-big">${esc(m.result||"–")}</div>
-  <div class="result-tip-row"><span>Tipp war: <strong>${esc(m.tip)}</strong></span>${accuracyBadge(m.accuracy)}</div>
+  <div class="result-tip-row"><span>Tipp war: <strong>${esc(m.tip||"?")}</strong></span>${accuracyBadge(m.accuracy)}</div>
   ${hasProbs?`<div class="prob-bar">
     <div class="bar-a" style="width:${pa}%"></div>
     <div class="bar-draw" style="width:${pd}%"></div>
     <div class="bar-b" style="width:${pb}%"></div>
   </div>
   <div class="prob-row">
-    <span class="prob-a">W ${(m.prob_a||0).toFixed(1)}%</span><span class="prob-sep">•</span>
-    <span class="prob-draw">D ${(m.prob_draw||0).toFixed(1)}%</span><span class="prob-sep">•</span>
-    <span class="prob-b">L ${(m.prob_b||0).toFixed(1)}%</span>
+    <span class="prob-a">S ${(m.prob_a||0).toFixed(1)}%</span><span class="prob-sep">•</span>
+    <span class="prob-draw">U ${(m.prob_draw||0).toFixed(1)}%</span><span class="prob-sep">•</span>
+    <span class="prob-b">N ${(m.prob_b||0).toFixed(1)}%</span>
   </div>`:""}
 </div>`;
   }
@@ -387,7 +392,7 @@
     if (ef.tip_lambda_a != null && ef.prob_lambda_a != null) {
       const rawDiff = ef.tip_lambda_a - ef.tip_lambda_b;
       const sign = rawDiff >= 0 ? '+' : '';
-      const lambdaLabel = ef.over_2_5 != null ? 'λ Tipp (D=0.3, O/U kalibriert)' : 'λ Tipp (D=0.3, ×1.5)';
+      const lambdaLabel = ef.over_2_5 != null ? 'λ Tipp (D=0.3, O/U kalibriert)' : 'λ Tipp (D=0.3, ×1.8)';
       const ouLine = ef.over_2_5 != null
         ? `<div class="tip-derivation">📊 O/U 2.5: ${ef.over_2_5}% über | Erw. Gesamt: ${ef.ou_total != null ? ef.ou_total.toFixed(1) : "–"} Tore</div>`
         : '';
