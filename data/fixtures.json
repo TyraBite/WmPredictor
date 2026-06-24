@@ -730,8 +730,8 @@
     "date": "2026-06-24",
     "kickoff_utc": "2026-06-24T19:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "2:1",
     "api_id": 537337
   },
   {
@@ -745,8 +745,8 @@
     "date": "2026-06-24",
     "kickoff_utc": "2026-06-24T19:00:00Z",
     "venue": "",
-    "status": "pending",
-    "result": null,
+    "status": "completed",
+    "result": "3:1",
     "api_id": 537338
   },
   {
