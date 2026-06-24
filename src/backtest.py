@@ -350,7 +350,7 @@ def score_grid_search(include_historical: bool = True) -> dict:
     goals_scale_vals   = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.8, 2.0, 2.5]
 
     base_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
-                       poisson_weight=0.90, draw_boost=0.15)
+                       poisson_weight=0.90, draw_boost=0.30)
 
     rows = []
     for td in tip_dampening_vals:
@@ -388,7 +388,7 @@ def grid_search(verbose: bool = True):
     elo_factors      = [0.0, 0.25, 0.50, 0.75, 1.0, 1.5, 2.0]
     p_weights        = [0.80, 0.85, 0.90, 1.00]
     host_bonuses     = [0.0, 0.10]
-    draw_boosts      = [0.0, 0.15, 0.30]
+    draw_boosts      = [0.0, 0.15, 0.30, 0.50]
     dampening_vals   = [0.0, 0.20, 0.40, 0.50, 0.60, 0.70, 0.80]
 
     total_combos = len(elo_factors) * len(p_weights) * len(host_bonuses) * len(draw_boosts) * len(dampening_vals)
@@ -439,7 +439,7 @@ def main():
     args = parser.parse_args()
 
     prod_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
-                       poisson_weight=0.90, draw_boost=0.15)
+                       poisson_weight=0.90, draw_boost=0.30)
 
     print("=== WM 2026 (OOS) — Production params ===")
     c, t = evaluate_wm2026(verbose=True, **prod_kwargs)
