@@ -137,6 +137,14 @@
                   border-radius: 6px; line-height: 1; }
   .detail-close:hover { color: var(--text); background: rgba(255,255,255,0.07); }
   #detail-panel { position: relative; }
+  .detail-nav { display: flex; align-items: center; justify-content: center; gap: 16px;
+                margin-top: 20px; padding-top: 12px; border-top: 1px solid #2a2a3e; }
+  .detail-nav-btn { background: none; border: 1px solid #3a3a5e; color: var(--text);
+                    font-size: 1.2rem; width: 36px; height: 36px; border-radius: 50%;
+                    cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .detail-nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .detail-nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .detail-nav-count { font-size: 0.78rem; color: var(--muted); min-width: 50px; text-align: center; }
   .detail-teams { font-size: 1.1rem; font-weight: 700; text-align: center; margin-bottom: 4px; }
   .detail-meta  { font-size: 0.78rem; color: var(--muted); text-align: center;
                   text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
@@ -360,6 +368,8 @@
 
   // ── Detail Modal ──────────────────────────────────────────────────────────
   let allMatches = {};
+  let matchList = [];
+  let currentMatchIdx = -1;
 
   function splitBar(a, b, invertForLower) {
     const fa=parseFloat(a), fb=parseFloat(b);
@@ -435,14 +445,32 @@ ${factorRow("Angriff (Poisson)", ef.attack_a, ef.attack_b)}
 ${factorRow("Abwehr (Poisson)", ef.defense_a, ef.defense_b, true)}
 ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
   }
+  function _renderDetailNav() {
+    if(currentMatchIdx<0||matchList.length<2) return "";
+    return `<div class="detail-nav">
+  <button class="detail-nav-btn" onclick="navigateDetail(-1)" ${currentMatchIdx===0?"disabled":""}>‹</button>
+  <span class="detail-nav-count">${currentMatchIdx+1} / ${matchList.length}</span>
+  <button class="detail-nav-btn" onclick="navigateDetail(1)" ${currentMatchIdx===matchList.length-1?"disabled":""}>›</button>
+</div>`;
+  }
+  function _applyDetail(m) {
+    document.getElementById("detail-content").innerHTML=renderDetail(m)+_renderDetailNav();
+    document.getElementById("detail-panel").scrollTop=0;
+  }
   function openDetail(m) {
     if(!m) return;
-    document.getElementById("detail-content").innerHTML=renderDetail(m);
+    currentMatchIdx=matchList.indexOf(m.match_id);
+    _applyDetail(m);
     const overlay=document.getElementById("detail-overlay");
     const panel=document.getElementById("detail-panel");
     overlay.classList.add("open");
     requestAnimationFrame(()=>requestAnimationFrame(()=>panel.classList.add("open")));
-    panel.scrollTop=0;
+  }
+  function navigateDetail(delta) {
+    const next=currentMatchIdx+delta;
+    if(next<0||next>=matchList.length) return;
+    currentMatchIdx=next;
+    _applyDetail(allMatches[matchList[currentMatchIdx]]);
   }
   function closeDetail() {
     const panel=document.getElementById("detail-panel");
@@ -450,10 +478,24 @@ ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
     panel.classList.remove("open");
     setTimeout(()=>overlay.classList.remove("open"),290);
   }
+  let _swipeX=0;
+  document.getElementById("detail-panel").addEventListener("touchstart",e=>{
+    _swipeX=e.touches[0].clientX;
+  },{passive:true});
+  document.getElementById("detail-panel").addEventListener("touchend",e=>{
+    const dx=e.changedTouches[0].clientX-_swipeX;
+    if(Math.abs(dx)>50) navigateDetail(dx<0?1:-1);
+  },{passive:true});
   document.getElementById("detail-overlay").addEventListener("click", e=>{
     if(e.target===document.getElementById("detail-overlay")) closeDetail();
   });
-  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeDetail(); });
+  document.addEventListener("keydown", e=>{
+    if(e.key==="Escape"){closeDetail();return;}
+    if(document.getElementById("detail-overlay").classList.contains("open")){
+      if(e.key==="ArrowRight") navigateDetail(1);
+      if(e.key==="ArrowLeft")  navigateDetail(-1);
+    }
+  });
   document.addEventListener("click", e=>{
     const card=e.target.closest(".card[data-mid]");
     if(card) openDetail(allMatches[card.dataset.mid]);
@@ -471,6 +513,8 @@ ${factorRow("Form-Anpassung", ef.live_adj_a, ef.live_adj_b)}`;
       const pending=data.pending_matches||[];
       const completed=data.completed_matches||[];
       pending.forEach(m=>{ allMatches[m.match_id]=m; });
+      completed.forEach(m=>{ allMatches[m.match_id]=m; });
+      matchList=[...pending,...completed].map(m=>m.match_id);
 
       // ── Tab 1: Vergangene Tipps ──────────────────────────────────────────
       let pastHtml="";
