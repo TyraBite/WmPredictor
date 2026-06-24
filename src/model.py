@@ -33,8 +33,8 @@ POISSON_NAME_MAP = {
 }
 
 POISSON_DAMPENING  = 0.8
-TIP_DAMPENING      = 0.3   # less dampened → wider lambda spread for score tip margin
-GOALS_SCALE        = 1.5   # baseline tip-lambda scale; overridden per-match by O/U calibration
+TIP_DAMPENING      = 0.6   # grid-search optimised on WM 2006-2026 (45 OOS + 320 IS matches)
+GOALS_SCALE        = 1.8   # grid-search optimised; overridden per-match by O/U calibration
 ELO_FACTOR         = 0.75
 SCORE_ODDS_BLEND   = 0.3   # bookmaker correct_score weight in tip selection (0 = model only)
 

@@ -150,11 +150,12 @@ def predict(team_a: str, team_b: str,
             poisson_dampening: float = 0.5,
             tip_dampening: float = 0.3,
             goals_scale: float = 1.0,
+            score_odds_blend: float = 0.0,
+            score_odds: dict | None = None,
             **_kwargs) -> tuple[str, float, float, float, str]:
     """
     Predict match tendency + score tip. Returns (tendency, p_a, p_draw, p_b, tip).
-    tip_dampening: less dampening = wider lambda spread for score tip (0.3 = current).
-    goals_scale:   multiplier on tip lambdas — >1 shifts tips toward higher-scoring games.
+    Uses tip-lambda Poisson matrix filtered by win direction (no exp_diff rounding bug).
     """
     base = POISSON_PARAMS.get('base_rate', np.log(1.2))
     ta = POISSON_NAME_MAP.get(team_a, team_a)
@@ -210,7 +211,8 @@ def predict(team_a: str, team_b: str,
     tendency = ('win' if p_a >= p_d and p_a >= p_b else
                 'loss' if p_b >= p_d and p_b >= p_a else 'draw')
 
-    # Score tip with separate (less dampened) lambdas
+    # Tip selection: tip-lambda Poisson matrix, filtered by win direction
+    # (no exp_diff rounding — considers absolute goal counts)
     d_tip = 1.0 - tip_dampening
     lam_a_tip = np.exp(base + a_raw['attack'] * d_tip - b_raw['defense'] * d_tip) * elo_scale * goals_scale
     lam_b_tip = np.exp(base + b_raw['attack'] * d_tip - a_raw['defense'] * d_tip) / elo_scale * goals_scale
@@ -220,20 +222,22 @@ def predict(team_a: str, team_b: str,
     mat_t = np.outer(pa_t, pb_t)
     mat_t /= mat_t.sum()
 
-    all_results = sorted(
-        [(f"{i}:{j}", float(mat_t[i, j])) for i in range(max_goals) for j in range(max_goals)],
-        key=lambda x: -x[1]
-    )
-    raw_diff = lam_a_tip - lam_b_tip
+    tip_scored = {f"{i}:{j}": float(mat_t[i, j])
+                  for i in range(max_goals) for j in range(max_goals)}
+
+    if score_odds_blend > 0 and score_odds:
+        for s, pct in score_odds.items():
+            if s in tip_scored:
+                tip_scored[s] = ((1 - score_odds_blend) * tip_scored[s]
+                                 + score_odds_blend * (pct / 100))
+
     if p_a >= p_d and p_a >= p_b:
-        exp_diff = max(1, round(raw_diff))
+        cands = {s: v for s, v in tip_scored.items() if int(s.split(':')[0]) > int(s.split(':')[1])}
     elif p_b >= p_d and p_b >= p_a:
-        exp_diff = min(-1, round(raw_diff))
+        cands = {s: v for s, v in tip_scored.items() if int(s.split(':')[1]) > int(s.split(':')[0])}
     else:
-        exp_diff = 0
-    candidates = [(s, p) for s, p in all_results
-                  if int(s.split(':')[0]) - int(s.split(':')[1]) == exp_diff]
-    tip = candidates[0][0] if candidates else all_results[0][0]
+        cands = {s: v for s, v in tip_scored.items() if s.split(':')[0] == s.split(':')[1]}
+    tip = max(cands, key=cands.get) if cands else max(tip_scored, key=tip_scored.get)
 
     return tendency, p_a, p_d, p_b, tip
 
@@ -280,6 +284,24 @@ def evaluate_historical(season_from: int = 2022, **kwargs) -> tuple[int, int]:
     return correct, total
 
 
+def evaluate_historical_scores(season_from: int = 2006, season_to: int = 9999, **kwargs) -> tuple[dict, int, int]:
+    """Score tip accuracy on historical WM data (Poisson in-sample — inflated, but useful for parameter direction)."""
+    with open('data/historical_matches.json') as f:
+        matches = json.load(f)
+    matches = [m for m in matches if season_from <= m.get('season', 0) <= season_to]
+
+    counts = {'exact': 0, 'difference': 0, 'tendency': 0, 'wrong': 0}
+    for m in matches:
+        result = f"{m['goals_a']}:{m['goals_b']}"
+        _, _, _, _, tip = predict(m['team_a'], m['team_b'], **kwargs)
+        acc = classify_score(tip, result)
+        counts[acc] += 1
+
+    total = sum(counts.values())
+    kpts = counts['exact'] * 4 + counts['difference'] * 3 + counts['tendency'] * 2
+    return counts, total, kpts
+
+
 def classify_score(tip: str, result: str) -> str:
     if tip == result:
         return 'exact'
@@ -320,37 +342,45 @@ def evaluate_wm2026_scores(verbose: bool = False, **kwargs) -> tuple[dict, int, 
     return counts, total, kpts
 
 
-def score_grid_search() -> dict:
-    """Grid search over tip_dampening × goals_scale, optimizing Kicktipp score (4/3/2/0)."""
+def score_grid_search(include_historical: bool = True) -> dict:
+    """Grid search over tip_dampening × goals_scale, optimizing Kicktipp score (4/3/2/0).
+    Combines WM 2026 (weight 0.6) + historical 2006-2022 (weight 0.4, in-sample).
+    """
     tip_dampening_vals = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
-    goals_scale_vals   = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.8, 2.0]
+    goals_scale_vals   = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.8, 2.0, 2.5]
 
-    # Use current production tendency params (model.py constants)
     base_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
                        poisson_weight=0.90, draw_boost=0.15)
 
     rows = []
     for td in tip_dampening_vals:
         for gs in goals_scale_vals:
-            counts, total, kpts = evaluate_wm2026_scores(
-                **base_kwargs, tip_dampening=td, goals_scale=gs)
-            rows.append((kpts, td, gs, counts, total))
+            kw = {**base_kwargs, 'tip_dampening': td, 'goals_scale': gs}
+            c26, t26, kpts26 = evaluate_wm2026_scores(**kw)
+            if include_historical:
+                ch, th, kptsh = evaluate_historical_scores(season_from=2006, **kw)
+                # Normalize to % then combine (OOS 2026 weighted higher)
+                score = 0.6 * (kpts26 / (t26 * 4)) + 0.4 * (kptsh / (th * 4))
+            else:
+                score = kpts26 / (t26 * 4)
+            rows.append((score, kpts26, td, gs, c26, t26))
 
-    rows.sort(key=lambda x: (-x[0], x[1], x[2]))
+    rows.sort(key=lambda x: (-x[0], x[2], x[3]))
 
-    max_pts = (rows[0][4] if rows else 1) * 4
-    print(f"\n{'TipDamp':>8} {'GoalSc':>7}  Exact  Diff  Tend  Wrong   KickPts (max {max_pts})")
-    print("─" * 65)
-    for kpts, td, gs, counts, total in rows[:20]:
-        bar = kpts * 20 // max_pts if max_pts else 0
-        print(f"{td:>8.1f} {gs:>7.1f}  {counts['exact']:5d} {counts['difference']:5d} "
-              f"{counts['tendency']:5d} {counts['wrong']:5d}   "
-              f"{kpts:3d}pts  {'█' * bar}")
+    max_pts26 = (rows[0][5] if rows else 1) * 4
+    hist_label = " + Hist" if include_historical else ""
+    print(f"\n{'TipDamp':>8} {'GoalSc':>7}  Exact  Diff  Tend  Wrong  2026pts  Score{hist_label}")
+    print("─" * 75)
+    for score, kpts26, td, gs, c26, t26 in rows[:20]:
+        bar = int(score * 20)
+        print(f"{td:>8.1f} {gs:>7.1f}  {c26['exact']:5d} {c26['difference']:5d} "
+              f"{c26['tendency']:5d} {c26['wrong']:5d}  "
+              f"{kpts26:4d}/{max_pts26}   {score:.3f}  {'█' * bar}")
 
     best = rows[0]
-    print(f"\n→ Best: tip_dampening={best[1]}, goals_scale={best[2]}  "
-          f"({best[0]}pts / {best[4] * 4}max)")
-    return {'tip_dampening': best[1], 'goals_scale': best[2]}
+    print(f"\n→ Best: tip_dampening={best[2]}, goals_scale={best[3]}  "
+          f"(2026: {best[1]}pts/{max_pts26}  combined_score={best[0]:.3f})")
+    return {'tip_dampening': best[2], 'goals_scale': best[3]}
 
 
 def grid_search(verbose: bool = True):
@@ -402,46 +432,52 @@ def grid_search(verbose: bool = True):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--grid', action='store_true', help='Run full grid search')
-    parser.add_argument('--score-grid', action='store_true', help='Run score tip grid search')
-    parser.add_argument('--hist', type=int, default=0, help='Show historical accuracy from season')
+    parser.add_argument('--grid', action='store_true', help='Run full tendency grid search')
+    parser.add_argument('--score-grid', action='store_true', help='Run score tip grid search (2026 + historical)')
+    parser.add_argument('--hist', type=int, default=0, help='Show historical tendency accuracy from season')
+    parser.add_argument('--hist-scores', action='store_true', help='Show historical score accuracy per WM')
     args = parser.parse_args()
 
-    print("=== WM 2026 (OOS) — Current params (elo_factor=0.5, damp=0.5, p_wt=0.85) ===")
-    c, t = evaluate_wm2026(
-        verbose=True,
-        elo_factor=0.5, poisson_weight=0.85,
-        host_bonus=0.0, draw_boost=0.0, poisson_dampening=0.5)
+    prod_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
+                       poisson_weight=0.90, draw_boost=0.15)
+
+    print("=== WM 2026 (OOS) — Production params ===")
+    c, t = evaluate_wm2026(verbose=True, **prod_kwargs)
     print(f"\n  Correct tendency: {c}/{t} = {c/t*100:.1f}%")
 
-    print("\n=== WM 2026 — Old baseline (no Elo adj, 60/40 blend) ===")
+    print("\n=== WM 2026 — Old baseline (no Elo, 60/40) ===")
     c_old, t_old = evaluate_wm2026(
-        verbose=False,
-        elo_factor=0.0, poisson_weight=0.60,
+        verbose=False, elo_factor=0.0, poisson_weight=0.60,
         host_bonus=0.0, draw_boost=0.0, poisson_dampening=0.0)
     print(f"  Correct tendency: {c_old}/{t_old} = {c_old/t_old*100:.1f}%")
 
     if args.hist > 0:
-        print(f"\n=== Historical WM {args.hist}+ ===")
-        c22, t22 = evaluate_historical(season_from=args.hist, elo_factor=0.5, poisson_weight=0.85, poisson_dampening=0.5)
-        print(f"  Correct tendency: {c22}/{t22} = {c22/t22*100:.1f}%")
+        print(f"\n=== Historical tendency WM {args.hist}+ ===")
+        ch, th = evaluate_historical(season_from=args.hist, **prod_kwargs)
+        print(f"  Correct tendency: {ch}/{th} = {ch/th*100:.1f}%")
 
-    # Score baseline
-    prod_kwargs = dict(elo_factor=0.75, poisson_dampening=0.8,
-                       poisson_weight=0.90, draw_boost=0.15)
-    print("\n=== WM 2026 — Score tips (production params, default dampening) ===")
-    sc, st, skpts = evaluate_wm2026_scores(verbose=True, **prod_kwargs)
+    print("\n=== WM 2026 — Score tips (production params) ===")
+    sc, st, skpts = evaluate_wm2026_scores(verbose=True, **prod_kwargs,
+                                           tip_dampening=0.3, goals_scale=1.5)
     max_kpts = st * 4
     print(f"\n  Exact: {sc['exact']}  Diff: {sc['difference']}  Tend: {sc['tendency']}  Wrong: {sc['wrong']}")
     print(f"  Kicktipp-Punkte: {skpts} / {max_kpts}  ({skpts/max_kpts*100:.1f}%)")
 
+    if args.hist_scores:
+        print("\n=== Historical score tips per WM (in-sample — inflated) ===")
+        tip_kw = {**prod_kwargs, 'tip_dampening': 0.3, 'goals_scale': 1.5}
+        for season in [2006, 2010, 2014, 2018, 2022]:
+            ch2, th2, kh2 = evaluate_historical_scores(season_from=season, season_to=season, **tip_kw)
+            print(f"  WM {season}: {ch2['exact']}E {ch2['difference']}D {ch2['tendency']}T "
+                  f"{ch2['wrong']}W  → {kh2}/{th2*4} pts ({kh2/(th2*4)*100:.1f}%)")
+        ch_all, th_all, kh_all = evaluate_historical_scores(season_from=2006, **tip_kw)
+        print(f"  All hist: {kh_all}/{th_all*4} pts ({kh_all/(th_all*4)*100:.1f}%)")
+
     if args.grid:
-        print("\n=== Grid Search (tendency) ===")
+        print("\n=== Tendency Grid Search (WM 2026 OOS + 2022 IS) ===")
         best_params, best_score = grid_search(verbose=True)
         print(f"\nBest params: {best_params}")
         print(f"Best combined score: {best_score:.3f}")
-
-        print(f"\n=== Best params — detailed WM 2026 evaluation ===")
         evaluate_wm2026(verbose=True, **best_params)
         c_best, t_best = evaluate_wm2026(verbose=False, **best_params)
         c22b, t22b = evaluate_historical(season_from=2022, **best_params)
@@ -451,15 +487,18 @@ def main():
         print(f"  WM 2006-22 IS: {c_hist}/{t_hist} = {c_hist/t_hist*100:.1f}%")
 
     if args.score_grid:
-        print("\n=== Score Grid Search ===")
-        best_score_params = score_grid_search()
-        print(f"\n=== Best score params — verbose ===")
-        evaluate_wm2026_scores(verbose=True, **prod_kwargs,
-                               **best_score_params)
+        print("\n=== Score Grid Search (WM 2026 OOS 60% + Hist 2006-22 IS 40%) ===")
+        best_score_params = score_grid_search(include_historical=True)
+        print(f"\n=== Best score params — WM 2026 verbose ===")
+        evaluate_wm2026_scores(verbose=True, **prod_kwargs, **best_score_params)
         sc2, st2, kpts2 = evaluate_wm2026_scores(**prod_kwargs, **best_score_params)
         print(f"\n  → tip_dampening={best_score_params['tip_dampening']}, "
               f"goals_scale={best_score_params['goals_scale']}")
-        print(f"  Kicktipp-Punkte: {kpts2} / {st2*4}  ({kpts2/(st2*4)*100:.1f}%)")
+        print(f"  WM 2026 Kicktipp-Punkte: {kpts2} / {st2*4}  ({kpts2/(st2*4)*100:.1f}%)")
+        ch_best, th_best, khpts_best = evaluate_historical_scores(
+            season_from=2006, **prod_kwargs, **best_score_params)
+        print(f"  Hist 2006-22 Kicktipp-Punkte: {khpts_best} / {th_best*4}  "
+              f"({khpts_best/(th_best*4)*100:.1f}%)")
 
 
 if __name__ == '__main__':
