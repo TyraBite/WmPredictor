@@ -1,7 +1,9 @@
 {
-  "updated_at": "2026-06-25T19:16:54.860943+00:00",
+  "updated_at": "2026-06-25T21:52:59.454820+00:00",
   "tournament_phase": "Gruppenphase",
-  "warnings": [],
+  "warnings": [
+    "Live-Updates nicht verfügbar (FOOTBALL_DATA_KEY fehlt)"
+  ],
   "stats": {
     "played": 54,
     "correct_result": 4,
@@ -932,9 +934,9 @@
         "elo_a": 1850,
         "elo_b": 1926,
         "h2h_score": 0.0,
-        "odds_prob_a": 20.5,
-        "odds_prob_draw": 20.5,
-        "odds_prob_b": 59.0,
+        "odds_prob_a": 85.0,
+        "odds_prob_draw": 13.5,
+        "odds_prob_b": 1.5,
         "attack_a": 0.241,
         "attack_b": 0.886,
         "defense_a": 0.212,
@@ -963,7 +965,7 @@
       "prob_a": 7.7,
       "prob_draw": 18.4,
       "prob_b": 74.0,
-      "tip": "0:4",
+      "tip": "0:1",
       "top_results": [
         [
           "0:2",
@@ -1005,9 +1007,9 @@
         "elo_a": 1550,
         "elo_b": 1841,
         "h2h_score": 0.5,
-        "odds_prob_a": 6.8,
-        "odds_prob_draw": 11.7,
-        "odds_prob_b": 81.6,
+        "odds_prob_a": 40.0,
+        "odds_prob_draw": 25.0,
+        "odds_prob_b": 35.0,
         "attack_a": 0,
         "attack_b": 0.301,
         "defense_a": 0,
@@ -1016,10 +1018,10 @@
         "live_adj_b": 0.484,
         "prob_lambda_a": 0.407,
         "prob_lambda_b": 2.362,
-        "tip_lambda_a": 0.757,
-        "tip_lambda_b": 4.515,
-        "ou_total": null,
-        "over_2_5": null
+        "tip_lambda_a": 0.244,
+        "tip_lambda_b": 1.456,
+        "ou_total": 1.7,
+        "over_2_5": 24.3
       }
     },
     {
@@ -1151,9 +1153,9 @@
         "elo_a": 1900,
         "elo_b": 1768,
         "h2h_score": 0.5,
-        "odds_prob_a": 48.4,
-        "odds_prob_draw": 27.9,
-        "odds_prob_b": 23.7,
+        "odds_prob_a": 47.0,
+        "odds_prob_draw": 28.6,
+        "odds_prob_b": 24.3,
         "attack_a": 0.217,
         "attack_b": 0.259,
         "defense_a": -0.044,
@@ -1162,10 +1164,10 @@
         "live_adj_b": 0.494,
         "prob_lambda_a": 1.14,
         "prob_lambda_b": 0.788,
-        "tip_lambda_a": 1.487,
-        "tip_lambda_b": 1.133,
-        "ou_total": 2.62,
-        "over_2_5": 48.7
+        "tip_lambda_a": 1.504,
+        "tip_lambda_b": 1.146,
+        "ou_total": 2.65,
+        "over_2_5": 49.5
       }
     },
     {
@@ -1516,9 +1518,9 @@
         "elo_a": 1866,
         "elo_b": 2056,
         "h2h_score": 0.5,
-        "odds_prob_a": 13.2,
-        "odds_prob_draw": 23.7,
-        "odds_prob_b": 63.2,
+        "odds_prob_a": 12.6,
+        "odds_prob_draw": 22.0,
+        "odds_prob_b": 65.3,
         "attack_a": 0.317,
         "attack_b": 0.66,
         "defense_a": 0.392,
@@ -1590,8 +1592,8 @@
         "elo_b": 1677,
         "h2h_score": 0.5,
         "odds_prob_a": 0.0,
-        "odds_prob_draw": 29.7,
-        "odds_prob_b": 34.5,
+        "odds_prob_draw": 27.8,
+        "odds_prob_b": 35.1,
         "attack_a": 0,
         "attack_b": -0.216,
         "defense_a": 0,
